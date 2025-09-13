@@ -1,0 +1,15 @@
+services:
+  fcgi:
+    ports:
+      - "24571:24571"
+    build:
+      context: ..
+      dockerfile: Dockerfile
+
+  httpd:
+    image: "httpd:2.4.62"
+    ports:
+      - "24570:24570"
+    volumes:
+      - "./httpd.conf:/usr/local/apache2/conf/httpd.conf"
+      - "./static:/var/www"
