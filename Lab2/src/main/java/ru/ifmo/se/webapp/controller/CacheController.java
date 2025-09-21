@@ -1,7 +1,7 @@
-package ru.ifmo.se.server.controller;
+package ru.ifmo.se.webapp.controller;
 
 import redis.clients.jedis.Jedis;
-import ru.ifmo.se.server.dto.PointRequest;
+import ru.ifmo.se.webapp.dto.PointRequest;
 
 public class CacheController {
     private final Jedis jedis = new Jedis("localhost", 6379);
