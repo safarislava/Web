@@ -10,6 +10,8 @@ public class CalculationController {
     private final MathContext mathContext = MathContext.DECIMAL128;
 
     private final BigDecimal TWO = new BigDecimal("2");
+    private final BigDecimal HUNDRED = new BigDecimal("100");
+    private final BigDecimal HUNDRED_FIFTY = new BigDecimal("150");
 
     public BigDecimal cos(BigDecimal x) {
         BigDecimal result = BigDecimal.ONE;
@@ -78,5 +80,13 @@ public class CalculationController {
         }
 
         return isPointInArea;
+    }
+
+    public BigDecimal translateX(String x, String r) {
+        return HUNDRED_FIFTY.add(new BigDecimal(x).divide(new BigDecimal(r), mathContext).multiply(HUNDRED));
+    }
+
+    public BigDecimal translateY(String y, String r) {
+        return HUNDRED_FIFTY.add(new BigDecimal(y).divide(new BigDecimal(r), mathContext).multiply(HUNDRED).negate());
     }
 }

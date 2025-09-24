@@ -45,9 +45,9 @@ function validate(xValues, y, rValues) {
 }
 
 async function sendData() {
-    let xValues = getXValues();
+    let xValues = getXValues().map(x => Number(x));
     let y = document.getElementById("y-data").value;
-    let rValues = getRValues();
+    let rValues = getRValues().map(x => Number(x));
 
     let error = validate(xValues, y, rValues)
     if (error) {
@@ -55,50 +55,15 @@ async function sendData() {
         return;
     }
 
-    for (let x of xValues) {
-        for (let r of rValues) {
-            const response = await fetch(controllerServletUrl + "?" + new URLSearchParams({
-                x: x,
-                y: y,
-                r: r
-            }).toString());
-            const result = await response.text();
-            console.log(result);
-            process(JSON.parse(result));
-        }
-    }
+    const response = await fetch(controllerServletUrl +
+        `?x=${xValues.join(",")}&y=${y}&r=${rValues.join(",")}`);
+
+    const result = await response.text();
+    process(result);
 }
 
 function process(data) {
-    switch (data.title){
-        case "Point response":
-            addPoints(data);
-            clearError();
-            break;
-        case "Wrong request":
-            printError(data.detail);
-            break;
-    }
-}
-
-function addPoints(data) {
-    let index = document.getElementById("results-tbody").children.length;
-    document.getElementById("results-tbody").innerHTML +=
-        `<tr>\n` +
-        `    <td>${index}</td>\n` +
-        `    <td>${data.x}</td>\n` +
-        `    <td>${data.y}</td>\n` +
-        `    <td>${data.r}</td>\n` +
-        `    <td>${data.isPointInArea}</td>\n` +
-        `    <td>${data.deltaTime}</td>\n` +
-        `    <td>${data.time}</td>\n` +
-        `</tr>`;
-
-
-    let cx = 150 + data.x / data.r * 100;
-    let cy = 150 - data.y / data.r * 100;
-    document.getElementById("graph").innerHTML +=
-        `<circle cx="${cx}" cy="${cy}" r="3" fill="black" />\n`;
+    document.documentElement.innerHTML = data;
 }
 
 function printError(error) {
@@ -107,14 +72,4 @@ function printError(error) {
 
 function clearError() {
     document.getElementById("problem-label").innerText = "";
-}
-
-function sendWrongJson() {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", urlFastCGI, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onload = function() {
-        process(JSON.parse(xhr.responseText));
-    };
-    xhr.send('{"x":"0","y":"6","r":"3"}');
 }

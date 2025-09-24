@@ -1,22 +1,31 @@
 package ru.ifmo.se.webapp;
 
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
-import ru.ifmo.se.webapp.controller.ValidationController;
-import ru.ifmo.se.webapp.dto.PointRequest;
+
+import java.io.IOException;
 
 @WebServlet(name = "controllerServlet", value = "/controller-servlet")
 public class ControllerServlet extends HttpServlet {
-    private final ValidationController validationController = new ValidationController();
-
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse res) {
-        String x = req.getParameter("x");
-        String y = req.getParameter("y");
-        String r = req.getParameter("r");
-        PointRequest pointRequest = new PointRequest(x, y, r);
-        validationController.validate(pointRequest);
-        System.out.println(pointRequest);
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+        String x = request.getParameter("x");
+        String y = request.getParameter("y");
+        String r = request.getParameter("r");
+
+        if (x != null && y != null && r != null) {
+            try {
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("area-check-servlet");
+                requestDispatcher.forward(request, response);
+            }
+             catch (ServletException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

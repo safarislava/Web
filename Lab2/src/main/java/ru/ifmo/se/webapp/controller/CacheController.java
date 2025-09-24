@@ -14,9 +14,10 @@ public class CacheController {
         try {
             jedis.connect();
             value = jedis.get(pointRequest.toString());
-        }
-        finally {
             jedis.close();
+        }
+        catch (Exception e) {
+            return null;
         }
 
         if (value == null) return null;
@@ -34,9 +35,7 @@ public class CacheController {
         try {
             jedis.connect();
             jedis.set(key, value);
-        }
-        finally {
             jedis.close();
-        }
+        } catch (Exception ignored) {}
     }
 }

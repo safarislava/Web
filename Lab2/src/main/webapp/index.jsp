@@ -1,3 +1,8 @@
+<%@ page import="com.google.gson.Gson" %>
+<%@ page import="ru.ifmo.se.webapp.dto.PointResponse" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.google.gson.reflect.TypeToken" %>
+<%@ page import="ru.ifmo.se.webapp.controller.CalculationController" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="ru">
@@ -10,7 +15,7 @@
     <body>
         <header>
             <div class="header-container">
-                <p class="header-item logo">ЛАБА №1</p>
+                <p class="header-item logo">ЛАБА №2</p>
                 <p class="header-item">Вячеслав Софьин</p>
                 <p class="header-item">Вариант 467570</p>
             </div>
@@ -31,6 +36,22 @@
                         <text x="250" y="145" font-family="Arial" font-size="10" fill="#2c3e50">R</text>
                         <text x="155" y="250" font-family="Arial" font-size="10" fill="#2c3e50">-R</text>
                         <text x="155" y="50" font-family="Arial" font-size="10" fill="#2c3e50">R</text>
+                        <%
+                            if (session.getAttribute("Points") != null) {
+                                Gson gson = new Gson();
+                                List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
+                                        new TypeToken<List<PointResponse>>(){}.getType());
+
+                                CalculationController calculationController = new CalculationController();
+                                for (PointResponse point : points) {
+                                    String cx = calculationController.translateX(point.x, point.r).toPlainString();
+                                    String cy = calculationController.translateY(point.y, point.r).toPlainString();
+                        %>
+                        <circle cx="<%= cx %>" cy="<%= cy %>" r="3" fill="black"></circle>
+                        <%
+                                }
+                            }
+                        %>
                     </svg>
                 </div>
                 <div class="input-form">
@@ -125,6 +146,28 @@
                         </tr>
                     </thead>
                     <tbody id="results-tbody">
+                        <%
+                            if (session.getAttribute("Points") != null) {
+                                Gson gson = new Gson();
+                                List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
+                                        new TypeToken<List<PointResponse>>(){}.getType());
+
+                                for (int i = 0; i < points.size(); i++) {
+                                    PointResponse point = points.get(i);
+                        %>
+                        <tr>
+                            <td><%= i %></td>
+                            <td><%= point.x %></td>
+                            <td><%= point.y %></td>
+                            <td><%= point.r %></td>
+                            <td><%= point.isPointInArea %></td>
+                            <td><%= point.deltaTime %></td>
+                            <td><%= point.time %></td>
+                        </tr>
+                        <%
+                                }
+                            }
+                        %>
                     </tbody>
                 </table>
             </div>
