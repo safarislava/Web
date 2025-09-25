@@ -1,4 +1,4 @@
-let urlFastCGI = "http://localhost:24570/api"
+let urlFastCGI = "fcgi://localhost:24570/api"
 
 function getXValues() {
     let xBoxes = document.getElementsByName("x").values();

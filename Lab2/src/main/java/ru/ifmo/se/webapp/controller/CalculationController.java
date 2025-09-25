@@ -10,8 +10,10 @@ public class CalculationController {
     private final MathContext mathContext = MathContext.DECIMAL128;
 
     private final BigDecimal TWO = new BigDecimal("2");
-    private final BigDecimal HUNDRED = new BigDecimal("100");
-    private final BigDecimal HUNDRED_FIFTY = new BigDecimal("150");
+    private final BigDecimal THREE = new BigDecimal("3");
+    private final BigDecimal FOUR = new BigDecimal("4");
+    private final BigDecimal FIVE = new BigDecimal("5");
+    private final BigDecimal SIX = new BigDecimal("6");
 
     public BigDecimal cos(BigDecimal x) {
         BigDecimal result = BigDecimal.ONE;
@@ -41,25 +43,73 @@ public class CalculationController {
     }
 
     public boolean checkPointInArea(BigDecimal x, BigDecimal y, BigDecimal r) {
-        ArrayList<Point> polygon = new ArrayList<>() {};
+        ArrayList<Point> polygon = new ArrayList<>();
+
+        BigDecimal rFourthNegate = r.divide(FOUR, mathContext).negate();
+        BigDecimal rTheeForth = r.multiply(THREE).divide(FOUR, mathContext);
+        BigDecimal rTwoThird = r.multiply(TWO).divide(THREE, mathContext);
+        BigDecimal rSixthNegate = r.divide(SIX, mathContext).negate();
+        BigDecimal rSecondNegate = r.divide(TWO, mathContext).negate();
 
         polygon.add(new Point(r, BigDecimal.ZERO));
-        polygon.add(new Point(BigDecimal.ZERO, r.divide(TWO, mathContext)));
-        polygon.add(new Point(BigDecimal.ZERO, BigDecimal.ZERO));
-        polygon.add(new Point(r.negate(), BigDecimal.ZERO));
+        polygon.add(new Point(r, rFourthNegate));
+        polygon.add(new Point(rTheeForth, rTwoThird.negate()));
+        polygon.add(new Point(r.divide(TWO, mathContext), rTheeForth.negate()));
+        polygon.add(new Point(rTheeForth, rSixthNegate));
+        polygon.add(new Point(r.divide(THREE, mathContext), rFourthNegate));
 
-        for (double angle = 180; angle <= 270; angle += 1) {
-            polygon.add(new Point(
-                    r.multiply(cos(BigDecimal.valueOf(Math.toRadians(angle)))),
-                    r.multiply(sin(BigDecimal.valueOf(Math.toRadians(angle))))));
+        BigDecimal arcRadius = r.multiply(TWO).divide(FIVE, mathContext);
+        BigDecimal halfChord = r.divide(THREE, mathContext);
+
+        BigDecimal h = arcRadius.pow(2, mathContext).subtract(halfChord.pow(2, mathContext)).sqrt(mathContext);
+        BigDecimal arcCenterY1 = rFourthNegate.add(h);
+
+        double startAngle1 = Math.atan2(-h.doubleValue(), halfChord.doubleValue());
+        double endAngle1 = Math.atan2(-h.doubleValue(), -halfChord.doubleValue());
+
+        int arcSteps = 20;
+        for (int i = 0; i <= arcSteps; i++) {
+            double currentAngle = startAngle1 + (endAngle1 - startAngle1) * i / arcSteps;
+            BigDecimal angleBD = new BigDecimal(currentAngle);
+            BigDecimal pX = arcRadius.multiply(cos(angleBD), mathContext);
+            BigDecimal pY = arcCenterY1.add(arcRadius.multiply(sin(angleBD), mathContext));
+            polygon.add(new Point(pX, pY));
         }
 
-        polygon.add(new Point(BigDecimal.ZERO, r.divide(TWO, mathContext).negate()));
-        polygon.add(new Point(r, r.divide(TWO, mathContext).negate()));
-        polygon.add(new Point(r, BigDecimal.ZERO));
+        polygon.add(new Point(rTheeForth.negate(), rSixthNegate));
+        polygon.add(new Point(rSecondNegate, rTheeForth.negate()));
+        polygon.add(new Point(rTheeForth.negate(), rTwoThird.negate()));
+        polygon.add(new Point(r.negate(), rFourthNegate));
+        polygon.add(new Point(r.negate(), r.divide(FOUR, mathContext)));
+        polygon.add(new Point(rTheeForth.negate(), rTwoThird));
+        polygon.add(new Point(rSecondNegate, rTheeForth));
+        polygon.add(new Point(rTheeForth.negate(), r.divide(SIX, mathContext)));
+        polygon.add(new Point(r.divide(THREE, mathContext).negate(), r.divide(FOUR, mathContext)));
+
+
+        BigDecimal arcCenterY2 = r.divide(FOUR, mathContext).subtract(h);
+
+        double startAngle2 = Math.atan2(h.doubleValue(), -halfChord.doubleValue());
+        double endAngle2 = Math.atan2(h.doubleValue(), halfChord.doubleValue());
+
+        if (endAngle2 > startAngle2) {
+            startAngle2 += 2 * Math.PI;
+        }
+
+        for (int i = 0; i <= arcSteps; i++) {
+            double currentAngle = startAngle2 + (endAngle2 - startAngle2) * i / arcSteps;
+            BigDecimal angleBD = new BigDecimal(currentAngle);
+            BigDecimal pX = arcRadius.multiply(cos(angleBD), mathContext);
+            BigDecimal pY = arcCenterY2.add(arcRadius.multiply(sin(angleBD), mathContext));
+            polygon.add(new Point(pX, pY));
+        }
+
+        polygon.add(new Point(rTheeForth, r.divide(SIX, mathContext)));
+        polygon.add(new Point(r.divide(TWO, mathContext), rTheeForth));
+        polygon.add(new Point(rTheeForth, rTwoThird));
+        polygon.add(new Point(r, r.divide(FOUR, mathContext)));
 
         boolean isPointInArea = false;
-
         int n = polygon.size();
 
         for (int i = 0, j = n - 1; i < n; j = i++) {
@@ -72,21 +122,16 @@ public class CalculationController {
                 return true;
             }
 
-            // (yi > y != yj > y) && (x < xj + (xi - xj) * (y - yj) / (yi - yj))
             if (((yi.compareTo(y) > 0) != (yj.compareTo(y) > 0)) &&
-                    (x.compareTo(xj.add(xi.subtract(xj).multiply(y.subtract(yj)).divide(yi.subtract(yj), mathContext))) < 0)) {
+                    (x.compareTo(xj.add(
+                            xi.subtract(xj)
+                                    .multiply(y.subtract(yj))
+                                    .divide(yi.subtract(yj), mathContext)
+                    )) < 0)) {
                 isPointInArea = !isPointInArea;
             }
         }
 
         return isPointInArea;
-    }
-
-    public BigDecimal translateX(String x, String r) {
-        return HUNDRED_FIFTY.add(new BigDecimal(x).divide(new BigDecimal(r), mathContext).multiply(HUNDRED));
-    }
-
-    public BigDecimal translateY(String y, String r) {
-        return HUNDRED_FIFTY.add(new BigDecimal(y).divide(new BigDecimal(r), mathContext).multiply(HUNDRED).negate());
     }
 }

@@ -13,6 +13,9 @@ public class PointResponse {
     public int deltaTime;
     public Timestamp time;
 
+    public PointResponse() {
+    }
+
     public PointResponse(boolean isPointInArea, int deltaTime, PointRequest pointRequest) {
         this.x = pointRequest.x.toPlainString();
         this.y = pointRequest.y.toPlainString();

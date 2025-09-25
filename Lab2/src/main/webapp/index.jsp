@@ -1,63 +1,46 @@
-<%@ page import="com.google.gson.Gson" %>
-<%@ page import="ru.ifmo.se.webapp.dto.PointResponse" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.google.gson.reflect.TypeToken" %>
-<%@ page import="ru.ifmo.se.webapp.controller.CalculationController" %>
+<%@taglib tagdir="/WEB-INF/tags" prefix="ctm" %>
+
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="ru">
     <head>
         <title>Shooter</title>
         <meta charset="utf-8">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
+        <link href="https://fonts.cdnfonts.com/css/starjedi-special-edition" rel="stylesheet">
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/main.js"></script>
     </head>
     <body>
         <header>
             <div class="header-container">
-                <p class="header-item logo">ЛАБА №2</p>
-                <p class="header-item">Вячеслав Софьин</p>
-                <p class="header-item">Вариант 467570</p>
+                <p class="header-item logo">lab2</p>
+                <p class="header-item">safarislava</p>
+                <p class="header-item">variant467570</p>
             </div>
         </header>
         <main>
             <div class="graph-section">
                 <div class="graph-container">
-                    <svg id="graph" viewBox="0 0 300 300">
-                        <path d="M250 150 L150 100 V150 H50 A100 100 1 0 0 150 250 V200 H250 Z"
-                              fill="rgba(52, 152, 219, 0.4)" stroke="#2980b9" stroke-width="2"></path>
-                        <line x1="25" y1="150" x2="275" y2="150" stroke="#2c3e50" stroke-width="1.5"></line>
-                        <line x1="150" y1="25" x2="150" y2="275" stroke="#2c3e50" stroke-width="1.5"></line>
-                        <polygon points="275,150 270,145 270,155" fill="#2c3e50"></polygon>
-                        <polygon points="150,25 145,30 155,30" fill="#2c3e50"></polygon>
-                        <text x="265" y="165" font-family="Arial" font-size="12" fill="#2c3e50">X</text>
-                        <text x="160" y="35" font-family="Arial" font-size="12" fill="#2c3e50">Y</text>
-                        <text x="50" y="145" font-family="Arial" font-size="10" fill="#2c3e50">-R</text>
-                        <text x="250" y="145" font-family="Arial" font-size="10" fill="#2c3e50">R</text>
-                        <text x="155" y="250" font-family="Arial" font-size="10" fill="#2c3e50">-R</text>
-                        <text x="155" y="50" font-family="Arial" font-size="10" fill="#2c3e50">R</text>
-                        <%
-                            if (session.getAttribute("Points") != null) {
-                                Gson gson = new Gson();
-                                List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
-                                        new TypeToken<List<PointResponse>>(){}.getType());
-
-                                CalculationController calculationController = new CalculationController();
-                                for (PointResponse point : points) {
-                                    String cx = calculationController.translateX(point.x, point.r).toPlainString();
-                                    String cy = calculationController.translateY(point.y, point.r).toPlainString();
-                        %>
-                        <circle cx="<%= cx %>" cy="<%= cy %>" r="3" fill="black"></circle>
-                        <%
-                                }
-                            }
-                        %>
+                    <svg id="graph" viewBox="-200 -200 400 400">
+                        <path id="graph-path" class="graph-item"></path>
+                        <line id="graph-x" class="graph-item"></line>
+                        <line id="graph-y" class="graph-item"></line>
+                        <polygon id="graph-x-arrow" class="graph-item"></polygon>
+                        <polygon id="graph-y-arrow" class="graph-item"></polygon>
+                        <text id="graph-x-label" class="graph-item">X</text>
+                        <text id="graph-y-label" class="graph-item">Y</text>
+                        <text id="graph-xr-label" class="graph-item">-R</text>
+                        <text id="graph-rx-label" class="graph-item">R</text>
+                        <text id="graph-yr-label" class="graph-item">-R</text>
+                        <text id="graph-ry-label" class="graph-item">R</text>
+                        <ctm:graph-points/>
                     </svg>
                 </div>
                 <div class="input-form">
                     <h2 class="form-title">Параметры точки</h2>
                     <div class="input-group">
-                        <label>Координата X:</label>
+                        <label class="input-group-label">Координата X:</label>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="x-2" name="x" value="-2">
@@ -98,11 +81,11 @@
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="y-data">Координата Y:</label>
+                        <label class="input-group-label" for="y-data">Координата Y:</label>
                         <input type="text" id="y-data" placeholder="Введите значение Y от -5 до 3" required>
                     </div>
                     <div class="input-group">
-                        <label>Значение R:</label>
+                        <label class="input-group-label">Значение R:</label>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input type="checkbox" id="r+1" name="r" value="1">
@@ -146,28 +129,7 @@
                         </tr>
                     </thead>
                     <tbody id="results-tbody">
-                        <%
-                            if (session.getAttribute("Points") != null) {
-                                Gson gson = new Gson();
-                                List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
-                                        new TypeToken<List<PointResponse>>(){}.getType());
-
-                                for (int i = 0; i < points.size(); i++) {
-                                    PointResponse point = points.get(i);
-                        %>
-                        <tr>
-                            <td><%= i %></td>
-                            <td><%= point.x %></td>
-                            <td><%= point.y %></td>
-                            <td><%= point.r %></td>
-                            <td><%= point.isPointInArea %></td>
-                            <td><%= point.deltaTime %></td>
-                            <td><%= point.time %></td>
-                        </tr>
-                        <%
-                                }
-                            }
-                        %>
+                        <ctm:table-contant/>
                     </tbody>
                 </table>
             </div>

@@ -1,4 +1,48 @@
-var controllerServletUrl = "http://localhost:8080/Lab2_war_exploded/controller-servlet";
+function draw_darth_vader() {
+    let r = 150;
+    document.getElementById("graph-path")
+        .setAttribute("d", `M${r} ${0}V${-r/4}L${3*r/4} ${-2*r/3}L${r/2} ${-3*r/4}`+
+            `L${3*r/4} ${-r/6}L${r/3} ${-r/4}A${2*r/5} ${2*r/5} 0 0 0 ${-r/3} ${-r/4}L${-3*r/4} ${-r/6}` +
+            `L${-r/2} ${-3*r/4}L${-3*r/4} ${-2*r/3}L${-r} ${-r/4}V${r/4}L${-3*r/4} ${2*r/3}` +
+            `L${-r/2} ${3*r/4}L${-3*r/4} ${r/6}L${-r/3} ${r/4} A${2*r/5} ${2*r/5} 0 0 0 ${r/3} ${r/4}` +
+            `L${3*r/4} ${r/6}L${r/2} ${3*r/4}L${3*r/4} ${2*r/3}L${r} ${r/4}Z`);
+
+    document.getElementById("graph-x").setAttribute("x1", `${-1.1*r}`);
+    document.getElementById("graph-x").setAttribute("x2", `${1.1*r}`);
+    document.getElementById("graph-x").setAttribute("y1", `${0}`);
+    document.getElementById("graph-x").setAttribute("y2", `${0}`);
+
+    document.getElementById("graph-y").setAttribute("x1", `${0}`);
+    document.getElementById("graph-y").setAttribute("x2", `${0}`);
+    document.getElementById("graph-y").setAttribute("y1", `${-1.1*r}`);
+    document.getElementById("graph-y").setAttribute("y2", `${1.1*r}`);
+
+    document.getElementById("graph-x-label").setAttribute("x", `${1.1*r+20}`);
+    document.getElementById("graph-x-label").setAttribute("y", `${0}`);
+
+    document.getElementById("graph-y-label").setAttribute("x", `${0}`);
+    document.getElementById("graph-y-label").setAttribute("y", `${-1.1*r-20}`);
+
+    document.getElementById("graph-ry-label").setAttribute("x", `${10}`);
+    document.getElementById("graph-ry-label").setAttribute("y", `${-r}`);
+
+    document.getElementById("graph-yr-label").setAttribute("x", `${10}`);
+    document.getElementById("graph-yr-label").setAttribute("y", `${r}`);
+
+    document.getElementById("graph-rx-label").setAttribute("x", `${r}`);
+    document.getElementById("graph-rx-label").setAttribute("y", `${20}`);
+
+    document.getElementById("graph-xr-label").setAttribute("x", `${-r}`);
+    document.getElementById("graph-xr-label").setAttribute("y", `${20}`);
+
+    document.getElementById("graph-x-arrow").setAttribute("points",
+        `${r*1.1+10},0 ${r*1.1},-5 ${r*1.1},5`);
+
+    document.getElementById("graph-y-arrow").setAttribute("points",
+        `0,${-r*1.1-10} -5,${-r*1.1} 5,${-r*1.1}`);
+}
+
+window.onload = draw_darth_vader;
 
 function getXValues() {
     let xBoxes = document.getElementsByName("x").values();
@@ -55,7 +99,7 @@ async function sendData() {
         return;
     }
 
-    const response = await fetch(controllerServletUrl +
+    const response = await fetch("http://127.0.0.1:8080/webapp-1.0/controller-servlet" +
         `?x=${xValues.join(",")}&y=${y}&r=${rValues.join(",")}`);
 
     const result = await response.text();
@@ -64,6 +108,7 @@ async function sendData() {
 
 function process(data) {
     document.documentElement.innerHTML = data;
+    draw_darth_vader();
 }
 
 function printError(error) {
