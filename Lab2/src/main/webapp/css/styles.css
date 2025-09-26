@@ -5,13 +5,20 @@
     font-family: sans-serif;
 }
 
+:root {
+    --header-height: 75px;
+    --footer-height: 50px;
+}
+
 body {
-    background-image: url("https://assets.vogue.com/photos/589134b57edfa70512d62da0/master/pass/how-to-watch-star-wars.jpg");
+    background-image: url(image/background-star-wars.jpg);
     background-color: black;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
 }
 
 header {
@@ -26,7 +33,6 @@ header {
 
 .header-container {
     max-width: 100%;
-    height: 50px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -253,4 +259,3 @@ tr:nth-child(even) {
 tr:hover {
     background: rgb(52, 152, 219, 0.2);
 }
-

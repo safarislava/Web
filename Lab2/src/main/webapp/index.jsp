@@ -115,25 +115,26 @@
                     </div>
                 </div>
             </div>
+        </main>
+        <footer>
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr>
-                            <th scope="col">Номер</th>
-                            <th scope="col">X</th>
-                            <th scope="col">Y</th>
-                            <th scope="col">R</th>
-                            <th scope="col">Попал</th>
-                            <th scope="col">Время выполнения</th>
-                            <th scope="col">Когда</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Номер</th>
+                        <th scope="col">X</th>
+                        <th scope="col">Y</th>
+                        <th scope="col">R</th>
+                        <th scope="col">Попал</th>
+                        <th scope="col">Время выполнения</th>
+                        <th scope="col">Когда</th>
+                    </tr>
                     </thead>
                     <tbody id="results-tbody">
                         <ctm:table-contant/>
                     </tbody>
                 </table>
             </div>
-        </main>
-        <footer></footer>
+        </footer>
     </body>
 </html>

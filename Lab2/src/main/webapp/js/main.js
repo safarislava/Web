@@ -99,7 +99,7 @@ async function sendData() {
         return;
     }
 
-    const response = await fetch("http://127.0.0.1:8080/webapp-1.0/controller-servlet" +
+    const response = await fetch(document.URL + "controller-servlet" +
         `?x=${xValues.join(",")}&y=${y}&r=${rValues.join(",")}`);
 
     const result = await response.text();

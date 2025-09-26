@@ -13,9 +13,11 @@ import ru.ifmo.se.webapp.controller.CalculationController;
 import ru.ifmo.se.webapp.controller.ValidationController;
 import ru.ifmo.se.webapp.dto.PointRequest;
 import ru.ifmo.se.webapp.dto.PointResponse;
+import ru.ifmo.se.webapp.dto.ProblemJson;
 
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,34 +29,31 @@ public class AreaCheckServlet extends HttpServlet {
     private final CalculationController calculationController = new CalculationController();
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String xValues = request.getParameter("x");
         String y = request.getParameter("y");
         String rValues = request.getParameter("r");
 
-        ArrayList<PointResponse> pointsNew = new ArrayList<>();
-
-        for (String x : xValues.split(",")) {
-            for (String r : rValues.split(",")) {
-                PointRequest pointRequest = new PointRequest(x, y, r);
-                validationController.validate(pointRequest);
-                pointsNew.add(process(pointRequest));
-            }
-        }
+        ArrayList<PointResponse> points = new ArrayList<>();
 
         try {
-            HttpSession session = request.getSession();
-            List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
-                    new TypeToken<List<PointResponse>>(){}.getType());
-            if (points == null) points = new ArrayList<>();
-
-            points.addAll(pointsNew);
-            session.setAttribute("Points", gson.toJson(points));
-
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            throw new RuntimeException(e);
+            for (String x : xValues.split(",")) {
+                for (String r : rValues.split(",")) {
+                    PointRequest pointRequest = new PointRequest(x, y, r);
+                    validationController.validate(pointRequest);
+                    points.add(process(pointRequest));
+                }
+            }
+        } catch (Exception e) {
+            Writer writer = response.getWriter();
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.setHeader("Content-Type", "application/json");
+            writer.write(gson.toJson(new ProblemJson(e.getMessage(), e)));
+            return;
         }
+
+        addSessionPoints(request, points);
+        request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 
     private PointResponse process(PointRequest pointRequest) {
@@ -67,5 +66,14 @@ public class AreaCheckServlet extends HttpServlet {
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
         return new PointResponse(isPointInArea, deltaTime, pointRequest);
+    }
+
+    private void addSessionPoints(HttpServletRequest request, List<PointResponse> pointsNew) {
+        HttpSession session = request.getSession();
+        List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
+                new TypeToken<List<PointResponse>>(){}.getType());
+        if (points == null) points = new ArrayList<>();
+        points.addAll(pointsNew);
+        session.setAttribute("Points", gson.toJson(points));
     }
 }
