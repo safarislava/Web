@@ -8,6 +8,10 @@
 :root {
     --header-height: 75px;
     --footer-height: 50px;
+    --accent-color: #3498db;
+    --dark-accent-color: #144b6c;
+    --transparent-accent-color: rgba(52, 152, 219, 0.5);
+    --light-transparent-accent-color: rgba(52, 152, 219, 0.2);
 }
 
 body {
@@ -50,7 +54,7 @@ header {
 }
 
 .header-item:hover {
-    color: #3498db;
+    color: var(--accent-color);
 }
 
 .logo {
@@ -94,8 +98,8 @@ text.graph-item {
 }
 
 path.graph-item {
-    fill: rgba(52, 152, 219, 0.5);
-    stroke: #2980b9;
+    fill: var(--transparent-accent-color);
+    stroke: var(--accent-color);
     stroke-width: 2px;
 }
 
@@ -177,7 +181,7 @@ line.graph-item {
 .checkbox-item input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    accent-color: #3498db;
+    accent-color: var(--accent-color);
 }
 
 .input-group input[type="text"] {
@@ -202,7 +206,7 @@ line.graph-item {
 }
 
 button {
-    background: #3498db;
+    background: var(--accent-color);
     color: white;
     border: none;
     padding: 14px 25px;
@@ -257,5 +261,5 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background: rgb(52, 152, 219, 0.2);
+    background: var(--light-transparent-accent-color);
 }

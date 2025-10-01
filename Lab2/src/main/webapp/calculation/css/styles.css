@@ -1,0 +1,19 @@
+:root {
+    --header-height: 75px;
+    --footer-height: 50px;
+    --accent-color: #40b33d;
+    --dark-accent-color: #2a7a29;
+    --transparent-accent-color: rgba(64, 179, 61, 0.5);
+    --light-transparent-accent-color: rgba(64, 179, 61, 0.2);
+}
+
+body {
+    background-image: url(image/mandalorian.jpeg);
+    background-color: black;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}

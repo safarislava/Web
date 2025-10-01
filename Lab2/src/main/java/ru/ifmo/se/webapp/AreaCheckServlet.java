@@ -31,17 +31,19 @@ public class AreaCheckServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String xValues = request.getParameter("x");
-        String y = request.getParameter("y");
+        String yValues = request.getParameter("y");
         String rValues = request.getParameter("r");
 
         ArrayList<PointResponse> points = new ArrayList<>();
 
         try {
             for (String x : xValues.split(",")) {
-                for (String r : rValues.split(",")) {
-                    PointRequest pointRequest = new PointRequest(x, y, r);
-                    validationController.validate(pointRequest);
-                    points.add(process(pointRequest));
+                for (String y : yValues.split(",")) {
+                    for (String r : rValues.split(",")) {
+                        PointRequest pointRequest = new PointRequest(x, y, r);
+                        validationController.validate(pointRequest);
+                        points.add(process(pointRequest));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -53,7 +55,7 @@ public class AreaCheckServlet extends HttpServlet {
         }
 
         addSessionPoints(request, points);
-        request.getRequestDispatcher("/index.jsp").forward(request, response);
+        request.getRequestDispatcher("/calculation/index.jsp").forward(request, response);
     }
 
     private PointResponse process(PointRequest pointRequest) {
@@ -70,10 +72,12 @@ public class AreaCheckServlet extends HttpServlet {
 
     private void addSessionPoints(HttpServletRequest request, List<PointResponse> pointsNew) {
         HttpSession session = request.getSession();
-        List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
+        session.setAttribute("points", gson.toJson(pointsNew));
+
+        List<PointResponse> points = gson.fromJson((String) session.getAttribute("points-history"),
                 new TypeToken<List<PointResponse>>(){}.getType());
         if (points == null) points = new ArrayList<>();
         points.addAll(pointsNew);
-        session.setAttribute("Points", gson.toJson(points));
+        session.setAttribute("points-history", gson.toJson(points));
     }
 }

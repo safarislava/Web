@@ -1,3 +1,4 @@
+<%@ attribute name="scope" required="true" %>
 <%@ tag import="java.math.MathContext" %>
 <%@ tag import="java.math.BigDecimal" %>
 <%@ tag import="com.google.gson.Gson" %>
@@ -18,9 +19,9 @@
     }
 %>
 <%
-    if (session.getAttribute("Points") != null) {
+    if (session.getAttribute(scope) != null) {
         Gson gson = new Gson();
-        List<PointResponse> points = gson.fromJson((String) session.getAttribute("Points"),
+        List<PointResponse> points = gson.fromJson((String) session.getAttribute(scope),
                 new TypeToken<List<PointResponse>>(){}.getType());
 
         for (PointResponse point : points) {
