@@ -1,3 +1,4 @@
+<%@ page import="java.util.UUID" %>
 <%@taglib tagdir="/WEB-INF/tags" prefix="ctm" %>
 
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -9,6 +10,12 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/css/styles.css">
         <link href="https://fonts.cdnfonts.com/css/starjedi-special-edition" rel="stylesheet">
+
+        <%
+            String token = UUID.randomUUID().toString();
+            session.setAttribute("csrf-token", token);
+        %>
+        <meta name="csrf-token" content="<%= token %>">
     </head>
     <body>
         <header>

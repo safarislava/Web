@@ -35,7 +35,6 @@ public class AreaCheckServlet extends HttpServlet {
         String rValues = request.getParameter("r");
 
         ArrayList<PointResponse> points = new ArrayList<>();
-
         try {
             for (String x : xValues.split(",")) {
                 for (String y : yValues.split(",")) {
@@ -55,7 +54,7 @@ public class AreaCheckServlet extends HttpServlet {
         }
 
         addSessionPoints(request, points);
-        request.getRequestDispatcher("/calculation/index.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/calculation/index.jsp");
     }
 
     private PointResponse process(PointRequest pointRequest) {

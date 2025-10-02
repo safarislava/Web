@@ -1,30 +1,22 @@
 document.getElementById('graph').addEventListener('mousedown', async (event) => {
-    let x = (event.offsetX - 200) / R;
-    let y = (200 - event.offsetY) / R;
-    let rValues = getRValues().map(x => Number(x));
-
+    let rValues = getRValues()
     if (!rValues) {
         printError("R не указан");
         return;
     }
-
-    for (let r of rValues) {
-        if (-5 > y * r || y * r > 3) {
-            printError("Y неправильный");
-            return;
-        }
+    if (rValues.length > 1) {
+        printError("Указано много R");
+        return;
     }
 
-    let xValues = [], yValues = [];
-    for (let r of rValues) {
-        xValues.push(x * r);
-        yValues.push(y * r);
+    let r =  Number(rValues[0]);
+    let x = (event.offsetX - 200) / R * r;
+    let y = (200 - event.offsetY) / R * r;
+    if (-5 > y || y > 3) {
+        printError("Y неправильный");
+        return;
     }
-
-    window.location.replace(
-        `http://localhost:8080/Lab2_war_exploded/calculation/` +
-        `?x=${xValues.join(",")}&y=${yValues.join(",")}&r=${rValues.join(",")}`);
-
+    sendData([x], [y], [r]);
 });
 
 function getXValues() {
@@ -62,8 +54,7 @@ async function redirectCalculationPage() {
         return;
     }
 
-    window.location.replace(
-        `http://localhost:8080/Lab2_war_exploded/calculation/?x=${xValues.join(",")}&y=${y}&r=${rValues.join(",")}`);
+    sendData(xValues, [y], rValues);
 }
 
 function printError(error) {
@@ -72,4 +63,19 @@ function printError(error) {
 
 function clearError() {
     document.getElementById("problem-label").innerText = "";
+}
+
+async function sendData(xValues, yValues, rValues) {
+    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    if (token == null) return;
+
+    const query = `?x=${xValues.join(",")}&y=${yValues.join(",")}&r=${rValues.join(",")}`;
+    const response = await fetch(document.URL + "/controller-servlet" + query, {
+        redirect: 'follow',
+        headers: {"x-csrf-token": token},
+    }).then(response => {
+        if (response.redirected) {
+            window.location.href = response.url;
+        }
+    });
 }

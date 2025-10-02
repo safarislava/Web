@@ -14,7 +14,7 @@
     <body>
         <header>
             <div class="header-container">
-                <p class="header-item logo">lab2</p>
+                <a href="${pageContext.request.contextPath}" class="header-item logo">home</a>
                 <p class="header-item">safarislava</p>
                 <p class="header-item">variant467570</p>
             </div>
@@ -60,6 +60,5 @@
             </div>
         </footer>
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/main.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/calculation/js/script.js"></script>
     </body>
 </html>

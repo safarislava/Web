@@ -7,13 +7,20 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
 import java.io.IOException;
 
 @WebServlet(name = "controllerServlet", value = "/controller-servlet")
-public class ControllerServlet extends HttpServlet {
+public class ControllerServlet extends  HttpServlet{
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String verifiableToken = request.getHeader("x-csrf-token");
+        String token = request.getSession().getAttribute("csrf-token").toString();
+
+        if (verifiableToken == null || !verifiableToken.equals(token)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
         String x = request.getParameter("x");
         String y = request.getParameter("y");
         String r = request.getParameter("r");
@@ -24,3 +31,4 @@ public class ControllerServlet extends HttpServlet {
         }
     }
 }
+
