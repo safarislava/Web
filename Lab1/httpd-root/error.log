@@ -238,3 +238,8 @@
 [Fri Sep 19 11:41:29.495602 2025] [:notice] [pid 98424] FastCGI: process manager initialized (pid 98424)
 [Fri Sep 19 11:41:29.496868 2025] [mpm_prefork:notice] [pid 98410] AH00163: Apache/2.4.65 (Unix) OpenSSL/3.5.2 PHP/8.4.12 mod_fastcgi/mod_fastcgi-SNAP-0910052141 configured -- resuming normal operations
 [Fri Sep 19 11:41:29.496883 2025] [core:notice] [pid 98410] AH00094: Command line: '/opt/homebrew/opt/httpd/bin/httpd -f /Users/safarislava/Documents/web/Lab1/httpd.conf'
+[Sat Oct 04 17:14:41.367338 2025] [ssl:warn] [pid 95938] AH01873: Init: Session Cache is not configured [hint: SSLSessionCache]
+[Sat Oct 04 17:14:41.445852 2025] [:notice] [pid 95952] FastCGI: process manager initialized (pid 95952)
+[Sat Oct 04 17:14:41.446763 2025] [mpm_prefork:notice] [pid 95938] AH00163: Apache/2.4.65 (Unix) OpenSSL/3.5.2 PHP/8.4.12 mod_fastcgi/mod_fastcgi-SNAP-0910052141 configured -- resuming normal operations
+[Sat Oct 04 17:14:41.446778 2025] [core:notice] [pid 95938] AH00094: Command line: '/opt/homebrew/opt/httpd/bin/httpd -f /Users/safarislava/Documents/web/Lab1/httpd.conf'
+[Sat Oct 04 17:22:53.580509 2025] [mpm_prefork:notice] [pid 95938] AH00169: caught SIGTERM, shutting down

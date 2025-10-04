@@ -1,4 +1,4 @@
-package ru.ifmo.se.webapp;
+package ru.ifmo.se.weblab;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;

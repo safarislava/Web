@@ -1,4 +1,4 @@
-package ru.ifmo.se.webapp;
+package ru.ifmo.se.weblab;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import ru.ifmo.se.webapp.controller.CacheController;
-import ru.ifmo.se.webapp.controller.CalculationController;
-import ru.ifmo.se.webapp.controller.ValidationController;
-import ru.ifmo.se.webapp.dto.PointRequest;
-import ru.ifmo.se.webapp.dto.PointResponse;
+import ru.ifmo.se.weblab.controller.CacheController;
+import ru.ifmo.se.weblab.controller.CalculationController;
+import ru.ifmo.se.weblab.controller.ValidationController;
+import ru.ifmo.se.weblab.dto.PointRequest;
+import ru.ifmo.se.weblab.dto.PointResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
