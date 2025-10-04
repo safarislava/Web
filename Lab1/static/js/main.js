@@ -1,4 +1,4 @@
-let urlFastCGI = "fcgi://localhost:24570/api"
+let urlFastCGI = "http://localhost:24570/api"
 
 function getXValues() {
     let xBoxes = document.getElementsByName("x").values();
@@ -61,6 +61,7 @@ function sendData() {
             xhr.open("POST", urlFastCGI, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function() {
+                console.log(xhr.responseText);
                 process(JSON.parse(xhr.responseText));
             };
             xhr.send(JSON.stringify({"x": x, "y" : y, "r" : r}));
