@@ -19,7 +19,7 @@ public class CalculationController {
         BigDecimal result = BigDecimal.ONE;
         BigDecimal term = BigDecimal.ONE;
         BigDecimal xSquared = x.pow(2, mathContext);
-        for (int n = 1; n <= 100; n++) {
+        for (int n = 1; n <= 20; n++) {
             term = term.multiply(xSquared.negate(), mathContext);
             term = term.divide(BigDecimal.valueOf((2 * n - 1) * (2 * n)), mathContext);
 
@@ -33,7 +33,7 @@ public class CalculationController {
         BigDecimal term = x;
         BigDecimal xSquared = x.pow(2, mathContext);
 
-        for (int n = 1; n <= 100; n++) {
+        for (int n = 1; n <= 20; n++) {
             term = term.multiply(xSquared.negate(), mathContext);
             term = term.divide(BigDecimal.valueOf((2 * n) * (2 * n + 1)), mathContext);
 

@@ -4,14 +4,7 @@
               xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
                                   http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
               version="2.3">
-
     <application>
         <el-resolver>org.primefaces.application.exceptionhandler.PrimeExceptionHandlerELResolver</el-resolver>
     </application>
-
-    <managed-bean>
-        <managed-bean-name>control</managed-bean-name>
-        <managed-bean-class>ru.ifmo.se.weblab.bean.ControlBean</managed-bean-class>
-        <managed-bean-scope>request</managed-bean-scope>
-    </managed-bean>
 </faces-config>

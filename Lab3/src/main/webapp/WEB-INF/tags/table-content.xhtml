@@ -1,22 +1,39 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:c="http://java.sun.com/jsp/jstl/core"
-      xmlns:cc="http://java.sun.com/jsf/composite">
-<cc:implementation>
-    <c:set var="points" value="#{control.getPoints()}" scope="request" />
-    <ui:repeat value="#{points}" var="point" varStatus="status">
-        <tr>
-            <td>#{status.index + 1}</td>
-            <td>#{point.x}</td>
-            <td>#{point.y}</td>
-            <td>#{point.r}</td>
-            <td>#{point.isPointInArea ? 'Да' : 'Нет'}</td>
-            <td>#{point.deltaTime} мс</td>
-            <td>#{point.time}</td>
-        </tr>
-    </ui:repeat>
-</cc:implementation>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition>
+    <h:dataTable id="resultsTable" value="#{controlBean.getPoints()}" var="point"
+                 styleClass="point-table" headerClass="table-header" rowClasses="table-row">
+        <h:column>
+            <f:facet name="header">Номер</f:facet>
+            #{point.id}
+        </h:column>
+        <h:column>
+            <f:facet name="header">X</f:facet>
+            #{point.x}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Y</f:facet>
+            #{point.y}
+        </h:column>
+        <h:column>
+            <f:facet name="header">R</f:facet>
+            #{point.r}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Попал</f:facet>
+            #{point.isPointInArea ? 'Да' : 'Нет'}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Время выполнения</f:facet>
+            #{point.deltaTime / 1000000} мс
+        </h:column>
+        <h:column>
+            <f:facet name="header">Когда</f:facet>
+            #{point.time}
+        </h:column>
+    </h:dataTable>
+</ui:composition>
 </html>

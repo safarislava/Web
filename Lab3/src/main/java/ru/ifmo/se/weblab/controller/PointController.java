@@ -13,7 +13,7 @@ public class PointController {
     private final CacheController cacheController = new CacheController();
     private final ValidationController validationController = new ValidationController();
     private final CalculationController calculationController = new CalculationController();
-    private final PointRepository pointRepository = new PointRepository();
+    private final PointRepository pointRepository = new PointJooqRepository();
 
     private PointResponse process(PointRequest pointRequest) {
         long startTime = System.nanoTime();

@@ -9,4 +9,8 @@
         <tag-name>table-content</tag-name>
         <source>tags/table-content.xhtml</source>
     </tag>
+    <tag>
+        <tag-name>graph-points</tag-name>
+        <source>tags/graph-points.xhtml</source>
+    </tag>
 </facelet-taglib>

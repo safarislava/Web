@@ -1,42 +1,57 @@
 package ru.ifmo.se.weblab.bean;
 
 
+import com.google.gson.Gson;
 import ru.ifmo.se.weblab.controller.PointController;
-import ru.ifmo.se.weblab.controller.PointRepository;
+import ru.ifmo.se.weblab.controller.PointHibernateRepository;
 import ru.ifmo.se.weblab.dto.PointResponse;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
+@ManagedBean(name="controlBean", eager = true)
+@ViewScoped
 public class ControlBean implements Serializable {
-    private List<String> x;
+    private String x;
     private String y;
-    private List<String> r;
+    private String r;
+    private List<PointResponse> points;
+    private String pointsJson;
 
-    public List<String> getX() { return x; }
-    public void setX(List<String> x) { this.x = x; }
+    public String getX() { return x; }
+    public void setX(String x) { this.x = x; }
 
     public String getY() { return y; }
     public void setY(String y) { this.y = y; }
 
-    public List<String> getR() { return r; }
-    public void setR(List<String> r) { this.r = r; }
+    public String getR() { return r; }
+    public void setR(String r) { this.r = r; }
+
+    private void loadPoints() {
+        PointHibernateRepository repository = new PointHibernateRepository();
+        points = repository.findAll();
+    }
 
     public List<PointResponse> getPoints() {
-        PointRepository repository = new PointRepository();
-        return repository.findAll();
+        if (points == null) loadPoints();
+        return points;
+    }
+
+    public String getPointsJson() {
+        if (points == null) loadPoints();
+        Gson gson = new Gson();
+        return gson.toJson(points);
     }
 
     public void addPoints() throws IOException {
-        ArrayList<String> yVals = new ArrayList<>();
-        yVals.add(y);
-
         if (x != null && y != null && r != null) {
             PointController pointController = new PointController();
-            pointController.updatePoints(x, yVals, r);
+            pointController.updatePoints(List.of(x), List.of(y), List.of(r));
         }
+        loadPoints();
     }
 }
 

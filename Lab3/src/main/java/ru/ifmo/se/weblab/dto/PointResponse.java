@@ -1,7 +1,6 @@
 package ru.ifmo.se.weblab.dto;
 
-import jakarta.persistence.*;
-
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.Instant;
 
@@ -29,6 +28,14 @@ public class PointResponse {
         this.isPointInArea = isPointInArea;
         this.deltaTime = deltaTime;
         this.time = Timestamp.from(Instant.now());
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getStatus() {
