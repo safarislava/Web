@@ -19,7 +19,6 @@ public class ControlBean implements Serializable {
     private String y;
     private String r;
     private List<PointResponse> points;
-    private String pointsJson;
 
     public String getX() { return x; }
     public void setX(String x) { this.x = x; }
