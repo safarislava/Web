@@ -23,17 +23,13 @@ function printError(error) {
 function updateGraphImage() {}
 
 function handleGraphAjaxEvent(data) {
-    if (data.status === "error") {
+    if (data.status === "begin") {
+        let r = document.querySelector('[id$="hidden-r"]').value;
+        console.log(r);
 
-        const requiredFields = document.querySelectorAll('#graphForm [required]');
-        let hasEmptyFields = false;
-
-        requiredFields.forEach(field => {
-            if (!field.value || field.value.trim() === '') hasEmptyFields = true;
-        });
-
-        if (hasEmptyFields) {
+        if (r == null || r.trim() === "") {
             printError('R не введён');
+            return;
         }
         else {
             printError("")
@@ -42,19 +38,29 @@ function handleGraphAjaxEvent(data) {
 }
 
 function handleMainAjaxEvent(data) {
-    if (data.status === "error") {
-        const requiredFields = document.querySelectorAll('#mainForm [required]');
-        let hasEmptyFields = false;
-
-        requiredFields.forEach(field => {
-            if (!field.value || field.value.trim() === '') hasEmptyFields = true;
-        });
-
-        if (hasEmptyFields) {
-            printError('Данные невалидны');
+    if (data.status === "begin") {
+        let x = document.querySelector('[id$="hiddenMainForm:form-x"]').value;
+        console.log(x);
+        if (x == null || x.trim() === "") {
+            printError('X не введён');
+            return;
         }
-        else {
-            printError("")
+
+        let y = document.querySelector('[id$="hiddenMainForm:form-y"]').value;
+        console.log(y);
+        if (y == null || y.trim() === "") {
+            printError('Y не введён');
+            return;
         }
+
+
+        let r = document.querySelector('[id$="hiddenMainForm:form-r"]').value;
+        console.log(r);
+        if (r == null || r.trim() === "") {
+            printError('R не введён');
+            return;
+        }
+
+        printError("")
     }
 }

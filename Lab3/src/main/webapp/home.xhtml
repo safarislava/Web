@@ -23,6 +23,7 @@
             <div class="graph-container">
                 <h:form id="hidden-points">
                     <h:inputHidden id="points" value="#{controlBean.getPointsJson()}"/>
+                    <h:inputHidden id="form-r-image" value="#{controlBean.r}"/>
                     <h:outputScript>updateGraphImage()</h:outputScript>
                 </h:form>
                 <h:form id="graphForm">
@@ -35,6 +36,11 @@
                     </h:graphicImage>
                 </h:form>
             </div>
+            <h:form id="hiddenMainForm">
+                <h:inputHidden id="form-x" value="#{controlBean.x}"/>
+                <h:inputHidden id="form-y" value="#{controlBean.y}"/>
+                <h:inputHidden id="form-r" value="#{controlBean.r}"/>
+            </h:form>
             <h:form class="input-form" id="mainForm">
                 <h2 class="form-title">Параметры точки</h2>
                 <div class="input-group">
@@ -50,13 +56,16 @@
                             <f:selectItem itemValue="1" itemLabel="1"/>
                             <f:selectItem itemValue="1.5" itemLabel="+1.5"/>
                             <f:selectItem itemValue="2" itemLabel="2"/>
+                            <f:ajax event="click" render=":hiddenMainForm:form-x"/>
                         </h:selectOneRadio>
                     </div>
                 </div>
                 <div class="input-group">
                     <label class="input-group-label">Координата Y:</label>
-                    <h:inputText type="text" id="y-data" value="#{controlBean.y}"
-                                 title="Введите значение Y от -5 до 3" required="true"/>
+                    <h:inputText type="text" value="#{controlBean.y}"
+                                 title="Введите значение Y от -5 до 3" required="true">
+                        <f:ajax event="change" render=":hiddenMainForm:form-y"/>
+                    </h:inputText>
                 </div>
                 <div class="input-group">
                     <label class="input-group-label">Значение R:</label>
@@ -67,7 +76,7 @@
                             <f:selectItem itemValue="2" itemLabel="2"/>
                             <f:selectItem itemValue="2.5" itemLabel="2.5"/>
                             <f:selectItem itemValue="3" itemLabel="3"/>
-                            <f:ajax event="click" render=":graphForm:hidden-r"/>
+                            <f:ajax event="click" render=":graphForm:hidden-r :hiddenMainForm:form-r :hidden-points"/>
                         </h:selectOneRadio>
                     </div>
                 </div>

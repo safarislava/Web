@@ -25,8 +25,8 @@ public class PointHibernateRepository implements PointRepository {
             }
             entityManager.getTransaction().commit();
         }
-        finally {
-            emf.close();
+        catch (Exception e) {
+            close();
         }
     }
 
@@ -37,8 +37,9 @@ public class PointHibernateRepository implements PointRepository {
             return em.createQuery(
                     "SELECT p FROM PointResponse p ORDER BY p.id DESC", PointResponse.class).getResultList();
         }
-        finally {
-            emf.close();
+        catch (Exception e) {
+            close();
+            return null;
         }
     }
 

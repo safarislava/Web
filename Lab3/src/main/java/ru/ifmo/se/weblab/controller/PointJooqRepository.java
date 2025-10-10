@@ -20,6 +20,7 @@ public class PointJooqRepository implements PointRepository {
             throw new RuntimeException("Failed to initialize DSLContext", e);
         }
     }
+
     @Override
     public void save(List<PointResponse> points) {
         Points table = Points.POINTS;
@@ -59,10 +60,11 @@ public class PointJooqRepository implements PointRepository {
             point.setTime(record.getTime());
             points.add(point);
         }
-
         return points;
     }
 
     @Override
-    public void close() {}
+    public void close() throws Exception {
+
+    }
 }

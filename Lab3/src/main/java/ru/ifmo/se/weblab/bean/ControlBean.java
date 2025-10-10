@@ -4,21 +4,23 @@ package ru.ifmo.se.weblab.bean;
 import com.google.gson.Gson;
 import ru.ifmo.se.weblab.controller.PointController;
 import ru.ifmo.se.weblab.controller.PointHibernateRepository;
+import ru.ifmo.se.weblab.controller.PointRepository;
 import ru.ifmo.se.weblab.dto.PointResponse;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 @ManagedBean(name="controlBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class ControlBean implements Serializable {
     private String x;
     private String y;
     private String r;
     private List<PointResponse> points;
+    private final PointRepository repository = new PointHibernateRepository();
 
     public String getX() { return x; }
     public void setX(String x) { this.x = x; }
@@ -29,8 +31,8 @@ public class ControlBean implements Serializable {
     public String getR() { return r; }
     public void setR(String r) { this.r = r; }
 
+
     private void loadPoints() {
-        PointHibernateRepository repository = new PointHibernateRepository();
         points = repository.findAll();
     }
 
@@ -48,9 +50,10 @@ public class ControlBean implements Serializable {
     public void addPoints() throws IOException {
         if (x != null && y != null && r != null) {
             PointController pointController = new PointController();
-            pointController.updatePoints(List.of(x), List.of(y), List.of(r));
+            if (pointController.updatePoints(List.of(x), List.of(y), List.of(r))) {
+                loadPoints();
+            }
         }
-        loadPoints();
     }
 }
 

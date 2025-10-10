@@ -73,11 +73,13 @@ function drawMainFigure(R = 150) {
 }
 
 function drawPoints() {
+    let rScale = document.querySelector('[id$="hidden-points:form-r-image"]').value;
+
     let pointsJson = document.querySelector('[id$="hidden-points:points"]').value;
     let points = JSON.parse(pointsJson);
 
     for (let point of points) {
-        addPoint(point.x, point.y, point.r, point.isPointInArea);
+        addPoint(point.x, point.y, point.r, point.isPointInArea, rScale);
     }
 }
 
@@ -139,18 +141,20 @@ function drawLabels() {
     ctx.restore();
 }
 
-function addPoint(x, y, r, hit) {
+function addPoint(x, y, r, hit, rScale) {
     ctx.save();
 
-    let scaledX = (x / r) * 150;
-    let scaledY = (y / r) * 150;
+    if (r === rScale) {
+        let scaledX = (x / r) * 150;
+        let scaledY = (y / r) * 150;
 
-    ctx.fillStyle = hit ? 'green' : 'red';
-    ctx.beginPath();
-    ctx.arc(scaledX, scaledY, 3, 0, Math.PI * 2);
-    ctx.fill();
+        ctx.fillStyle = hit ? 'green' : 'red';
+        ctx.beginPath();
+        ctx.arc(scaledX, scaledY, 3, 0, Math.PI * 2);
+        ctx.fill();
 
-    ctx.restore();
+        ctx.restore();
+    }
 }
 
 updateGraphImage();

@@ -13,7 +13,7 @@ public class PointController {
     private final CacheController cacheController = new CacheController();
     private final ValidationController validationController = new ValidationController();
     private final CalculationController calculationController = new CalculationController();
-    private final PointRepository pointRepository = new PointJooqRepository();
+    private final PointRepository pointRepository = new PointHibernateRepository();
 
     private PointResponse process(PointRequest pointRequest) {
         long startTime = System.nanoTime();
@@ -27,7 +27,7 @@ public class PointController {
         return new PointResponse(isPointInArea, deltaTime, pointRequest);
     }
 
-    public void updatePoints(List<String> xValues, List<String>  yValues, List<String>  rValues) throws IOException {
+    public boolean updatePoints(List<String> xValues, List<String>  yValues, List<String>  rValues) throws IOException {
         ArrayList<PointResponse> points = new ArrayList<>();
         try {
             for (String x : xValues) {
@@ -42,9 +42,10 @@ public class PointController {
         } catch (Exception e) {
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
             externalContext.redirect(externalContext.getRequestContextPath() + "/error/400.jsp");
-            return;
+            return false;
         }
+
         pointRepository.save(points);
-        pointRepository.close();
+        return true;
     }
 }

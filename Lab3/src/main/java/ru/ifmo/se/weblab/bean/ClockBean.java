@@ -1,13 +1,13 @@
 package ru.ifmo.se.weblab.bean;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
 @ManagedBean(name="clockBean", eager = true)
-@ViewScoped
+@SessionScoped
 public class ClockBean implements Serializable {
     private double hourAngle;
     private double minuteAngle;
