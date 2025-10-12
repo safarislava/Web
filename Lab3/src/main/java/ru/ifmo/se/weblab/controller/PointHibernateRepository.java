@@ -34,8 +34,7 @@ public class PointHibernateRepository implements PointRepository {
     public List<PointResponse> findAll() {
         try {
             EntityManager em = emf.createEntityManager();
-            return em.createQuery(
-                    "SELECT p FROM PointResponse p ORDER BY p.id DESC", PointResponse.class).getResultList();
+            return em.createQuery("SELECT p FROM PointResponse p ORDER BY p.id DESC", PointResponse.class).getResultList();
         }
         catch (Exception e) {
             close();

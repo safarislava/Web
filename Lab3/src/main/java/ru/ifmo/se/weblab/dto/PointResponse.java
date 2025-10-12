@@ -6,17 +6,19 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "points")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class PointResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    public String status = "200";
-    public String x;
-    public String y;
-    public String r;
-    public boolean isPointInArea;
-    public int deltaTime;
-    public Timestamp time;
+    private String status = "200";
+    private String x;
+    private String y;
+    private String r;
+    private boolean isPointInArea;
+    private int deltaTime;
+    private Timestamp time;
+    protected String shape;
 
     public PointResponse() {
     }
@@ -28,6 +30,7 @@ public class PointResponse {
         this.isPointInArea = isPointInArea;
         this.deltaTime = deltaTime;
         this.time = Timestamp.from(Instant.now());
+        this.shape = "circle";
     }
 
     public Long getId() {
@@ -92,5 +95,13 @@ public class PointResponse {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    public String getShape() {
+        return shape;
+    }
+
+    public void setShape(String shape) {
+        this.shape = shape;
     }
 }

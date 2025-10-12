@@ -40,24 +40,20 @@ function handleGraphAjaxEvent(data) {
 function handleMainAjaxEvent(data) {
     if (data.status === "begin") {
         let x = document.querySelector('[id$="hiddenMainForm:form-x"]').value;
-        console.log(x);
         if (x == null || x.trim() === "") {
-            printError('X не введён');
+            printError('X невалиден');
             return;
         }
 
         let y = document.querySelector('[id$="hiddenMainForm:form-y"]').value;
-        console.log(y);
         if (y == null || y.trim() === "") {
-            printError('Y не введён');
+            printError('Y невалиден');
             return;
         }
 
-
         let r = document.querySelector('[id$="hiddenMainForm:form-r"]').value;
-        console.log(r);
         if (r == null || r.trim() === "") {
-            printError('R не введён');
+            printError('R невалиден');
             return;
         }
 

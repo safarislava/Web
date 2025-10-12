@@ -74,12 +74,23 @@ function drawMainFigure(R = 150) {
 
 function drawPoints() {
     let rScale = document.querySelector('[id$="hidden-points:form-r-image"]').value;
+    if (rScale == null || rScale.trim() === "") return;
 
     let pointsJson = document.querySelector('[id$="hidden-points:points"]').value;
     let points = JSON.parse(pointsJson);
 
     for (let point of points) {
-        addPoint(point.x, point.y, point.r, point.isPointInArea, rScale);
+        switch (point.shape) {
+            case 'circle':
+                addPoint(point.x, point.y, point.r, point.isPointInArea, rScale);
+                break;
+            case 'square':
+                addSquarePoint(point.x, point.y, point.r, point.isPointInArea, rScale);
+                break;
+            case 'triangle':
+                addTrianglePoint(point.x, point.y, point.r, point.isPointInArea, rScale);
+                break;
+        }
     }
 }
 
@@ -151,6 +162,40 @@ function addPoint(x, y, r, hit, rScale) {
         ctx.fillStyle = hit ? 'green' : 'red';
         ctx.beginPath();
         ctx.arc(scaledX, scaledY, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+    }
+}
+
+function addSquarePoint(x, y, r, hit, rScale) {
+    ctx.save();
+
+    if (r === rScale) {
+        let scaledX = (x / r) * 150;
+        let scaledY = (y / r) * 150;
+
+        ctx.fillStyle = hit ? 'green' : 'red';
+        ctx.beginPath();
+        ctx.rect(scaledX-3, scaledY-3, 6, 6);
+        ctx.fill();
+
+        ctx.restore();
+    }
+}
+
+function addTrianglePoint(x, y, r, hit, rScale) {
+    ctx.save();
+
+    if (r === rScale) {
+        let scaledX = (x / r) * 150;
+        let scaledY = (y / r) * 150;
+
+        ctx.fillStyle = hit ? 'green' : 'red';
+        ctx.beginPath();
+        ctx.moveTo(scaledX, scaledY + 4);
+        ctx.lineTo(scaledX + 4, scaledY - 2);
+        ctx.lineTo(scaledX - 4, scaledY - 2);
         ctx.fill();
 
         ctx.restore();

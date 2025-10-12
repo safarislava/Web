@@ -2,18 +2,22 @@ package ru.ifmo.se.weblab.controller;
 
 import ru.ifmo.se.weblab.dto.PointRequest;
 import ru.ifmo.se.weblab.dto.PointResponse;
+import ru.ifmo.se.weblab.dto.SquarePointResponse;
+import ru.ifmo.se.weblab.dto.TrianglePointResponse;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PointController {
     private final CacheController cacheController = new CacheController();
     private final ValidationController validationController = new ValidationController();
     private final CalculationController calculationController = new CalculationController();
     private final PointRepository pointRepository = new PointHibernateRepository();
+    private final Random random = new Random();
 
     private PointResponse process(PointRequest pointRequest) {
         long startTime = System.nanoTime();
@@ -24,10 +28,21 @@ public class PointController {
         }
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new PointResponse(isPointInArea, deltaTime, pointRequest);
+
+        switch (random.nextInt(3)) {
+            case 1 -> {
+                return new SquarePointResponse(isPointInArea, deltaTime, pointRequest);
+            }
+            case 2 -> {
+                return new TrianglePointResponse(isPointInArea, deltaTime, pointRequest);
+            }
+            default -> {
+                return new PointResponse(isPointInArea, deltaTime, pointRequest);
+            }
+        }
     }
 
-    public boolean updatePoints(List<String> xValues, List<String>  yValues, List<String>  rValues) throws IOException {
+    public void addPoints(List<String> xValues, List<String>  yValues, List<String>  rValues) throws IOException {
         ArrayList<PointResponse> points = new ArrayList<>();
         try {
             for (String x : xValues) {
@@ -42,10 +57,11 @@ public class PointController {
         } catch (Exception e) {
             ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
             externalContext.redirect(externalContext.getRequestContextPath() + "/error/400.jsp");
-            return false;
         }
-
         pointRepository.save(points);
-        return true;
+    }
+
+    public List<PointResponse> getPoints() {
+        return pointRepository.findAll();
     }
 }

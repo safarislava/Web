@@ -65,6 +65,7 @@
                     <h:inputText type="text" value="#{controlBean.y}"
                                  title="Введите значение Y от -5 до 3" required="true">
                         <f:ajax event="change" render=":hiddenMainForm:form-y"/>
+                        <f:validateDoubleRange minimum="-3" maximum="3"/>
                     </h:inputText>
                 </div>
                 <div class="input-group">

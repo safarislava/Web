@@ -16,6 +16,7 @@ public class DatabaseConfig {
     static {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl("jdbc:postgresql://185.239.141.48:5432/pointsdb");
+        config.setDriverClassName("org.postgresql.Driver");
         config.setUsername("s467570");
         config.setPassword("ckfdecbr13579");
         config.setMaximumPoolSize(10);
@@ -23,7 +24,6 @@ public class DatabaseConfig {
         config.setConnectionTimeout(30000);
         config.setIdleTimeout(600000);
         config.setMaxLifetime(1800000);
-
         dataSource = new HikariDataSource(config);
     }
 
