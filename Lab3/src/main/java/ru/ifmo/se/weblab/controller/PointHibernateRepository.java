@@ -6,6 +6,7 @@ import ru.ifmo.se.weblab.dto.PointResponse;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PointHibernateRepository implements PointRepository {
@@ -38,7 +39,7 @@ public class PointHibernateRepository implements PointRepository {
         }
         catch (Exception e) {
             close();
-            return null;
+            return new ArrayList<>();
         }
     }
 
