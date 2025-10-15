@@ -18,7 +18,6 @@ public class PointResponse {
     private boolean isPointInArea;
     private int deltaTime;
     private Timestamp time;
-    protected String shape;
 
     public PointResponse() {
     }
@@ -30,7 +29,6 @@ public class PointResponse {
         this.isPointInArea = isPointInArea;
         this.deltaTime = deltaTime;
         this.time = Timestamp.from(Instant.now());
-        this.shape = "circle";
     }
 
     public Long getId() {
@@ -95,13 +93,5 @@ public class PointResponse {
 
     public void setTime(Timestamp time) {
         this.time = time;
-    }
-
-    public String getShape() {
-        return shape;
-    }
-
-    public void setShape(String shape) {
-        this.shape = shape;
     }
 }

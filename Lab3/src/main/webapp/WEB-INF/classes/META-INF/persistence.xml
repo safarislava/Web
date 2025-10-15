@@ -8,8 +8,7 @@
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <jta-data-source>java:jboss/datasources/WebLabDS</jta-data-source>
     <class>ru.ifmo.se.weblab.dto.PointResponse</class>
-    <class>ru.ifmo.se.weblab.dto.SquarePointResponse</class>
-    <class>ru.ifmo.se.weblab.dto.TrianglePointResponse</class>
+    <class>ru.ifmo.se.weblab.dto.ShapablePointResponse</class>
     <properties>
         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
         <property name="hibernate.hbm2ddl.auto" value="update"/>

@@ -1,9 +1,6 @@
 package ru.ifmo.se.weblab.controller;
 
-import ru.ifmo.se.weblab.dto.PointRequest;
-import ru.ifmo.se.weblab.dto.PointResponse;
-import ru.ifmo.se.weblab.dto.SquarePointResponse;
-import ru.ifmo.se.weblab.dto.TrianglePointResponse;
+import ru.ifmo.se.weblab.dto.*;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -19,7 +16,7 @@ public class PointController {
     private final PointRepository pointRepository = new PointHibernateRepository();
     private final Random random = new Random();
 
-    private PointResponse process(PointRequest pointRequest) {
+    private ShapablePointResponse process(PointRequest pointRequest) {
         long startTime = System.nanoTime();
         Boolean isPointInArea = cacheController.getCache(pointRequest);
         if (isPointInArea == null) {
@@ -30,20 +27,23 @@ public class PointController {
         int deltaTime = (int) (endTime - startTime);
 
         switch (random.nextInt(3)) {
+            case 0 -> {
+                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "circle");
+            }
             case 1 -> {
-                return new SquarePointResponse(isPointInArea, deltaTime, pointRequest);
+                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "square");
             }
             case 2 -> {
-                return new TrianglePointResponse(isPointInArea, deltaTime, pointRequest);
+                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "triangle");
             }
             default -> {
-                return new PointResponse(isPointInArea, deltaTime, pointRequest);
+                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "");
             }
         }
     }
 
     public void addPoints(List<String> xValues, List<String>  yValues, List<String>  rValues) throws IOException {
-        ArrayList<PointResponse> points = new ArrayList<>();
+        ArrayList<ShapablePointResponse> points = new ArrayList<>();
         try {
             for (String x : xValues) {
                 for (String y : yValues) {
@@ -61,7 +61,7 @@ public class PointController {
         pointRepository.save(points);
     }
 
-    public List<PointResponse> getPoints() {
+    public List<ShapablePointResponse> getPoints() {
         return pointRepository.findAll();
     }
 }
