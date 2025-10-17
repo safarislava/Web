@@ -16,7 +16,7 @@ public class PointController {
     private final PointRepository pointRepository = new PointHibernateRepository();
     private final Random random = new Random();
 
-    private ShapablePointResponse process(PointRequest pointRequest) {
+    private PointResponse process(PointRequest pointRequest) {
         long startTime = System.nanoTime();
         Boolean isPointInArea = cacheController.getCache(pointRequest);
         if (isPointInArea == null) {
@@ -28,22 +28,22 @@ public class PointController {
 
         switch (random.nextInt(3)) {
             case 0 -> {
-                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "circle");
+                return new CirclePointResponse(isPointInArea, deltaTime, pointRequest);
             }
             case 1 -> {
-                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "square");
+                return new SquarePointResponse(isPointInArea, deltaTime, pointRequest);
             }
             case 2 -> {
-                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "triangle");
+                return new TrianglePointResponse(isPointInArea, deltaTime, pointRequest);
             }
             default -> {
-                return new ShapablePointResponse(isPointInArea, deltaTime, pointRequest, "");
+                return new PointResponse(isPointInArea, deltaTime, pointRequest);
             }
         }
     }
 
     public void addPoints(List<String> xValues, List<String>  yValues, List<String>  rValues) throws IOException {
-        ArrayList<ShapablePointResponse> points = new ArrayList<>();
+        ArrayList<PointResponse> points = new ArrayList<>();
         try {
             for (String x : xValues) {
                 for (String y : yValues) {
@@ -61,7 +61,7 @@ public class PointController {
         pointRepository.save(points);
     }
 
-    public List<ShapablePointResponse> getPoints() {
+    public List<PointResponse> getPoints() {
         return pointRepository.findAll();
     }
 }

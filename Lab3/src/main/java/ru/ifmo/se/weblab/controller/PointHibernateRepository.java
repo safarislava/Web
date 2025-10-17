@@ -2,32 +2,34 @@ package ru.ifmo.se.weblab.controller;
 
 
 import ru.ifmo.se.weblab.dto.PointResponse;
-import ru.ifmo.se.weblab.dto.ShapablePointResponse;
+import ru.ifmo.se.weblab.utils.PointComparator;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PointHibernateRepository implements PointRepository {
-    private final EntityManagerFactory emf;
+    private EntityManagerFactory emf;
+    private EntityManager entityManager;
 
-    public PointHibernateRepository() {
-        this.emf = Persistence.createEntityManagerFactory("weblab");
+    public void guarantyConnection() {
+        if (emf == null || !emf.isOpen()) emf = Persistence.createEntityManagerFactory("weblab");
+        if (entityManager == null || !entityManager.isOpen()) entityManager = emf.createEntityManager();
     }
 
     @Override
-    public void save(List<ShapablePointResponse> points) {
+    public void save(List<PointResponse> points) {
+        guarantyConnection();
+
         try {
-            EntityManager entityManager = emf.createEntityManager();
             entityManager.getTransaction().begin();
             for (PointResponse point : points) {
                 entityManager.persist(point);
             }
             entityManager.getTransaction().commit();
-            entityManager.close();
         }
         catch (Exception e) {
             close();
@@ -35,18 +37,20 @@ public class PointHibernateRepository implements PointRepository {
     }
 
     @Override
-    public List<ShapablePointResponse> findAll() {
-        try {
-            EntityManager entityManager = emf.createEntityManager();
-            TypedQuery<ShapablePointResponse> query = entityManager.createQuery(
-                    "SELECT s FROM ShapablePointResponse s", ShapablePointResponse.class);
+    public List<PointResponse> findAll() {
+        guarantyConnection();
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
-            List<ShapablePointResponse> points = query.getResultList();
-            entityManager.close();
+        try {
+            CriteriaQuery<PointResponse> criteriaQuery = criteriaBuilder.createQuery(PointResponse.class);
+            Root<PointResponse> circleRoot = criteriaQuery.from(PointResponse.class);
+            criteriaQuery.select(circleRoot);
+            TypedQuery<PointResponse> query = entityManager.createQuery(criteriaQuery);
+            List<PointResponse> points = new ArrayList<>(query.getResultList());
+            points.sort(new PointComparator());
             return points;
         }
         catch (Exception e) {
-            e.printStackTrace();
             close();
             return new ArrayList<>();
         }
@@ -54,6 +58,9 @@ public class PointHibernateRepository implements PointRepository {
 
     @Override
     public void close() {
+        if (entityManager != null && !entityManager.isOpen()) {
+            entityManager.close();
+        }
         if (emf != null && emf.isOpen()) {
             emf.close();
         }

@@ -11,6 +11,8 @@ public class PointResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Version
+    private Long version;
     private String status = "200";
     private String x;
     private String y;
@@ -37,6 +39,14 @@ public class PointResponse {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 
     public String getStatus() {

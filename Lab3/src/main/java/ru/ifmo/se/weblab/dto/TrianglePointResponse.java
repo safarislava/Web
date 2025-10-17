@@ -5,17 +5,17 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "shapable_points")
+@Table(name = "triangle_points")
 @PrimaryKeyJoinColumn(name = "id")
-public class ShapablePointResponse extends PointResponse {
+public class TrianglePointResponse extends PointResponse {
     private String shape;
 
-    public ShapablePointResponse() {
+    public TrianglePointResponse() {
     }
 
-    public ShapablePointResponse(boolean isPointInArea, int deltaTime, PointRequest pointRequest, String shape) {
+    public TrianglePointResponse(boolean isPointInArea, int deltaTime, PointRequest pointRequest) {
         super(isPointInArea, deltaTime, pointRequest);
-        this.shape = shape;
+        this.shape = "triangle";
     }
 
     public String getShape() {
