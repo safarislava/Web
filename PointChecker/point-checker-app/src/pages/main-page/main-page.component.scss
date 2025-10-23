@@ -1,7 +1,21 @@
+$accent-color: #e60003;
+
+* {
+  font-family: 'Chinese Rocks Rg', sans-serif;
+  color: white;
+}
+
+.glass {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
 .main-container {
   width: 100%;
-  height: 100vh;
-  background-image: url(/assets/images/feature.jpg);
+  height: 100%;
+  background-image: url(/assets/images/background.webp);
   background-color: black;
   background-repeat: no-repeat;
   background-size: cover;
@@ -12,13 +26,8 @@
 }
 
 header {
-  background: rgba(50, 50, 50, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  margin-bottom: 50px;
   padding: 20px;
-  margin: 30px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  border-radius: 50px;
 }
 
 .header-container {
@@ -34,12 +43,12 @@ header {
 
 .header-item {
   color: white;
-  font-family: 'Star Jedi Outline', sans-serif;
   font-size: 26px;
-}
+  transition: all 0.1s ease;
 
-.header-item:hover {
-  color: yellow;
+  &:hover {
+    color: $accent-color;
+  }
 }
 
 .logo {
@@ -49,7 +58,7 @@ header {
 .graph-section {
   display: flex;
   flex-wrap: wrap;
-  gap: 50px;
+  gap: 10%;
   justify-content: center;
   margin-bottom: 40px;
   padding: 0 50px 0 50px;
@@ -57,62 +66,25 @@ header {
 
 .graph-container {
   display: flex;
-  background: rgba(50, 50, 50, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  border-radius: 50px;
-  padding: 20px;
-  flex: 1;
-  min-width: 440px;
-  max-width: 500px;
   align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+  padding: 20px;
 }
 
-#graph {
-  width: 400px;
-  height: 400px;
-  display: block;
-  margin: 0 auto;
-}
-
-text.graph-item {
-  fill: white;
-  font-family: "Arial", serif;
-  font-size: 16px;
-}
-
-path.graph-item {
-  fill: yellow;
-  stroke: yellow;
-  stroke-width: 2px;
-}
-
-circle.graph-item {
-  fill: white;
-}
-
-polygon.graph-item {
-  fill: white;
-}
-
-line.graph-item {
-  stroke: white;
-  stroke-width: 1px;
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input-form {
-  background: rgba(50, 50, 50, 0.2);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  padding: 40px;
-  border-radius: 50px;
-  flex: 1;
-  min-width: 400px;
-  max-width: 500px;
   display: flex;
   flex-direction: column;
+
+  padding: 40px;
+  border-radius: 10px;
   gap: 20px;
 }
 
@@ -126,55 +98,60 @@ line.graph-item {
   text-align: center;
   color: white;
   margin-bottom: 10px;
-  font-weight: 600;
-}
+  font-size: 32px;
 
-.form-title::after {
-  content: "";
-  display: block;
-  width: 75%;
-  height: 3px;
-  background-color: white;
-  margin: 10px auto 0;
+  &::after {
+    content: "";
+    display: block;
+    width: 75%;
+    height: 3px;
+    background-color: white;
+    margin: 10px auto 0;
+  }
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
 
-.input-group label {
-  color: white;
-  font-size: 16px;
+  label {
+    color: white;
+    font-size: 20px;
+  }
+
+  input[type="number"] {
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #444;
+  }
+
+  .error-message {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 .checkbox-group {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 15px;
   margin-top: 5px;
-  align-items: center;
 }
 
 .checkbox-item {
   display: flex;
   align-items: center;
   gap: 6px;
-}
 
-.checkbox-item input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  accent-color: yellow;
-}
-
-.input-group input[type="text"] {
-  padding: 12px 15px;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  font-size: 16px;
-  width: 100%;
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: $accent-color;
+  }
 }
 
 #problem-label {
@@ -191,21 +168,20 @@ line.graph-item {
 }
 
 button {
-  background: yellow;
+  background: $accent-color;
   color: white;
   border: none;
   padding: 14px 25px;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
   font-size: 17px;
   transition: all 0.3s;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
 
-button:hover {
-  transform: translateY(2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  &:hover {
+    transform: translateY(2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
 }
 
 .table-container {
@@ -219,32 +195,32 @@ table {
   width: 100%;
   border-collapse: collapse;
   min-width: 600px;
-  backdrop-filter: blur(8px);
-  background: rgba(25, 25, 25, 0.2);
-  -webkit-backdrop-filter: blur(8px);
   color: white;
-}
 
-th, td {
-  padding: 15px;
-  text-align: center;
-  white-space: nowrap;
-}
+  th, td {
+    padding: 15px;
+    text-align: center;
+    white-space: nowrap;
+  }
 
-thead tr {
-  background: rgba(25, 25, 25, 0.2);
-}
+  thead {
+    tr {
+      background: rgba(25, 25, 25, 0.2);
+    }
+    th {
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+    }
+  }
 
-th {
-  font-weight: 500;
-  position: sticky;
-  top: 0;
-}
+  tr {
+    &:nth-child(even) {
+      background: rgba(25, 25, 25, 0.2);
+    }
 
-tr:nth-child(even) {
-  background: rgba(25, 25, 25, 0.2);
-}
-
-tr:hover {
-  background: yellow;
+    &:hover {
+      background: $accent-color;
+    }
+  }
 }

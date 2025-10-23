@@ -1,4 +1,4 @@
-import {Component, HostListener, OnDestroy, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, HostListener, OnDestroy, ViewChild} from '@angular/core';
 import {FormComponent} from './form.component/form.component';
 import {CommonModule} from '@angular/common';
 
@@ -10,25 +10,36 @@ import {CommonModule} from '@angular/common';
   imports: [CommonModule, FormComponent]
 })
 export class StartPageComponent implements OnDestroy {
-  isKeyDown = false;
-  progressOffset = 160;
-
   @ViewChild(FormComponent) formComponent!: FormComponent;
 
+  private isKeyDown = false;
+  progressOffset = 160;
   private progressInterval: any;
   private progress = 0;
   private readonly progressTime = 1000;
   private readonly updateInterval = 20;
 
-  @HostListener('document:keydown', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent): void {
+  @HostListener('document:mousedown', ['$event'])
+  handleMouseDownEvent(event: MouseEvent): void {
     if (!this.isKeyDown && !this.formComponent.isFormOpen()) this.startProgress();
   }
 
-  @HostListener('document:keyup', ['$event'])
-  handleKeyUp(event: KeyboardEvent): void {
+  @HostListener('document:keydown', ['$event'])
+  handleKeyDownEvent(event: KeyboardEvent): void {
+    if (!this.isKeyDown && !this.formComponent.isFormOpen()) this.startProgress();
+  }
+
+  @HostListener('document:mouseup', ['$event'])
+  handleMouseUpEvent(event: MouseEvent): void {
     if (!this.formComponent.isFormOpen()) this.stopProgress();
   }
+
+  @HostListener('document:keyup', ['$event'])
+  handleKeyUpEvent(event: KeyboardEvent): void {
+    if (!this.formComponent.isFormOpen()) this.stopProgress();
+  }
+
+  constructor(private cdRef: ChangeDetectorRef) {}
 
   private startProgress(): void {
     this.progress = 0;
@@ -42,6 +53,7 @@ export class StartPageComponent implements OnDestroy {
       else {
         this.progress += this.updateInterval;
         this.updateProgress();
+        this.cdRef.markForCheck();
       }
     }, this.updateInterval);
   }
@@ -63,6 +75,7 @@ export class StartPageComponent implements OnDestroy {
     }
     this.progressOffset = 160;
     this.progress = 0;
+    this.cdRef.detectChanges();
   }
 
   ngOnDestroy(): void {
