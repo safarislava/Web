@@ -1,14 +1,19 @@
-import { Component, HostListener, OnDestroy } from '@angular/core';
+import {Component, HostListener, OnDestroy, ViewChild} from '@angular/core';
+import {FormComponent} from './form.component/form.component';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-start-page',
+  standalone: true,
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.scss',
+  imports: [CommonModule, FormComponent]
 })
 export class StartPageComponent implements OnDestroy {
-  isCompliant = false;
   isKeyDown = false;
   progressOffset = 160;
+
+  @ViewChild(FormComponent) formComponent!: FormComponent;
 
   private progressInterval: any;
   private progress = 0;
@@ -17,12 +22,12 @@ export class StartPageComponent implements OnDestroy {
 
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent): void {
-    if (!this.isKeyDown && !this.isCompliant) this.startProgress();
+    if (!this.isKeyDown && !this.formComponent.isFormOpen()) this.startProgress();
   }
 
   @HostListener('document:keyup', ['$event'])
   handleKeyUp(event: KeyboardEvent): void {
-    if (!this.isCompliant) this.stopProgress();
+    if (!this.formComponent.isFormOpen()) this.stopProgress();
   }
 
   private startProgress(): void {
@@ -47,7 +52,7 @@ export class StartPageComponent implements OnDestroy {
 
   private completeProgress(): void {
     this.stopProgress();
-    this.openForm();
+    this.formComponent.openForm();
   }
 
   private stopProgress(): void {
@@ -58,14 +63,6 @@ export class StartPageComponent implements OnDestroy {
     }
     this.progressOffset = 160;
     this.progress = 0;
-  }
-
-  public openForm(): void {
-    this.isCompliant = true;
-  }
-
-  public closeForm(): void {
-    this.isCompliant = false;
   }
 
   ngOnDestroy(): void {
