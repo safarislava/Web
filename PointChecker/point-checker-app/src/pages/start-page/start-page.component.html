@@ -1,0 +1,49 @@
+<div class="main-container">
+  <div class="background">
+    <div class="crop-video">
+      <video id="background-video" src="/assets/videos/footage.mp4" autoplay loop muted></video>
+    </div>
+  </div>
+  <main class="container">
+    <div class="top-nav">
+      <div class="logo">
+        <img src="/assets/images/Red_Dead_Redemption_2_Logo.png" alt=""/>
+      </div>
+    </div>
+    <div class="window"></div>
+    <div class="bottom-nav">
+      <div class="button-container">
+        <p>Press any key to continue</p>
+        <div class="button-image">
+          <img src="/assets/images/key_empty.png" alt=""/>
+          <svg class="progress-rect" viewBox="0 0 50 50">
+            <rect x="5" y="5" width="40" height="40" rx="5" ry="5" [attr.stroke-dashoffset]="progressOffset" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="login-overlay" [class.active]="isCompliant">
+    <div class="login-form">
+      <div class="form-header">
+        <h2>LOGIN</h2>
+      </div>
+      <form class="form-content">
+        <div class="input-group">
+          <label for="username">USERNAME</label>
+          <input type="text" id="username" placeholder="Input your username">
+        </div>
+        <div class="input-group">
+          <label for="password">PASSWORD</label>
+          <input type="password" id="password" placeholder="Input your password">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="cancel-btn">REGISTRATION</button>
+          <button type="submit" class="login-btn">ENTER</button>
+          <button type="button" class="cancel-btn" (click)="closeForm()">CANCEL</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

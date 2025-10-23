@@ -1,13 +1,10 @@
 package ru.ifmo.se.weblab.bean;
 
-
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import ru.ifmo.se.weblab.controller.PointController;
 import ru.ifmo.se.weblab.dto.PointResponse;
-import ru.ifmo.se.weblab.utils.PointResponseSerializer;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import java.io.IOException;
 import java.io.Serializable;
@@ -16,11 +13,13 @@ import java.util.List;
 @ManagedBean(name="controlBean", eager = true)
 @SessionScoped
 public class ControlBean implements Serializable {
+    @ManagedProperty(value = "#{pointController}")
+    private PointController pointController;
     private String x;
     private String y;
     private String r;
     private List<PointResponse> points;
-    private final PointController pointController = new PointController();
+    private final Gson gson = new Gson();
 
     public String getX() { return x; }
     public void setX(String x) { this.x = x; }
@@ -43,7 +42,6 @@ public class ControlBean implements Serializable {
 
     public String getPointsJson() {
         if (points == null) loadPoints();
-        Gson gson = new GsonBuilder().registerTypeAdapter(PointResponse.class, new PointResponseSerializer()).create();
         return gson.toJson(points);
     }
 
@@ -51,6 +49,14 @@ public class ControlBean implements Serializable {
         if (x == null || y == null || r == null) return;
         pointController.addPoints(List.of(x), List.of(y), List.of(r));
         loadPoints();
+    }
+
+    public PointController getPointController() {
+        return pointController;
+    }
+
+    public void setPointController(PointController pointController) {
+        this.pointController = pointController;
     }
 }
 

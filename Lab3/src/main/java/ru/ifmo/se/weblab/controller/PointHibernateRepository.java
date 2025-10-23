@@ -1,7 +1,7 @@
 package ru.ifmo.se.weblab.controller;
 
 
-import ru.ifmo.se.weblab.dto.PointResponse;
+import ru.ifmo.se.weblab.entity.Point;
 import ru.ifmo.se.weblab.utils.PointComparator;
 
 import javax.persistence.*;
@@ -21,12 +21,12 @@ public class PointHibernateRepository implements PointRepository {
     }
 
     @Override
-    public void save(List<PointResponse> points) {
+    public void save(List<Point> points) {
         guarantyConnection();
 
         try {
             entityManager.getTransaction().begin();
-            for (PointResponse point : points) {
+            for (Point point : points) {
                 entityManager.persist(point);
             }
             entityManager.getTransaction().commit();
@@ -37,16 +37,16 @@ public class PointHibernateRepository implements PointRepository {
     }
 
     @Override
-    public List<PointResponse> findAll() {
+    public List<Point> findAll() {
         guarantyConnection();
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         try {
-            CriteriaQuery<PointResponse> criteriaQuery = criteriaBuilder.createQuery(PointResponse.class);
-            Root<PointResponse> circleRoot = criteriaQuery.from(PointResponse.class);
+            CriteriaQuery<Point> criteriaQuery = criteriaBuilder.createQuery(Point.class);
+            Root<Point> circleRoot = criteriaQuery.from(Point.class);
             criteriaQuery.select(circleRoot);
-            TypedQuery<PointResponse> query = entityManager.createQuery(criteriaQuery);
-            List<PointResponse> points = new ArrayList<>(query.getResultList());
+            TypedQuery<Point> query = entityManager.createQuery(criteriaQuery);
+            List<Point> points = new ArrayList<>(query.getResultList());
             points.sort(new PointComparator());
             return points;
         }

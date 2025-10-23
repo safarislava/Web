@@ -7,10 +7,10 @@
 <persistence-unit name="weblab" transaction-type="JTA">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <jta-data-source>java:jboss/datasources/WebLabDS</jta-data-source>
-    <class>ru.ifmo.se.weblab.dto.PointResponse</class>
-    <class>ru.ifmo.se.weblab.dto.CirclePointResponse</class>
-    <class>ru.ifmo.se.weblab.dto.SquarePointResponse</class>
-    <class>ru.ifmo.se.weblab.dto.TrianglePointResponse</class>
+    <class>ru.ifmo.se.weblab.entity.Point</class>
+    <class>ru.ifmo.se.weblab.entity.CirclePoint</class>
+    <class>ru.ifmo.se.weblab.entity.SquarePoint</class>
+    <class>ru.ifmo.se.weblab.entity.TrianglePoint</class>
     <properties>
         <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
         <property name="hibernate.hbm2ddl.auto" value="update"/>

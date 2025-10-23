@@ -1,6 +1,6 @@
 package ru.ifmo.se.weblab.controller;
 
-import ru.ifmo.se.weblab.entity.Point;
+import ru.ifmo.se.weblab.entity.MathPoint;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -43,7 +43,7 @@ public class CalculationController {
     }
 
     public boolean checkPointInArea(BigDecimal x, BigDecimal y, BigDecimal r) {
-        ArrayList<Point> polygon = new ArrayList<>();
+        ArrayList<MathPoint> polygon = new ArrayList<>();
 
         BigDecimal rFourthNegate = r.divide(FOUR, mathContext).negate();
         BigDecimal rTheeForth = r.multiply(THREE).divide(FOUR, mathContext);
@@ -51,12 +51,12 @@ public class CalculationController {
         BigDecimal rSixthNegate = r.divide(SIX, mathContext).negate();
         BigDecimal rSecondNegate = r.divide(TWO, mathContext).negate();
 
-        polygon.add(new Point(r, BigDecimal.ZERO));
-        polygon.add(new Point(r, rFourthNegate));
-        polygon.add(new Point(rTheeForth, rTwoThird.negate()));
-        polygon.add(new Point(r.divide(TWO, mathContext), rTheeForth.negate()));
-        polygon.add(new Point(rTheeForth, rSixthNegate));
-        polygon.add(new Point(r.divide(THREE, mathContext), rFourthNegate));
+        polygon.add(new MathPoint(r, BigDecimal.ZERO));
+        polygon.add(new MathPoint(r, rFourthNegate));
+        polygon.add(new MathPoint(rTheeForth, rTwoThird.negate()));
+        polygon.add(new MathPoint(r.divide(TWO, mathContext), rTheeForth.negate()));
+        polygon.add(new MathPoint(rTheeForth, rSixthNegate));
+        polygon.add(new MathPoint(r.divide(THREE, mathContext), rFourthNegate));
 
         BigDecimal arcRadius = r.multiply(TWO).divide(FIVE, mathContext);
         BigDecimal halfChord = r.divide(THREE, mathContext);
@@ -73,18 +73,18 @@ public class CalculationController {
             BigDecimal angleBD = new BigDecimal(currentAngle);
             BigDecimal pX = arcRadius.multiply(cos(angleBD), mathContext);
             BigDecimal pY = arcCenterY1.add(arcRadius.multiply(sin(angleBD), mathContext));
-            polygon.add(new Point(pX, pY));
+            polygon.add(new MathPoint(pX, pY));
         }
 
-        polygon.add(new Point(rTheeForth.negate(), rSixthNegate));
-        polygon.add(new Point(rSecondNegate, rTheeForth.negate()));
-        polygon.add(new Point(rTheeForth.negate(), rTwoThird.negate()));
-        polygon.add(new Point(r.negate(), rFourthNegate));
-        polygon.add(new Point(r.negate(), r.divide(FOUR, mathContext)));
-        polygon.add(new Point(rTheeForth.negate(), rTwoThird));
-        polygon.add(new Point(rSecondNegate, rTheeForth));
-        polygon.add(new Point(rTheeForth.negate(), r.divide(SIX, mathContext)));
-        polygon.add(new Point(r.divide(THREE, mathContext).negate(), r.divide(FOUR, mathContext)));
+        polygon.add(new MathPoint(rTheeForth.negate(), rSixthNegate));
+        polygon.add(new MathPoint(rSecondNegate, rTheeForth.negate()));
+        polygon.add(new MathPoint(rTheeForth.negate(), rTwoThird.negate()));
+        polygon.add(new MathPoint(r.negate(), rFourthNegate));
+        polygon.add(new MathPoint(r.negate(), r.divide(FOUR, mathContext)));
+        polygon.add(new MathPoint(rTheeForth.negate(), rTwoThird));
+        polygon.add(new MathPoint(rSecondNegate, rTheeForth));
+        polygon.add(new MathPoint(rTheeForth.negate(), r.divide(SIX, mathContext)));
+        polygon.add(new MathPoint(r.divide(THREE, mathContext).negate(), r.divide(FOUR, mathContext)));
 
 
         BigDecimal arcCenterY2 = r.divide(FOUR, mathContext).subtract(h);
@@ -101,15 +101,15 @@ public class CalculationController {
             BigDecimal angleBD = new BigDecimal(currentAngle);
             BigDecimal pX = arcRadius.multiply(cos(angleBD), mathContext);
             BigDecimal pY = arcCenterY2.add(arcRadius.multiply(sin(angleBD), mathContext));
-            polygon.add(new Point(pX, pY));
+            polygon.add(new MathPoint(pX, pY));
         }
 
-        polygon.add(new Point(rTheeForth, r.divide(SIX, mathContext)));
-        polygon.add(new Point(r.divide(TWO, mathContext), rTheeForth));
-        polygon.add(new Point(rTheeForth, rTwoThird));
-        polygon.add(new Point(r, r.divide(FOUR, mathContext)));
+        polygon.add(new MathPoint(rTheeForth, r.divide(SIX, mathContext)));
+        polygon.add(new MathPoint(r.divide(TWO, mathContext), rTheeForth));
+        polygon.add(new MathPoint(rTheeForth, rTwoThird));
+        polygon.add(new MathPoint(r, r.divide(FOUR, mathContext)));
 
-        boolean isPointInArea = false;
+        boolean isMathPointInArea = false;
         int n = polygon.size();
 
         for (int i = 0, j = n - 1; i < n; j = i++) {
@@ -128,10 +128,10 @@ public class CalculationController {
                                     .multiply(y.subtract(yj))
                                     .divide(yi.subtract(yj), mathContext)
                     )) < 0)) {
-                isPointInArea = !isPointInArea;
+                isMathPointInArea = !isMathPointInArea;
             }
         }
 
-        return isPointInArea;
+        return isMathPointInArea;
     }
 }

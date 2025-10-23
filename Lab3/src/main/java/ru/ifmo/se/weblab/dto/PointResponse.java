@@ -1,62 +1,48 @@
 package ru.ifmo.se.weblab.dto;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
-import java.time.Instant;
+import ru.ifmo.se.weblab.entity.CirclePoint;
+import ru.ifmo.se.weblab.entity.Point;
+import ru.ifmo.se.weblab.entity.SquarePoint;
+import ru.ifmo.se.weblab.entity.TrianglePoint;
 
-@Entity
-@Table(name = "points")
-@Inheritance(strategy = InheritanceType.JOINED)
+import java.sql.Timestamp;
+
 public class PointResponse {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Version
-    private Long version;
-    private String status = "200";
     private String x;
     private String y;
     private String r;
     private boolean isPointInArea;
     private int deltaTime;
     private Timestamp time;
+    private String shape;
 
-    public PointResponse() {
-    }
+    public PointResponse(Point point) {
+        this.id = point.getId();
+        this.x = point.getX();
+        this.y = point.getY();
+        this.r = point.getR();
+        this.isPointInArea = point.getIsPointInArea();
+        this.deltaTime = point.getDeltaTime();
+        this.time = point.getTime();
 
-    public PointResponse(boolean isPointInArea, int deltaTime, PointRequest pointRequest) {
-        this.x = pointRequest.x.toPlainString();
-        this.y = pointRequest.y.toPlainString();
-        this.r = pointRequest.r.toPlainString();
-        this.isPointInArea = isPointInArea;
-        this.deltaTime = deltaTime;
-        this.time = Timestamp.from(Instant.now());
+        if (point instanceof CirclePoint) {
+            this.shape = ((CirclePoint) point).getShape();
+        }
+        else if (point instanceof SquarePoint) {
+            this.shape = ((SquarePoint) point).getShape();
+        }
+        else if (point instanceof TrianglePoint) {
+            this.shape = ((TrianglePoint) point).getShape();
+        }
     }
 
     public Long getId() {
         return id;
     }
-
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getX() {
         return x;
     }
@@ -85,8 +71,8 @@ public class PointResponse {
         return isPointInArea;
     }
 
-    public void setPointInArea(boolean pointInArea) {
-        isPointInArea = pointInArea;
+    public void setIsPointInArea(boolean isPointInArea) {
+        this.isPointInArea = isPointInArea;
     }
 
     public int getDeltaTime() {
@@ -103,5 +89,13 @@ public class PointResponse {
 
     public void setTime(Timestamp time) {
         this.time = time;
+    }
+
+    public String getShape() {
+        return shape;
+    }
+
+    public void setShape(String shape) {
+        this.shape = shape;
     }
 }
