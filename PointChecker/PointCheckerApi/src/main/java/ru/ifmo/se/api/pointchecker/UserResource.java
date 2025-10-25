@@ -6,16 +6,16 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.*;
-import ru.ifmo.se.api.pointchecker.controller.JwtController;
-import ru.ifmo.se.api.pointchecker.controller.UserController;
+import ru.ifmo.se.api.pointchecker.controller.JwtBean;
+import ru.ifmo.se.api.pointchecker.controller.UserBean;
 import ru.ifmo.se.api.pointchecker.dto.UserDto;
 
 @Path("/user")
 public class UserResource {
     @EJB
-    private UserController userController;
+    private UserBean userBean;
     @EJB
-    private JwtController jwtController;
+    private JwtBean jwtBean;
 
     @GET
     public Response get() {
@@ -27,10 +27,10 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(UserDto userDto) {
         try {
-            boolean correct = userController.login(userDto);
+            boolean correct = userBean.login(userDto);
             if (!correct) return Response.status(Response.Status.UNAUTHORIZED).build();
 
-            String token = jwtController.generate(userDto);
+            String token = jwtBean.generate(userDto);
             NewCookie authCookie = new NewCookie.Builder("accessToken")
                     .value(token)
                     .path("/")
@@ -52,9 +52,9 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response register(UserDto userDto) {
         try {
-            userController.register(userDto);
+            userBean.register(userDto);
 
-            String token = jwtController.generate(userDto);
+            String token = jwtBean.generate(userDto);
             NewCookie authCookie = new NewCookie.Builder("accessToken")
                     .value(token)
                     .path("/")

@@ -6,7 +6,7 @@ import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 import java.math.BigDecimal;
 
 @Stateless
-public class ValidationController {
+public class ValidatorBean {
     public void validate(ShotRequest shotRequest) throws IllegalArgumentException {
         if (shotRequest.x == null) {
             throw new IllegalArgumentException("X не указан");

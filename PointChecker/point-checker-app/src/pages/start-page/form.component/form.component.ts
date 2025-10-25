@@ -16,7 +16,7 @@ export class FormComponent {
   public loginForm!: FormGroup;
 
   private isEnterOrRegister: boolean = true;
-  private urlApi = "http://localhost:8080/PointChecker-1.0/api";
+  private urlApi = "http://localhost:8080/PointChecker-1.0/api/user";
 
   constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder) {
     this.loginForm = this.createForm();
@@ -48,7 +48,7 @@ export class FormComponent {
     };
 
     if (this.isEnterOrRegister) {
-      this.http.post(this.urlApi + "/user/login", payload, {
+      this.http.post(this.urlApi + "/login", payload, {
         withCredentials: true,
       })
         .subscribe({
@@ -61,7 +61,7 @@ export class FormComponent {
         });
     }
     else {
-      this.http.post(this.urlApi + "/user/register", payload, {
+      this.http.post(this.urlApi + "/register", payload, {
         withCredentials: true,
       })
         .subscribe({

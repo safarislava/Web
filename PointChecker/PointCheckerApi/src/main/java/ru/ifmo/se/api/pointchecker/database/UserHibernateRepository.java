@@ -11,10 +11,11 @@ import jakarta.transaction.Transactional;
 import ru.ifmo.se.api.pointchecker.entity.User;
 
 @Stateless
-public class UserHibernateRepository {
+public class UserHibernateRepository implements UserRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Override
     public User getUser(String username) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
@@ -29,6 +30,7 @@ public class UserHibernateRepository {
         }
     }
 
+    @Override
     @Transactional
     public void addUser(String username, String password) {
         User user = new User(username, password);

@@ -5,6 +5,7 @@ import jakarta.ejb.Stateless;
 import ru.ifmo.se.api.pointchecker.database.ShotRepository;
 import ru.ifmo.se.api.pointchecker.dto.*;
 import ru.ifmo.se.api.pointchecker.entity.*;
+import ru.ifmo.se.api.pointchecker.utils.BigDecimalMath;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,18 +13,18 @@ import java.util.List;
 import java.util.Random;
 
 @Stateless
-public class ShotController {
+public class ShotBean {
     @EJB
-    private ShotRepository repositoryController;
+    private ShotRepository shotRepository;
     @EJB
-    private CacheController cacheController;
+    private CacheBean cacheBean;
     @EJB
-    private ValidationController validationController;
+    private ValidatorBean validatorBean;
     @EJB
-    private CalculationController calculationController;
+    private CalculationBean calculationBean;
 
     public List<ShotResponse> getShotResponses() {
-        List<Shot> shots = repositoryController.findAll();
+        List<Shot> shots = shotRepository.findAll();
         List<ShotResponse> shotResponses = new ArrayList<>();
         for (Shot shot : shots) {
             shotResponses.add(new ShotResponse(shot));
@@ -35,7 +36,7 @@ public class ShotController {
         ArrayList<Shot> shots = new ArrayList<>();
         try {
             for (ShotRequest shotRequest : shotRequests) {
-                validationController.validate(shotRequest);
+                validatorBean.validate(shotRequest);
 
                 Shot shot = null;
                 switch (shotRequest.weapon) {
@@ -51,15 +52,15 @@ public class ShotController {
         } catch (IllegalArgumentException e) {
             // externalContext.redirect(externalContext.getRequestContextPath() + "/error/400.jsp");
         }
-        repositoryController.save(shots);
+        shotRepository.save(shots);
     }
 
     private Bullet processPoint(ShotRequest shotRequest) {
         AbstractPoint abstractPoint = addSpread(shotRequest.x, shotRequest.y, shotRequest.r);
-        Boolean isPointInArea = cacheController.getCache(abstractPoint);
+        Boolean isPointInArea = cacheBean.getCache(abstractPoint);
         if (isPointInArea == null) {
-            isPointInArea = calculationController.checkPointInArea(abstractPoint.x, abstractPoint.y, shotRequest.r);
-            cacheController.setCache(abstractPoint, isPointInArea);
+            isPointInArea = calculationBean.checkPointInArea(abstractPoint.x, abstractPoint.y, shotRequest.r);
+            cacheBean.setCache(abstractPoint, isPointInArea);
         }
         return new Bullet(abstractPoint.x, abstractPoint.y, shotRequest.r, isPointInArea);
     }

@@ -5,7 +5,7 @@ import redis.clients.jedis.Jedis;
 import ru.ifmo.se.api.pointchecker.entity.AbstractPoint;
 
 @Stateless
-public class CacheController {
+public class CacheBean {
     private final Jedis jedis = new Jedis("localhost", 6379);
 
     private final String TRUE_VALUE = "TRUE";

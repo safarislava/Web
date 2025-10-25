@@ -6,13 +6,13 @@ import jakarta.ws.rs.container.ContainerRequestFilter;
 import jakarta.ws.rs.core.Cookie;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import ru.ifmo.se.api.pointchecker.controller.JwtController;
+import ru.ifmo.se.api.pointchecker.controller.JwtBean;
 
 @Provider
 @Secure
 public class JwtFilter implements ContainerRequestFilter {
     @EJB
-    private JwtController jwtController;
+    private JwtBean jwtBean;
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
@@ -24,7 +24,7 @@ public class JwtFilter implements ContainerRequestFilter {
         }
 
         String token = authCookie.getValue();
-        if (!jwtController.verify(token))
+        if (!jwtBean.verify(token))
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
     }
 }

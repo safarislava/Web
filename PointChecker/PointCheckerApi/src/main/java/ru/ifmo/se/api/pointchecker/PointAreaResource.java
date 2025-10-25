@@ -4,7 +4,7 @@ import jakarta.ejb.EJB;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import ru.ifmo.se.api.pointchecker.controller.ShotController;
+import ru.ifmo.se.api.pointchecker.controller.ShotBean;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 import ru.ifmo.se.api.pointchecker.dto.ShotResponse;
 import ru.ifmo.se.api.pointchecker.filter.Secure;
@@ -15,13 +15,13 @@ import java.util.List;
 @Secure
 public class PointAreaResource {
     @EJB
-    ShotController shotController;
+    ShotBean shotBean;
 
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(List<ShotRequest> request) {
-        shotController.addShots(request);
+        shotBean.addShots(request);
         return Response.ok().build();
     }
 
@@ -29,6 +29,6 @@ public class PointAreaResource {
     @Path("/get-points")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ShotResponse> getPoints() {
-        return shotController.getShotResponses();
+        return shotBean.getShotResponses();
     }
 }

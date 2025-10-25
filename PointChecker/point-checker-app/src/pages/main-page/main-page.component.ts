@@ -17,7 +17,7 @@ import {Router} from '@angular/router';
 export class MainPageComponent implements OnInit {
   @ViewChild(PointsAreaComponent) pointsAreaComponent!: PointsAreaComponent;
   pointForm!: FormGroup;
-  private urlApi = "http://localhost:8080/PointChecker-1.0/api";
+  private urlApi = "http://localhost:8080/PointChecker-1.0/api/point-area";
 
   constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder) {
     this.pointForm = this.createForm();
@@ -36,7 +36,7 @@ export class MainPageComponent implements OnInit {
       this.onRChange(r);
     });
 
-    this.http.get(this.urlApi + "/point-area/get-points", {
+    this.http.get(this.urlApi + "/get-points", {
       withCredentials: true,
     })
       .subscribe({

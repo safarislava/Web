@@ -2,15 +2,15 @@ package ru.ifmo.se.api.pointchecker.controller;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import ru.ifmo.se.api.pointchecker.database.UserHibernateRepository;
+import ru.ifmo.se.api.pointchecker.database.UserRepository;
 import ru.ifmo.se.api.pointchecker.dto.UserDto;
 import ru.ifmo.se.api.pointchecker.entity.User;
 import ru.ifmo.se.api.pointchecker.utils.SHA256;
 
 @Stateless
-public class UserController {
+public class UserBean {
     @EJB
-    private UserHibernateRepository userRepository;
+    private UserRepository userRepository;
 
     public boolean login(UserDto userDto) {
         User user = userRepository.getUser(userDto.username);

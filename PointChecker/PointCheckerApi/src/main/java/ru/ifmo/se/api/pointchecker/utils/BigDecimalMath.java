@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.pointchecker.controller;
+package ru.ifmo.se.api.pointchecker.utils;
 
 import java.math.BigDecimal;
 import java.math.MathContext;

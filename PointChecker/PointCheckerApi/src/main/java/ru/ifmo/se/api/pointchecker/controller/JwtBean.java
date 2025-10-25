@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Stateless
-public class JwtController {
+public class JwtBean {
     private final Algorithm algorithm = Algorithm.HMAC256("baeldung");
     private final JWTVerifier verifier = JWT.require(algorithm).withIssuer("PointCheckerApi").build();
 
