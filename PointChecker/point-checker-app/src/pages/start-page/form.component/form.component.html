@@ -3,18 +3,18 @@
     <div class="form-header">
       <h2>LOGIN</h2>
     </div>
-    <form class="form-content">
+    <form class="form-content" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="input-group">
         <label for="username">USERNAME</label>
-        <input type="text" id="username" placeholder="Input your username">
+        <input type="text" id="username" formControlName="username" placeholder="Input your username" required>
       </div>
       <div class="input-group">
         <label for="password">PASSWORD</label>
-        <input type="password" id="password" placeholder="Input your password">
+        <input type="password" id="password" formControlName="password" placeholder="Input your password" required>
       </div>
       <div class="form-actions">
-        <button type="submit" class="cancel-btn">REGISTRATION</button>
-        <button type="submit" class="login-btn">ENTER</button>
+        <button type="submit" class="cancel-btn" (click)="onRegistrationClick()">REGISTRATION</button>
+        <button type="submit" class="login-btn" (click)="onEnterClick()">ENTER</button>
         <button type="button" class="cancel-btn" (click)="closeForm()">CANCEL</button>
       </div>
     </form>

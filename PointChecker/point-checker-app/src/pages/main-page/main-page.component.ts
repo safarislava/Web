@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {PointsAreaComponent} from './points-area.component/points-area.component';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -17,8 +17,9 @@ import {HttpClient} from '@angular/common/http';
 export class MainPageComponent implements OnInit {
   @ViewChild(PointsAreaComponent) pointsAreaComponent!: PointsAreaComponent;
   pointForm!: FormGroup;
+  private urlApi = "http://localhost:8080/PointChecker-1.0/api";
 
-  constructor(private http: HttpClient, private formBuilder: FormBuilder) {
+  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder) {
     this.pointForm = this.createForm();
   }
 
@@ -34,6 +35,18 @@ export class MainPageComponent implements OnInit {
     this.r?.valueChanges.subscribe(r => {
       this.onRChange(r);
     });
+
+    this.http.get(this.urlApi + "/point-area/get-points", {
+      withCredentials: true,
+    })
+      .subscribe({
+        next: (response)=> {
+          console.log(response);
+        },
+        error: (error) => {
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   private onXChange(x: number): void {
@@ -64,15 +77,7 @@ export class MainPageComponent implements OnInit {
   get r(): AbstractControl | null { return this.pointForm.get('r'); }
 
   public shootAction(): void {
-    class PointResponse {
-      constructor(public x: number, public y: number, public r: number) {
-      }
-    }
-    this.postData(new PointResponse(this.x!.value, this.y!.value, this.r!.value));
-  }
 
-  postData(payload: any): Observable<any> {
-    return this.http.post(`/api`, payload);
   }
 }
 

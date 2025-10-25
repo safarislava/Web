@@ -11,13 +11,13 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name = "id")
 public class ShotgunShot extends Shot {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Point> points;
+    private List<Bullet> bullets;
 
     public ShotgunShot() {}
 
-    public ShotgunShot(List<Point> points, Integer deltaTime, ShotRequest shotRequest) {
-        super(points.stream().mapToInt(p -> p.getPointInArea() ? 1 : 0).sum() * 100 / points.size(),
+    public ShotgunShot(List<Bullet> bullets, Integer deltaTime, ShotRequest shotRequest) {
+        super(bullets.stream().mapToInt(p -> p.getPointInArea() ? 1 : 0).sum() * 100 / bullets.size(),
                 deltaTime, shotRequest);
-        this.points = points;
+        this.bullets = bullets;
     }
 }

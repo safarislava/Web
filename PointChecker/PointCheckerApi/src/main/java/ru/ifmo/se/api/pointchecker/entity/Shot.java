@@ -15,6 +15,8 @@ public class Shot {
     private Long id;
     @Version
     private Long version;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
     private BigDecimal x;
     private BigDecimal y;
     private BigDecimal r;

@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "point")
-public class Point {
+@Table(name = "bullet")
+public class Bullet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,9 +17,9 @@ public class Point {
     private BigDecimal r;
     private Boolean isPointInArea;
 
-    public Point() {}
+    public Bullet() {}
 
-    public Point(BigDecimal x, BigDecimal y, BigDecimal r, Boolean isPointInArea) {
+    public Bullet(BigDecimal x, BigDecimal y, BigDecimal r, Boolean isPointInArea) {
         this.x = x;
         this.y = y;
         this.r = r;

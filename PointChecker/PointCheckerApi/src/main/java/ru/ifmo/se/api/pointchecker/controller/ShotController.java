@@ -54,33 +54,33 @@ public class ShotController {
         repositoryController.save(shots);
     }
 
-    private Point processPoint(ShotRequest shotRequest) {
+    private Bullet processPoint(ShotRequest shotRequest) {
         AbstractPoint abstractPoint = addSpread(shotRequest.x, shotRequest.y, shotRequest.r);
         Boolean isPointInArea = cacheController.getCache(abstractPoint);
         if (isPointInArea == null) {
             isPointInArea = calculationController.checkPointInArea(abstractPoint.x, abstractPoint.y, shotRequest.r);
             cacheController.setCache(abstractPoint, isPointInArea);
         }
-        return new Point(abstractPoint.x, abstractPoint.y, shotRequest.r, isPointInArea);
+        return new Bullet(abstractPoint.x, abstractPoint.y, shotRequest.r, isPointInArea);
     }
 
     private RevolverShot processRevolverShot(ShotRequest shotRequest) {
         long startTime = System.nanoTime();
-        Point point = processPoint(shotRequest);
+        Bullet bullet = processPoint(shotRequest);
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new RevolverShot(point, deltaTime, shotRequest);
+        return new RevolverShot(bullet, deltaTime, shotRequest);
     }
 
     private ShotgunShot processShotgunShot(ShotRequest shotRequest) {
         long startTime = System.nanoTime();
-        List<Point> points = new ArrayList<>();
+        List<Bullet> bullets = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            points.add(processPoint(shotRequest));
+            bullets.add(processPoint(shotRequest));
         }
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new ShotgunShot(points, deltaTime, shotRequest);
+        return new ShotgunShot(bullets, deltaTime, shotRequest);
     }
 
     private AbstractPoint addSpread(BigDecimal x, BigDecimal y, BigDecimal r) {

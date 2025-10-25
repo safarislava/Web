@@ -9,12 +9,12 @@ import jakarta.persistence.*;
 @PrimaryKeyJoinColumn(name = "id")
 public class RevolverShot extends Shot {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Point point;
+    private Bullet bullet;
 
     public RevolverShot() {}
 
-    public RevolverShot(Point point, Integer deltaTime, ShotRequest shotRequest) {
-        super(point.getPointInArea() ? 100 : 0, deltaTime, shotRequest);
-        this.point = point;
+    public RevolverShot(Bullet bullet, Integer deltaTime, ShotRequest shotRequest) {
+        super(bullet.getPointInArea() ? 100 : 0, deltaTime, shotRequest);
+        this.bullet = bullet;
     }
 }
