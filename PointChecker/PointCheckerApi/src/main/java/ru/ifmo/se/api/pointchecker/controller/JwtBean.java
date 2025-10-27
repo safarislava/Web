@@ -13,13 +13,13 @@ import java.util.UUID;
 
 @Stateless
 public class JwtBean {
-    private final Algorithm algorithm = Algorithm.HMAC256("baeldung");
+    private final Algorithm algorithm = Algorithm.HMAC256(System.getProperty("JWT_SECRET"));
     private final JWTVerifier verifier = JWT.require(algorithm).withIssuer("PointCheckerApi").build();
 
     public String generate(UserDto user) {
         return com.auth0.jwt.JWT.create()
                 .withIssuer("PointCheckerApi")
-                .withSubject("Baeldung Details")
+                .withSubject("Client")
                 .withClaim("username", user.username)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000L))
@@ -30,11 +30,15 @@ public class JwtBean {
     public boolean verify(String token) {
         try {
             DecodedJWT decodedJWT = verifier.verify(token);
-//            String username = decodedJWT.getClaim("username").asString();
             return true;
         }
         catch (JWTVerificationException e) {
             return false;
         }
+    }
+
+    public String getUsername(String token) {
+        DecodedJWT decodedJWT = verifier.verify(token);
+        return decodedJWT.getClaim("username").asString();
     }
 }

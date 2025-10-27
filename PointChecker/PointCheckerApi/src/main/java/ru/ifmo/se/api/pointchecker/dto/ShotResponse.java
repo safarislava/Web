@@ -1,8 +1,11 @@
 package ru.ifmo.se.api.pointchecker.dto;
 
+import com.google.gson.Gson;
+import ru.ifmo.se.api.pointchecker.entity.RevolverShot;
 import ru.ifmo.se.api.pointchecker.entity.Shot;
+import ru.ifmo.se.api.pointchecker.entity.ShotgunShot;
 
-import java.sql.Timestamp;
+import java.util.List;
 
 public class ShotResponse {
     private Long id;
@@ -11,7 +14,8 @@ public class ShotResponse {
     private String r;
     private Integer accuracy;
     private Integer deltaTime;
-    private Timestamp time;
+    private String time;
+    private String details = "";
 
     public ShotResponse(Shot shot) {
         this.id = shot.getId();
@@ -20,7 +24,19 @@ public class ShotResponse {
         this.r = shot.getR().toPlainString();
         this.accuracy = shot.getAccuracy();
         this.deltaTime = shot.getDeltaTime();
-        this.time = shot.getTime();
+        this.time = shot.getTime().toString();
+
+        Gson gson = new Gson();
+        if (shot instanceof RevolverShot) {
+            BulletDto bullet = new BulletDto(((RevolverShot)  shot).getBullet());
+            RevolverDetails details = new RevolverDetails(bullet);
+            this.details = gson.toJson(details);
+        }
+        else if (shot instanceof ShotgunShot) {
+            List<BulletDto> bullets = ((ShotgunShot) shot).getBullets().stream().map(BulletDto::new).toList();
+            ShotgunDetails details = new ShotgunDetails(bullets);
+            this.details = gson.toJson(details);
+        }
     }
 
     public Long getId() {
@@ -65,10 +81,17 @@ public class ShotResponse {
         this.deltaTime = deltaTime;
     }
 
-    public Timestamp getTime() {
+    public String getTime() {
         return time;
     }
-    public void setTime(Timestamp time) {
+    public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+    public void setDetails(String details) {
+        this.details = details;
     }
 }

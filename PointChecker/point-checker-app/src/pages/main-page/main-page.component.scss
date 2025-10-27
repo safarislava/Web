@@ -60,7 +60,7 @@ header {
   flex-wrap: wrap;
   gap: 10%;
   justify-content: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   padding: 0 50px 0 50px;
 }
 
@@ -69,6 +69,7 @@ header {
   align-items: center;
   justify-content: center;
 
+  margin-bottom: 30px;
   border-radius: 10px;
   padding: 20px;
 }
@@ -129,8 +130,36 @@ header {
   }
 
   .error-message {
+    font-size: 20px;
     width: 100%;
     text-align: center;
+  }
+
+  .input-image-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+
+    background: white;
+    border-radius: 15px;
+
+    padding: 10px;
+
+    img {
+      width: 10vw;
+      height: auto;
+      opacity: 0.6;
+
+      &.selected {
+        opacity: 1;
+      }
+
+      &:hover {
+        filter: drop-shadow(0 0 5px $accent-color);
+      }
+    }
   }
 }
 

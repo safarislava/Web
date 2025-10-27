@@ -3,6 +3,7 @@ package ru.ifmo.se.api.pointchecker.dto;
 import java.math.BigDecimal;
 
 public class ShotRequest {
+    public String username;
     public BigDecimal x;
     public BigDecimal y;
     public BigDecimal r;

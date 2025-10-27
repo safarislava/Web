@@ -1,13 +1,13 @@
 import {ChangeDetectorRef, Component, HostListener, OnDestroy, ViewChild} from '@angular/core';
 import {FormComponent} from './form.component/form.component';
-import {CommonModule} from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-start-page',
   standalone: true,
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.scss',
-  imports: [CommonModule, FormComponent]
+  imports: [CommonModule, FormComponent, NgOptimizedImage]
 })
 export class StartPageComponent implements OnDestroy {
   @ViewChild(FormComponent) formComponent!: FormComponent;

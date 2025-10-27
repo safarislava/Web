@@ -13,16 +13,16 @@
       </div>
       <form [formGroup]="pointForm" class="input-container" (ngSubmit)="shootAction()">
         <div class="input-form glass">
-          <h2 class="form-title">POINT PARAMETERS</h2>
+          <h2 class="form-title">SHOT PARAMETERS</h2>
           <div class="input-group">
             <label class="input-group-label" for="x-data">Coordinate X</label>
             <input type="number" id="x-data" formControlName="x" placeholder="Enter X" required>
-            @if (x?.invalid && x?.touched) {
+            @if (X?.invalid && X?.touched) {
               <div class="error-message">
-                @if (x?.errors?.['required']) {
+                @if (X?.errors?.['required']) {
                   <p>X is required</p>
                 }
-                @if (x?.errors?.['pattern']) {
+                @if (X?.errors?.['pattern']) {
                   <p>Invalid format</p>
                 }
               </div>
@@ -31,12 +31,12 @@
           <div class="input-group">
             <label class="input-group-label" for="y-data">Coordinate Y</label>
             <input type="number" id="y-data" formControlName="y" placeholder="Enter Y" required>
-            @if (y?.invalid && y?.touched) {
+            @if (Y?.invalid && Y?.touched) {
               <div class="error-message">
-                @if (y?.errors?.['required']) {
+                @if (Y?.errors?.['required']) {
                   <p>Y is required</p>
                 }
-                @if (y?.errors?.['pattern']) {
+                @if (Y?.errors?.['pattern']) {
                   <p>Invalid format</p>
                 }
               </div>
@@ -45,16 +45,24 @@
           <div class="input-group">
             <label class="input-group-label" for="r-data">Coordinate R</label>
             <input type="number" id="r-data" formControlName="r" placeholder="Enter R" required>
-            @if (r?.invalid && r?.touched) {
+            @if (R?.invalid && R?.touched) {
               <div class="error-message">
-                @if (r?.errors?.['required']) {
+                @if (R?.errors?.['required']) {
                   <p>R is required</p>
                 }
-                @if (r?.errors?.['pattern']) {
+                @if (R?.errors?.['pattern']) {
                   <p>Invalid format</p>
                 }
               </div>
             }
+          </div>
+          <div class="input-group">
+            <div class="input-image-container">
+              <img ngSrc="/assets/images/Revolver.png" alt="" width="1198" height="628"
+                   (click)="setRevolver()" [class.selected]="Weapon=='REVOLVER'"/>
+              <img ngSrc="assets/images/Shotgun.png" alt="" width="982" height="306"
+                   (click)="setShotgun()" [class.selected]="Weapon=='SHOTGUN'"/>
+            </div>
           </div>
           <div class="send-form">
             <button type="submit">SHOOT</button>
@@ -78,7 +86,19 @@
         </tr>
         </thead>
         <tbody id="results-tbody">
-
+          @if (shotsService.shots$ | async; as shotsData) {
+            @for (shot of shotsData; track shot.id) {
+              <tr>
+                <td>{{ shot.id }}</td>
+                <td>{{ shot.x }}</td>
+                <td>{{ shot.y }}</td>
+                <td>{{ shot.r }}</td>
+                <td>{{ shot.accuracy }}</td>
+                <td>{{ shot.deltaTime }}</td>
+                <td>{{ shot.time }}</td>
+              </tr>
+            }
+          }
         </tbody>
       </table>
     </div>

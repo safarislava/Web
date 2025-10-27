@@ -13,8 +13,16 @@ public class RevolverShot extends Shot {
 
     public RevolverShot() {}
 
-    public RevolverShot(Bullet bullet, Integer deltaTime, ShotRequest shotRequest) {
-        super(bullet.getPointInArea() ? 100 : 0, deltaTime, shotRequest);
+    public RevolverShot(User user, Bullet bullet, Integer deltaTime, ShotRequest shotRequest) {
+        super(user, bullet.getIsPointInArea() ? 100 : 0, deltaTime, shotRequest);
+        this.bullet = bullet;
+    }
+
+    public Bullet getBullet() {
+        return bullet;
+    }
+
+    public void setBullet(Bullet bullet) {
         this.bullet = bullet;
     }
 }

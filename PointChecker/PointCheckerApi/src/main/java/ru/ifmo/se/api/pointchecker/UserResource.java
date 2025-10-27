@@ -59,8 +59,8 @@ public class UserResource {
                     .value(token)
                     .path("/")
                     .maxAge(15 * 60)
-                    .secure(true)
-                    .httpOnly(true)
+                    .secure(false)
+                    .httpOnly(false)
                     .sameSite(NewCookie.SameSite.NONE)
                     .build();
 

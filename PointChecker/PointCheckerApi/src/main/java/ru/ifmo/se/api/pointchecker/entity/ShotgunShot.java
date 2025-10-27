@@ -15,9 +15,17 @@ public class ShotgunShot extends Shot {
 
     public ShotgunShot() {}
 
-    public ShotgunShot(List<Bullet> bullets, Integer deltaTime, ShotRequest shotRequest) {
-        super(bullets.stream().mapToInt(p -> p.getPointInArea() ? 1 : 0).sum() * 100 / bullets.size(),
+    public ShotgunShot(User user, List<Bullet> bullets, Integer deltaTime, ShotRequest shotRequest) {
+        super(user, bullets.stream().mapToInt(p -> p.getIsPointInArea() ? 1 : 0).sum() * 100 / bullets.size(),
                 deltaTime, shotRequest);
+        this.bullets = bullets;
+    }
+
+    public List<Bullet> getBullets() {
+        return bullets;
+    }
+
+    public void setBullets(List<Bullet> bullets) {
         this.bullets = bullets;
     }
 }

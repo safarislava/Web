@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, HostListener, Inject, PLATFORM_ID} from '@angular/core';
+import {AfterViewInit, Component, HostListener, inject, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
-import {AbstractControl} from '@angular/forms';
+import {ShotsService} from '../ShotsService';
 
 @Component({
   selector: 'app-points-area',
@@ -12,26 +12,26 @@ import {AbstractControl} from '@angular/forms';
 export class PointsAreaComponent implements AfterViewInit {
   private canvas!: HTMLCanvasElement;
   private ctx!: CanvasRenderingContext2D;
-  private readonly isBrowser: boolean;
+  private platformId = inject(PLATFORM_ID);
 
   private isImageLoaded: boolean = false;
   private image: HTMLImageElement | undefined;
+  private scale: number = 50;
+
+  private shotsService = inject(ShotsService);
 
   private x: number | undefined;
   private y: number | undefined;
   private r: number | undefined;
-  private scale: number = 50;
+  private weapon: string = "REVOLVER";
 
   set X(x: number) { this.x = x; }
   set Y(y: number) { this.y = y; }
   set R(r: number) { this.r = r; }
-
-  constructor(@Inject(PLATFORM_ID) platformId: Object) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+  set Weapon(weapon: string) { this.weapon = weapon; }
 
   ngAfterViewInit(): void {
-    if (this.isBrowser) {
+    if (isPlatformBrowser(this.platformId)) {
       this.initCanvas();
       this.image = new Image();
       this.image.src = "/assets/images/target.png";
@@ -39,6 +39,9 @@ export class PointsAreaComponent implements AfterViewInit {
         this.isImageLoaded = true;
         this.updateGraphImage();
       }
+      this.shotsService.shots$.subscribe(shots => {
+        this.updateGraphImage();
+      });
     }
   }
 
@@ -52,8 +55,8 @@ export class PointsAreaComponent implements AfterViewInit {
 
   @HostListener('mousedown', ['$event'])
   handleMouseDown(event: MouseEvent): void {
-    if (this.x == undefined || this.y == undefined || this.r == undefined) return;
-
+    if (this.x == undefined || this.y == undefined || this.r == undefined || this.weapon == undefined) return;
+    this.shotsService.addShot(this.x, this.y, this.r, this.weapon);
   }
 
   private initCanvas() : void {
@@ -72,7 +75,7 @@ export class PointsAreaComponent implements AfterViewInit {
     this.ctx.clearRect(-this.canvas.width/2, -this.canvas.height/2, this.canvas.width, this.canvas.height);
 
     this.drawMainFigure();
-    this.drawPoints();
+    this.drawShots();
     this.drawScope();
   }
 
@@ -98,26 +101,18 @@ export class PointsAreaComponent implements AfterViewInit {
     }
   }
 
-  private drawPoints() {
-    // let rScale = document.querySelector('[id$="hidden-points:form-r-image"]').value;
-    // if (rScale == null || rScale.trim() === "") return;
-    //
-    // let pointsJson = document.querySelector('[id$="hidden-points:points"]').value;
-    // let points = JSON.parse(pointsJson);
-    //
-    // for (let point of points) {
-    //   switch (point.shape) {
-    //     case 'circle':
-    //       addPoint(point.x, point.y, point.r, point.isPointInArea, rScale);
-    //       break;
-    //     case 'square':
-    //       addSquarePoint(point.x, point.y, point.r, point.isPointInArea, rScale);
-    //       break;
-    //     case 'triangle':
-    //       addTrianglePoint(point.x, point.y, point.r, point.isPointInArea, rScale);
-    //       break;
-    //   }
-    // }
+  private drawShots() {
+    for (let shot of this.shotsService.currentShots) {
+      const details = JSON.parse(shot.details);
+      if (details.bullet){
+        this.drawBullet(details.bullet.x, details.bullet.y, details.bullet.isPointInArea);
+      }
+      else if (details.bullets){
+        for (let bullet of details.bullets) {
+          this.drawBullet(bullet.x, bullet.y, bullet.isPointInArea);
+        }
+      }
+    }
   }
 
   private drawScope() {
@@ -126,36 +121,43 @@ export class PointsAreaComponent implements AfterViewInit {
   }
 
   private drawScopePart(color: string, width: number) {
-    if (this.x == undefined || this.y == undefined || this.r == undefined) return;
+    if (this.x == undefined || this.y == undefined || this.r == undefined || this.weapon == undefined) return;
 
     this.ctx.save();
 
     this.ctx.strokeStyle = color;
     this.ctx.lineWidth = width;
 
-    this.ctx.beginPath();
-    this.ctx.arc(this.x * this.scale, this.y * this.scale, this.r * this.scale, 0, 2 * Math.PI);
-    this.ctx.stroke();
+    switch (this.weapon) {
+      case "REVOLVER": {
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x * this.scale - this.r * this.scale, this.y * this.scale);
+        this.ctx.lineTo(this.x * this.scale + this.r * this.scale, this.y * this.scale);
+        this.ctx.stroke();
 
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.x * this.scale - this.r * this.scale, this.y * this.scale);
-    this.ctx.lineTo(this.x * this.scale + this.r * this.scale, this.y * this.scale);
-    this.ctx.stroke();
-
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.x * this.scale, this.y * this.scale - this.r * this.scale);
-    this.ctx.lineTo(this.x * this.scale, this.y * this.scale + this.r * this.scale);
-    this.ctx.stroke();
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.x * this.scale, this.y * this.scale - this.r * this.scale);
+        this.ctx.lineTo(this.x * this.scale, this.y * this.scale + this.r * this.scale);
+        this.ctx.stroke();
+        break;
+      }
+      case "SHOTGUN": {
+        this.ctx.beginPath();
+        this.ctx.arc(this.x * this.scale, this.y * this.scale, this.r * this.scale, 0, 2 * Math.PI);
+        this.ctx.stroke();
+        break;
+      }
+    }
 
     this.ctx.restore();
   }
 
-  private drawPoint(x: number, y: number, r: number, hit: boolean, rScale: number) {
+  private drawBullet(x: number, y: number, hit: boolean) {
     this.ctx.save();
 
     this.ctx.fillStyle = hit ? 'green' : 'red';
     this.ctx.beginPath();
-    this.ctx.arc(x * this.scale, y * this.scale, 3, 0, Math.PI * 2);
+    this.ctx.arc(x * this.scale, y * this.scale, 5, 0, Math.PI * 2);
     this.ctx.fill();
 
     this.ctx.restore();

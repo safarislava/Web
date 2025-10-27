@@ -32,8 +32,9 @@ public class Shot {
         r = shotRequest.r;
     }
 
-    public Shot(Integer accuracy, Integer deltaTime, ShotRequest shotRequest) {
+    public Shot(User user, Integer accuracy, Integer deltaTime, ShotRequest shotRequest) {
         this(shotRequest);
+        this.user = user;
         this.accuracy = accuracy;
         this.deltaTime = deltaTime;
         this.time = new Timestamp(System.currentTimeMillis());
@@ -53,6 +54,14 @@ public class Shot {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public BigDecimal getX() {
