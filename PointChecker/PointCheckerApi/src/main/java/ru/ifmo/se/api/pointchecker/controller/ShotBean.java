@@ -100,4 +100,14 @@ public class ShotBean {
         BigDecimal pointY = y.add(BigDecimalMath.sin(arg).multiply(mod).multiply(r));
         return new AbstractPoint(pointX, pointY);
     }
+
+    public boolean clearShots(String username) {
+        try {
+            shotRepository.clear(userRepository.getUser(username));
+            return true;
+        }
+        catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 }

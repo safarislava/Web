@@ -34,6 +34,10 @@ export class MainPageComponent implements OnInit {
     this.shotsService.addShot(this.X?.value, this.Y?.value, this.R?.value, this.Weapon);
   }
 
+  public clearShots(): void {
+    this.shotsService.clearShots();
+  }
+
   ngOnInit(): void {
     this.X?.valueChanges.subscribe(x => {
       this.onXChange(x);
@@ -64,13 +68,13 @@ export class MainPageComponent implements OnInit {
     this.pointsAreaComponent.updateGraphImage();
   }
 
-  protected setRevolver(): void {
+  public setRevolver(): void {
     this.weapon = "REVOLVER";
     this.pointsAreaComponent.Weapon = "REVOLVER";
     this.pointsAreaComponent.updateGraphImage();
   }
 
-  protected setShotgun(): void {
+  public setShotgun(): void {
     this.weapon = "SHOTGUN"
     this.pointsAreaComponent.Weapon = "SHOTGUN";
     this.pointsAreaComponent.updateGraphImage();

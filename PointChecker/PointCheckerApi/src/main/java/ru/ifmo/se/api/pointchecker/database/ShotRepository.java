@@ -8,4 +8,5 @@ import java.util.List;
 public interface ShotRepository {
     List<Shot> findAll(User user);
     void save(List<Shot> points);
+    void clear(User user);
 }

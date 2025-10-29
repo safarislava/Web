@@ -34,10 +34,11 @@ public class UserResource {
             NewCookie authCookie = new NewCookie.Builder("accessToken")
                     .value(token)
                     .path("/")
+                    .domain("185.239.141.48")
                     .maxAge(15 * 60)
                     .secure(false)
                     .httpOnly(false)
-                    .sameSite(NewCookie.SameSite.NONE)
+                    //.sameSite(NewCookie.SameSite.NONE)
                     .build();
 
             return Response.ok().cookie(authCookie).build();
@@ -58,10 +59,11 @@ public class UserResource {
             NewCookie authCookie = new NewCookie.Builder("accessToken")
                     .value(token)
                     .path("/")
+                    .domain("185.239.141.48")
                     .maxAge(15 * 60)
                     .secure(false)
                     .httpOnly(false)
-                    .sameSite(NewCookie.SameSite.NONE)
+                    //.sameSite(NewCookie.SameSite.NONE)
                     .build();
 
             return Response.ok().cookie(authCookie).build();

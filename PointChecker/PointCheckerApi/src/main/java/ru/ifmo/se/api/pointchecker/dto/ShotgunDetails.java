@@ -2,10 +2,11 @@ package ru.ifmo.se.api.pointchecker.dto;
 
 import java.util.List;
 
-public class ShotgunDetails {
+public class ShotgunDetails extends BulletDetails {
     private List<BulletDto> bullets;
 
     public ShotgunDetails(List<BulletDto> bullets) {
+        super("Shotgun");
         this.bullets = bullets;
     }
 

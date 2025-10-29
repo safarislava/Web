@@ -16,6 +16,10 @@ public class JwtFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
+        if (requestContext.getMethod().equalsIgnoreCase("OPTIONS")) {
+            return;
+        }
+
         Cookie authCookie = requestContext.getCookies().get("accessToken");
 
         if (authCookie == null) {

@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "controllerServlet", value = "/controller-servlet")
-public class ControllerServlet extends  HttpServlet{
+public class ControllerServlet extends  HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String verifiableToken = request.getHeader("x-csrf-token");

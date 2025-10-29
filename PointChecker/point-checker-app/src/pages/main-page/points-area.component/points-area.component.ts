@@ -104,13 +104,15 @@ export class PointsAreaComponent implements AfterViewInit {
   private drawShots() {
     for (let shot of this.shotsService.currentShots) {
       const details = JSON.parse(shot.details);
-      if (details.bullet){
-        this.drawBullet(details.bullet.x, details.bullet.y, details.bullet.isPointInArea);
-      }
-      else if (details.bullets){
-        for (let bullet of details.bullets) {
-          this.drawBullet(bullet.x, bullet.y, bullet.isPointInArea);
-        }
+      switch (details.type){
+        case "Revolver":
+          this.drawBullet(details.bullet.x, details.bullet.y, details.bullet.isPointInArea);
+          break;
+        case "Shotgun":
+          for (let bullet of details.bullets) {
+            this.drawBullet(bullet.x, bullet.y, bullet.isPointInArea);
+          }
+          break;
       }
     }
   }

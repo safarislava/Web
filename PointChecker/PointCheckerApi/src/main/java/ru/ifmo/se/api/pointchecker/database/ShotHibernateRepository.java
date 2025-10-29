@@ -35,4 +35,12 @@ public class ShotHibernateRepository implements ShotRepository {
         TypedQuery<Shot> query = entityManager.createQuery(criteriaQuery);
         return new ArrayList<>(query.getResultList());
     }
+
+    @Override
+    public void clear(User user) {
+        List<Shot> shots = findAll(user);
+        for (Shot shot : shots) {
+            entityManager.remove(shot);
+        }
+    }
 }

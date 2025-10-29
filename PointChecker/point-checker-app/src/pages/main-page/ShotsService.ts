@@ -20,7 +20,7 @@ export class Shot {
 })
 export class ShotsService {
   private platformId = inject(PLATFORM_ID);
-  private urlApi = "http://localhost:8080/PointChecker-1.0/api/point-area";
+  private urlApi = "http://185.239.141.48:8080/PointChecker-1.0/api/shots";
   private shotsSubject = new BehaviorSubject<Shot[]>([]);
   public shots$: Observable<Shot[]> = this.shotsSubject.asObservable().pipe(
     map(shots => this.sortShots(shots))
@@ -45,7 +45,7 @@ export class ShotsService {
       return of([]);
     }
 
-    return this.http.get<Shot[]>(this.urlApi + "/get-all", {
+    return this.http.get<Shot[]>(this.urlApi, {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
@@ -72,11 +72,27 @@ export class ShotsService {
       weapon: weapon
     };
 
-    this.http.post(this.urlApi + "/add", payload, {
+    this.http.post(this.urlApi, payload, {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
       }})
+      .subscribe({
+        next: (response) => {
+          this.loadShots().subscribe();
+        },
+        error: (error) => {
+          if (error.status === 401) {
+            this.router.navigate(['/']);
+          }
+        }
+      });
+  }
+
+  public clearShots(): void {
+    this.http.delete(this.urlApi, {
+      withCredentials: true
+    })
       .subscribe({
         next: (response) => {
           this.loadShots().subscribe();

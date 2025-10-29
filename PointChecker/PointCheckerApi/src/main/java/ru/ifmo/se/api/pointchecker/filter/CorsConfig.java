@@ -20,12 +20,12 @@ public class CorsConfig {
     public void init() {
         this.allowedOrigins = Set.of(
                 "http://localhost:4200",
-                "http://127.0.0.1:4200"
-        );
+                "http://185.239.141.48:4200",
+                "http://localhost");
         this.allowCredentials = true;
-        this.allowedMethods = Set.of("GET", "POST");
+        this.allowedMethods = Set.of("GET", "POST", "DELETE", "OPTIONS");
         this.allowedHeaders = Set.of("Origin", "Content-Type", "Accept", "Authorization",
-                "X-Requested-With", "X-CSRF-Token", "Cache-Control"
+                "X-Requested-With", "X-CSRF-Token", "Cache-Control", "Cookie", "Set-Cookie"
         );
         this.exposedHeaders = Set.of("Set-Cookie");
         this.maxAge = 3600;
