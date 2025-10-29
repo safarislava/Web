@@ -1,7 +1,7 @@
 package ru.ifmo.se.api.pointchecker.dto;
 
 public class RevolverDetails extends BulletDetails {
-    private BulletDto bullet;
+    private final BulletDto bullet;
 
     public RevolverDetails(BulletDto bullet) {
         super("Revolver");
