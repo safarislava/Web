@@ -1,8 +1,10 @@
-import {Component, inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, inject, OnInit, PLATFORM_ID, ViewChild} from '@angular/core';
 import {PointsAreaComponent} from './points-area.component/points-area.component';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AsyncPipe, isPlatformBrowser, NgOptimizedImage} from '@angular/common';
 import {ShotsService} from './ShotsService';
+import VanillaTilt from 'vanilla-tilt';
+
 
 @Component({
   selector: 'app-main-page',
@@ -16,7 +18,7 @@ import {ShotsService} from './ShotsService';
   templateUrl: './main-page.component.html',
   styleUrl: './main-page.component.scss'
 })
-export class MainPageComponent implements OnInit {
+export class MainPageComponent implements OnInit, AfterViewInit {
   @ViewChild(PointsAreaComponent) pointsAreaComponent!: PointsAreaComponent;
   private platformId = inject(PLATFORM_ID);
   public pointForm!: FormGroup;
@@ -24,7 +26,7 @@ export class MainPageComponent implements OnInit {
 
   private weapon: string = "REVOLVER";
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private elementRef: ElementRef) {
     this.pointForm = this.createForm();
   }
 
@@ -51,6 +53,20 @@ export class MainPageComponent implements OnInit {
       this.onRChange(r);
     });
     this.shotsService.loadShots().subscribe();
+  }
+
+  ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const tiltElement = this.elementRef.nativeElement.querySelector('.background');
+    if (tiltElement) {
+      VanillaTilt.init(tiltElement, {
+        max: 1,
+        speed: 300,
+        glare: true,
+        'max-glare': 0.1,
+        'full-page-listening': true,
+      });
+    }
   }
 
   private onXChange(x: number): void {

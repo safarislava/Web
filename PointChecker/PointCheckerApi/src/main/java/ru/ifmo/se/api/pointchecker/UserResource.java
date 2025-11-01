@@ -37,8 +37,8 @@ public class UserResource {
 //                    .domain("185.239.141.48")
                     .maxAge(15 * 60)
                     .secure(false)
-                    .httpOnly(false)
-                    //.sameSite(NewCookie.SameSite.NONE)
+                    .httpOnly(true)
+//                    .sameSite(NewCookie.SameSite.NONE)
                     .build();
 
             return Response.ok().cookie(authCookie).build();
@@ -62,8 +62,8 @@ public class UserResource {
 //                    .domain("185.239.141.48")
                     .maxAge(15 * 60)
                     .secure(false)
-                    .httpOnly(false)
-                    //.sameSite(NewCookie.SameSite.NONE)
+                    .httpOnly(true)
+//                    .sameSite(NewCookie.SameSite.NONE)
                     .build();
 
             return Response.ok().cookie(authCookie).build();
