@@ -3,7 +3,7 @@
     <div class="form-header">
       <h2>LOGIN</h2>
     </div>
-    <form class="form-content" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form class="form-content" [formGroup]="loginForm">
       <div class="input-group">
         <label for="username">USERNAME</label>
         <input type="text" id="username" formControlName="username" placeholder="Input your username" required>
@@ -30,6 +30,10 @@
           @else if (password?.errors?.['pattern']) {
             <p>Password has invalid format</p>
           }
+        </div>
+      } @else if (errorMessage) {
+        <div class="error-message">
+          <p>Something went wrong</p>
         </div>
       }
 
