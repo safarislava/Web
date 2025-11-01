@@ -20,7 +20,7 @@ export class Shot {
 })
 export class ShotsService {
   private platformId = inject(PLATFORM_ID);
-  private urlApi = "http://localhost:8080/PointChecker-1.0/api/shots";
+  private urlApi = "http://185.239.141.48:8080/PointChecker-1.0/api/shots";
   private shotsSubject = new BehaviorSubject<Shot[]>([]);
   public shots$: Observable<Shot[]> = this.shotsSubject.asObservable().pipe(
     map(shots => this.sortShots(shots))
