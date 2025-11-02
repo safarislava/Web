@@ -48,7 +48,7 @@ export class PointsAreaComponent implements AfterViewInit {
   @HostListener('mousemove', ['$event'])
   handleMouseOver(event: MouseEvent): void {
     if (this.r == undefined) return;
-    this.x = ((event.offsetX - this.canvas.width / 2)/ this.scale);
+    this.x = ((event.offsetX - this.canvas.width / 2) / this.scale);
     this.y = ((this.canvas.height / 2 - event.offsetY) / this.scale);
     this.updateGraphImage();
   }

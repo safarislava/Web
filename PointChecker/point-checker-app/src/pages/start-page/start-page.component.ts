@@ -19,6 +19,11 @@ export class StartPageComponent implements OnDestroy {
   private readonly progressTime = 1000;
   private readonly updateInterval = 20;
 
+  @HostListener('touchstart', ['$event'])
+  handleTouchDownEvent(event: TouchEvent): void {
+    if (!this.isKeyDown && !this.formComponent.isFormOpen()) this.startProgress();
+  }
+
   @HostListener('document:mousedown', ['$event'])
   handleMouseDownEvent(event: MouseEvent): void {
     if (!this.isKeyDown && !this.formComponent.isFormOpen()) this.startProgress();
@@ -27,6 +32,11 @@ export class StartPageComponent implements OnDestroy {
   @HostListener('document:keydown', ['$event'])
   handleKeyDownEvent(event: KeyboardEvent): void {
     if (!this.isKeyDown && !this.formComponent.isFormOpen()) this.startProgress();
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent) {
+    if (!this.formComponent.isFormOpen()) this.stopProgress();
   }
 
   @HostListener('document:mouseup', ['$event'])

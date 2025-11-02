@@ -5,23 +5,6 @@ $accent-color: #e60003;
   color: white;
 }
 
-.glass {
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.unselectable {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* Internet Explorer/Edge */
-  user-select: none;           /* Non-prefixed version, currently
-                                  not supported by any browser */
-}
-
 .main-container {
   width: 100%;
   height: 100%;
@@ -86,6 +69,7 @@ header {
   align-items: center;
   justify-content: center;
 
+  max-width: 100%;
   margin-bottom: 30px;
   border-radius: 10px;
   padding: 20px;
@@ -165,7 +149,8 @@ header {
     padding: 10px;
 
     img {
-      width: 10vw;
+      max-width: max(10vw, 80px);
+
       height: auto;
       opacity: 0.6;
 
