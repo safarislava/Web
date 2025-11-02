@@ -12,7 +12,9 @@ public class Bullet {
     private Long id;
     @Version
     private Long version;
+    @Column(precision = 25, scale = 20)
     private BigDecimal x;
+    @Column(precision = 25, scale = 20)
     private BigDecimal y;
     private Boolean isPointInArea;
 
