@@ -4,6 +4,7 @@ import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators
 import {AsyncPipe, isPlatformBrowser, NgOptimizedImage} from '@angular/common';
 import {ShotsService} from './ShotsService';
 import VanillaTilt from 'vanilla-tilt';
+import {positiveNumberValidator} from '../../shared/positive-validator';
 
 
 @Component({
@@ -98,9 +99,9 @@ export class MainPageComponent implements OnInit, AfterViewInit {
 
   private createForm(): FormGroup {
     return this.formBuilder.group({
-      x: ['', [Validators.required, Validators.pattern(/.*/)]],
-      y: ['', [Validators.required, Validators.pattern(/.*/)]],
-      r: ['', [Validators.required, Validators.pattern(/.*/)]],
+      x: ['', [Validators.required, Validators.pattern(/[+-]?([0-9]*[.])?[0-9]+/)]],
+      y: ['', [Validators.required, Validators.pattern(/[+-]?([0-9]*[.])?[0-9]+/)]],
+      r: ['', [Validators.required, Validators.pattern(/[+-]?([0-9]*[.])?[0-9]+/), positiveNumberValidator()]],
     });
   }
 

@@ -56,7 +56,7 @@ export class PointsAreaComponent implements AfterViewInit {
   @HostListener('mousedown', ['$event'])
   handleMouseDown(event: MouseEvent): void {
     if (this.x == undefined || this.y == undefined || this.r == undefined || this.weapon == undefined) return;
-    this.shotsService.addShot(this.x, this.y, this.r, this.weapon);
+    this.shotsService.addShot(this.x.toString(), this.y.toString(), this.r.toString(), this.weapon);
   }
 
   private initCanvas() : void {

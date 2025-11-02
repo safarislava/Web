@@ -20,7 +20,7 @@ export class Shot {
 })
 export class ShotsService {
   private platformId = inject(PLATFORM_ID);
-  private urlApi = "http://185.239.141.48:8080/PointChecker-1.0/api/shots";
+  private urlApi = "http://localhost:8080/PointChecker-1.0/api/shots";
   private shotsSubject = new BehaviorSubject<Shot[]>([]);
   public shots$: Observable<Shot[]> = this.shotsSubject.asObservable().pipe(
     map(shots => this.sortShots(shots))
@@ -64,7 +64,7 @@ export class ShotsService {
       );
   }
 
-  public addShot(x: number, y: number, r: number, weapon: string): void {
+  public addShot(x: string, y: string, r: string, weapon: string): void {
     const payload = {
       x: x,
       y: y,

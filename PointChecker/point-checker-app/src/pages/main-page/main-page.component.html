@@ -17,13 +17,13 @@
           <h2 class="form-title">SHOT PARAMETERS</h2>
           <div class="input-group">
             <label class="input-group-label" for="x-data">Coordinate X</label>
-            <input type="number" id="x-data" formControlName="x" placeholder="Enter X" required>
+            <input type="text" id="x-data" formControlName="x" placeholder="Enter X" required>
             @if (X?.invalid && X?.touched) {
               <div class="error-message">
                 @if (X?.errors?.['required']) {
                   <p>X is required</p>
                 }
-                @if (X?.errors?.['pattern']) {
+                @else if (X?.errors?.['pattern']) {
                   <p>Invalid format</p>
                 }
               </div>
@@ -31,13 +31,13 @@
           </div>
           <div class="input-group">
             <label class="input-group-label" for="y-data">Coordinate Y</label>
-            <input type="number" id="y-data" formControlName="y" placeholder="Enter Y" required>
+            <input type="text" id="y-data" formControlName="y" placeholder="Enter Y" required>
             @if (Y?.invalid && Y?.touched) {
               <div class="error-message">
                 @if (Y?.errors?.['required']) {
                   <p>Y is required</p>
                 }
-                @if (Y?.errors?.['pattern']) {
+                @else if (Y?.errors?.['pattern']) {
                   <p>Invalid format</p>
                 }
               </div>
@@ -45,14 +45,17 @@
           </div>
           <div class="input-group">
             <label class="input-group-label" for="r-data">Coordinate R</label>
-            <input type="number" id="r-data" formControlName="r" placeholder="Enter R" required>
+            <input type="text" id="r-data" formControlName="r" placeholder="Enter R" required>
             @if (R?.invalid && R?.touched) {
               <div class="error-message">
                 @if (R?.errors?.['required']) {
                   <p>R is required</p>
                 }
-                @if (R?.errors?.['pattern']) {
+                @else if (R?.errors?.['pattern']) {
                   <p>Invalid format</p>
+                }
+                @else if (R?.errors?.['positive']) {
+                  <p>R must be positive</p>
                 }
               </div>
             }
@@ -81,7 +84,7 @@
           <th scope="col">X</th>
           <th scope="col">Y</th>
           <th scope="col">R</th>
-          <th scope="col">HIT</th>
+          <th scope="col">ACCURACY</th>
           <th scope="col">CALCULATION TIME</th>
           <th scope="col">WHEN</th>
         </tr>

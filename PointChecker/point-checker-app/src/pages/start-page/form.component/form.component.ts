@@ -17,7 +17,7 @@ export class FormComponent {
   public errorMessage: boolean = false;
 
   private isEnterOrRegister: boolean = true;
-  private urlApi = "http://185.239.141.48:8080/PointChecker-1.0/api/";
+  private urlApi = "http://localhost:8080/PointChecker-1.0/api/";
 
   constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
     this.loginForm = this.createForm();
