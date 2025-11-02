@@ -3,6 +3,7 @@ import {inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {urlApi} from '../../shared/api-config';
 
 export class Shot {
   public id!: number;
@@ -20,7 +21,6 @@ export class Shot {
 })
 export class ShotsService {
   private platformId = inject(PLATFORM_ID);
-  private urlApi = "http://localhost:8080/PointChecker-1.0/api/shots";
   private shotsSubject = new BehaviorSubject<Shot[]>([]);
   public shots$: Observable<Shot[]> = this.shotsSubject.asObservable().pipe(
     map(shots => this.sortShots(shots))
@@ -45,7 +45,7 @@ export class ShotsService {
       return of([]);
     }
 
-    return this.http.get<Shot[]>(this.urlApi, {
+    return this.http.get<Shot[]>(urlApi + "/shots", {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ export class ShotsService {
       weapon: weapon
     };
 
-    this.http.post(this.urlApi, payload, {
+    this.http.post(urlApi + "/shots", payload, {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
@@ -90,7 +90,7 @@ export class ShotsService {
   }
 
   public clearShots(): void {
-    this.http.delete(this.urlApi, {
+    this.http.delete(urlApi + "/shots", {
       withCredentials: true
     })
       .subscribe({

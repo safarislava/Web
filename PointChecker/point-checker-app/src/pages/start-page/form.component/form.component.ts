@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import {urlApi} from '../../../shared/api-config';
 
 @Component({
   selector: 'app-form',
@@ -15,9 +16,7 @@ export class FormComponent {
   public isCompliant = false;
   public loginForm!: FormGroup;
   public errorMessage: boolean = false;
-
   private isEnterOrRegister: boolean = true;
-  private urlApi = "http://localhost:8080/PointChecker-1.0/api/";
 
   constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
     this.loginForm = this.createForm();
@@ -57,7 +56,7 @@ export class FormComponent {
     };
 
     if (this.isEnterOrRegister) {
-      this.http.post(this.urlApi + "auth-sessions", payload, {
+      this.http.post(urlApi + "/auth-sessions", payload, {
         withCredentials: true,
       })
         .subscribe({
@@ -72,7 +71,7 @@ export class FormComponent {
         });
     }
     else {
-      this.http.post(this.urlApi + "users", payload, {
+      this.http.post(urlApi + "/users", payload, {
         withCredentials: true,
       })
         .subscribe({
