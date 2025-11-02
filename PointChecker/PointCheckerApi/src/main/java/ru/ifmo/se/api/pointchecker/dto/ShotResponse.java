@@ -19,9 +19,9 @@ public class ShotResponse {
 
     public ShotResponse(Shot shot) {
         this.id = shot.getId();
-        this.x = shot.getX().toPlainString();
-        this.y = shot.getY().toPlainString();
-        this.r = shot.getR().toPlainString();
+        this.x = shot.getX().stripTrailingZeros().toPlainString();
+        this.y = shot.getY().stripTrailingZeros().toPlainString();
+        this.r = shot.getR().stripTrailingZeros().toPlainString();
         this.accuracy = shot.getAccuracy();
         this.deltaTime = shot.getDeltaTime();
         this.time = shot.getTime().toString();

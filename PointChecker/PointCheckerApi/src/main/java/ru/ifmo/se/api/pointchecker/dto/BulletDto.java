@@ -2,20 +2,18 @@ package ru.ifmo.se.api.pointchecker.dto;
 
 import ru.ifmo.se.api.pointchecker.entity.Bullet;
 
-import java.math.BigDecimal;
-
 public class BulletDto {
     private Long id;
-    private BigDecimal x;
-    private BigDecimal y;
+    private String x;
+    private String y;
     private Boolean isPointInArea;
 
     public BulletDto() {}
 
     public BulletDto(Bullet bullet) {
         this.id = bullet.getId();
-        this.x = bullet.getX();
-        this.y = bullet.getY();
+        this.x = bullet.getX().stripTrailingZeros().toPlainString();
+        this.y = bullet.getY().stripTrailingZeros().toPlainString();
         this.isPointInArea = bullet.getIsPointInArea();
     }
 
@@ -26,17 +24,17 @@ public class BulletDto {
         this.id = id;
     }
 
-    public BigDecimal getX() {
+    public String getX() {
         return x;
     }
-    public void setX(BigDecimal x) {
+    public void setX(String x) {
         this.x = x;
     }
 
-    public BigDecimal getY() {
+    public String getY() {
         return y;
     }
-    public void setY(BigDecimal y) {
+    public void setY(String y) {
         this.y = y;
     }
 
