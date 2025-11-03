@@ -1,9 +1,0 @@
-{
-  "/api": {
-    "target": "http://185.239.141.48:8080/PointChecker-1.0",
-    "secure": false,
-    "changeOrigin": true,
-    "logLevel": "debug",
-    "withCredentials": true
-  }
-}
