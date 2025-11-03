@@ -1,6 +1,15 @@
-import {ChangeDetectorRef, Component, HostListener, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  HostListener,
+  inject,
+  OnDestroy,
+  PLATFORM_ID,
+  ViewChild
+} from '@angular/core';
 import {FormComponent} from './form.component/form.component';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {CommonModule, isPlatformBrowser, NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-start-page',
@@ -9,9 +18,11 @@ import {CommonModule, NgOptimizedImage} from '@angular/common';
   styleUrl: './start-page.component.scss',
   imports: [CommonModule, FormComponent, NgOptimizedImage]
 })
-export class StartPageComponent implements OnDestroy {
+export class StartPageComponent implements OnDestroy, AfterViewInit {
+  @ViewChild('backgroundVideo') backgroundVideo!: any;
   @ViewChild(FormComponent) formComponent!: FormComponent;
 
+  private platformId = inject(PLATFORM_ID);
   private isKeyDown = false;
   progressOffset = 160;
   private progressInterval: any;
@@ -50,6 +61,25 @@ export class StartPageComponent implements OnDestroy {
   }
 
   constructor(private cdRef: ChangeDetectorRef) {}
+
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        this.loadVideo();
+      }, 1000);
+    }
+  }
+
+  private loadVideo() {
+    const video = document.getElementById('background-video') as HTMLVideoElement;
+    if (video) {
+      video.load();
+
+      video.addEventListener('loadeddata', () => {
+        video.play();
+      });
+    }
+  }
 
   private startProgress(): void {
     this.progress = 0;
