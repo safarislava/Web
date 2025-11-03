@@ -8,7 +8,6 @@ import java.util.Set;
 @Singleton
 @Startup
 public class CorsConfig {
-
     private Set<String> allowedOrigins;
     private boolean allowCredentials;
     private Set<String> allowedMethods;

@@ -14,7 +14,7 @@ import java.util.List;
 
 @Path("/shots")
 @Secure
-public class ShootingAreaResource {
+public class ShotsResource {
     @EJB
     ShotBean shotBean;
     @EJB
