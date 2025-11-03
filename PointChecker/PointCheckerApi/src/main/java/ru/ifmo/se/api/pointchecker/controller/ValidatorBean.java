@@ -17,5 +17,8 @@ public class ValidatorBean {
         if (shotRequest.r == null) {
             throw new IllegalArgumentException("R не указан");
         }
+        if (shotRequest.r.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("R неположительный");
+        }
     }
 }

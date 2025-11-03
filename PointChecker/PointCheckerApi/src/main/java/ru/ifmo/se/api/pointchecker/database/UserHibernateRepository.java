@@ -22,12 +22,7 @@ public class UserHibernateRepository implements UserRepository {
         Root<User> root = criteriaQuery.from(User.class);
         criteriaQuery.where(criteriaBuilder.equal(root.get("username"), username));
         TypedQuery<User> typedQuery = entityManager.createQuery(criteriaQuery);
-        try {
-            return typedQuery.getSingleResult();
-        }
-        catch (Exception e) {
-            return null;
-        }
+        return typedQuery.getSingleResult();
     }
 
     @Override
