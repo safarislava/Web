@@ -1,0 +1,47 @@
+<div class="login-overlay" [class.active]="isCompliant">
+  <div class="login-form">
+    <div class="form-header">
+      <h2>LOGIN</h2>
+    </div>
+    <form class="form-content" [formGroup]="loginForm">
+      <div class="input-group">
+        <label for="username">USERNAME</label>
+        <input type="text" id="username" formControlName="username" placeholder="Input your username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">PASSWORD</label>
+        <input type="password" id="password" formControlName="password" placeholder="Input your password" required>
+      </div>
+
+      @if (username?.invalid && username?.touched) {
+        <div class="error-message">
+          @if (username?.errors?.['required']) {
+            <p>Username is required</p>
+          }
+          @else if (username?.errors?.['pattern']) {
+            <p>Username has invalid format</p>
+          }
+        </div>
+      } @else if (password?.invalid && password?.touched) {
+        <div class="error-message">
+          @if (password?.errors?.['required']) {
+            <p>Password is required</p>
+          }
+          @else if (password?.errors?.['pattern']) {
+            <p>Password has invalid format</p>
+          }
+        </div>
+      } @else if (errorMessage) {
+        <div class="error-message">
+          <p>Something went wrong</p>
+        </div>
+      }
+
+      <div class="form-actions">
+        <button type="submit" class="cancel-btn" (click)="onRegistrationClick()">REGISTRATION</button>
+        <button type="submit" class="login-btn" (click)="onEnterClick()">ENTER</button>
+        <button type="button" class="cancel-btn" (click)="closeForm()">CANCEL</button>
+      </div>
+    </form>
+  </div>
+</div>
