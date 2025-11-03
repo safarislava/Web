@@ -37,6 +37,7 @@ public class ShotHibernateRepository implements ShotRepository {
     }
 
     @Override
+    @Transactional
     public void clear(User user) {
         List<Shot> shots = findAll(user);
         for (Shot shot : shots) {
