@@ -9,7 +9,7 @@ import jakarta.ws.rs.ext.Provider;
 import ru.ifmo.se.api.pointchecker.controller.JwtBean;
 
 @Provider
-@Secure
+@AuthRequirement
 public class JwtFilter implements ContainerRequestFilter {
     @EJB
     private JwtBean jwtBean;

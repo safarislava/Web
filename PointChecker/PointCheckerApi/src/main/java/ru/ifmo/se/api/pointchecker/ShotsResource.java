@@ -8,12 +8,12 @@ import ru.ifmo.se.api.pointchecker.controller.JwtBean;
 import ru.ifmo.se.api.pointchecker.controller.ShotBean;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 import ru.ifmo.se.api.pointchecker.dto.ShotResponse;
-import ru.ifmo.se.api.pointchecker.filter.Secure;
+import ru.ifmo.se.api.pointchecker.filter.AuthRequirement;
 
 import java.util.List;
 
 @Path("/shots")
-@Secure
+@AuthRequirement
 public class ShotsResource {
     @EJB
     ShotBean shotBean;
