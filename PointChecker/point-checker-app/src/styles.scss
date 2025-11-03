@@ -20,6 +20,10 @@
                                   not supported by any browser */
 }
 
+.hidden {
+  display: none;
+}
+
 @media (max-width: 686px) {
   .mobile-hidden {
     display: none;

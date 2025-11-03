@@ -1,6 +1,7 @@
 <div class="main-container unselectable">
   <div class="background">
     <div class="crop-video">
+      <img id="video-preview" ngSrc="/assets/images/preview.png"  alt="" height="812" width="1440" [class.hidden]="isVideoLoaded"/>
       <video id="background-video" loop muted playsinline preload="none">
         <source src="/assets/videos/footage.mp4"/>
       </video>

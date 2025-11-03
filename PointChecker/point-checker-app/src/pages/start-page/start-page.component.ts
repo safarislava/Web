@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import {FormComponent} from './form.component/form.component';
 import {CommonModule, isPlatformBrowser, NgOptimizedImage} from '@angular/common';
+import {timeout} from 'rxjs';
 
 @Component({
   selector: 'app-start-page',
@@ -19,12 +20,12 @@ import {CommonModule, isPlatformBrowser, NgOptimizedImage} from '@angular/common
   imports: [CommonModule, FormComponent, NgOptimizedImage]
 })
 export class StartPageComponent implements OnDestroy, AfterViewInit {
-  @ViewChild('backgroundVideo') backgroundVideo!: any;
   @ViewChild(FormComponent) formComponent!: FormComponent;
+  public progressOffset = 160;
+  public isVideoLoaded = false;
 
   private platformId = inject(PLATFORM_ID);
   private isKeyDown = false;
-  progressOffset = 160;
   private progressInterval: any;
   private progress = 0;
   private readonly progressTime = 1000;
@@ -64,18 +65,20 @@ export class StartPageComponent implements OnDestroy, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        this.loadVideo();
-      }, 1000);
+      this.loadVideo();
     }
   }
 
   private loadVideo() {
     const video = document.getElementById('background-video') as HTMLVideoElement;
-    if (video) {
+    const preview = document.getElementById('video-preview') as HTMLImageElement;
+
+    if (video && preview) {
       video.load();
 
       video.addEventListener('loadeddata', () => {
+        this.isVideoLoaded = true;
+        this.cdRef.detectChanges();
         video.play();
       });
     }
