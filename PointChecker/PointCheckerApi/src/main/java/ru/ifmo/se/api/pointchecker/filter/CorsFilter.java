@@ -19,29 +19,25 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
     @EJB
     private CorsConfig corsConfig;
 
-    private static final String ORIGIN_HEADER = "Origin";
-    private static final String REQUEST_METHOD_HEADER = "Access-Control-Request-Method";
-    private static final String REQUEST_HEADERS_HEADER = "Access-Control-Request-Headers";
-
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         if (isPreflightRequest(requestContext)) {
-            String origin = requestContext.getHeaderString(ORIGIN_HEADER);
+            String origin = requestContext.getHeaderString("Origin");
 
             if (isOriginAllowed(origin)) {
                 Response.ResponseBuilder builder = Response.ok();
                 addCorsHeaders(builder, origin);
                 requestContext.abortWith(builder.build());
-            } else {
+            }
+            else {
                 requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
             }
         }
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext,
-                       ContainerResponseContext responseContext) throws IOException {
-        String origin = requestContext.getHeaderString(ORIGIN_HEADER);
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
+        String origin = requestContext.getHeaderString("Origin");
 
         if (origin != null && isOriginAllowed(origin)) {
             addCorsHeaders(responseContext, origin);
@@ -50,8 +46,9 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
 
     private boolean isPreflightRequest(ContainerRequestContext requestContext) {
         return requestContext.getMethod().equalsIgnoreCase("OPTIONS") &&
-                requestContext.getHeaderString(ORIGIN_HEADER) != null &&
-                requestContext.getHeaderString(REQUEST_METHOD_HEADER) != null;
+                requestContext.getHeaderString("Origin") != null &&
+                requestContext.getHeaderString("Access-Control-Request-Method") != null &&
+                requestContext.getHeaderString("Access-Control-Request-Headers") != null;
     }
 
     private boolean isOriginAllowed(String origin) {
@@ -99,6 +96,10 @@ public class CorsFilter implements ContainerRequestFilter, ContainerResponseFilt
 
         if (!corsConfig.getAllowedHeaders().isEmpty()) {
             builder.header("Access-Control-Allow-Headers", joinSet(corsConfig.getAllowedHeaders()));
+        }
+
+        if (!corsConfig.getExposedHeaders().isEmpty()) {
+            builder.header("Access-Control-Expose-Headers", joinSet(corsConfig.getExposedHeaders()));
         }
 
         builder.header("Access-Control-Max-Age", String.valueOf(corsConfig.getMaxAge()));
