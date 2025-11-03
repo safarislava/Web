@@ -99,9 +99,9 @@ export class MainPageComponent implements OnInit, AfterViewInit {
 
   private createForm(): FormGroup {
     return this.formBuilder.group({
-      x: ['', [Validators.required, Validators.pattern(/[+-]?([0-9]*[.])?[0-9]+/)]],
-      y: ['', [Validators.required, Validators.pattern(/[+-]?([0-9]*[.])?[0-9]+/)]],
-      r: ['', [Validators.required, Validators.pattern(/[+-]?([0-9]*[.])?[0-9]+/), positiveNumberValidator()]],
+      x: ['', [Validators.required, Validators.pattern(/^[+-]?([0-9]*[.])?[0-9]+$/)]],
+      y: ['', [Validators.required, Validators.pattern(/^[+-]?([0-9]*[.])?[0-9]+$/)]],
+      r: ['', [Validators.required, Validators.pattern(/^[+-]?([0-9]*[.])?[0-9]+$/), positiveNumberValidator()]],
     });
   }
 
