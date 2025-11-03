@@ -1,6 +1,15 @@
+@font-face {
+  font-family: 'Chinese Rocks Rg';
+  src: url('/assets/fonts/chinese_rocks_rg.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   margin: 0;
   padding: 0;
+  font-family: 'Chinese Rocks Rg', sans-serif;
 }
 
 .glass {
@@ -22,6 +31,7 @@
 
 .hidden {
   display: none;
+  object-fit: none;
 }
 
 @media (max-width: 686px) {
