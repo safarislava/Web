@@ -1,11 +1,15 @@
 package ru.ifmo.se.api.pointchecker.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 
 import jakarta.persistence.*;
 
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "shotgun_shot")
 @PrimaryKeyJoinColumn(name = "id")
@@ -18,14 +22,6 @@ public class ShotgunShot extends Shot {
     public ShotgunShot(User user, List<Bullet> bullets, Integer deltaTime, ShotRequest shotRequest) {
         super(user, bullets.stream().mapToInt(p -> p.getIsPointInArea() ? 1 : 0).sum() * 100 / bullets.size(),
                 deltaTime, shotRequest);
-        this.bullets = bullets;
-    }
-
-    public List<Bullet> getBullets() {
-        return bullets;
-    }
-
-    public void setBullets(List<Bullet> bullets) {
         this.bullets = bullets;
     }
 }

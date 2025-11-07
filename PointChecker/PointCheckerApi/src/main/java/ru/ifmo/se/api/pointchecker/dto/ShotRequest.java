@@ -18,10 +18,6 @@ public class ShotRequest {
         this.weapon = weapon;
     }
 
-    public ShotRequest(String x, String y, String r, String weapon) {
-        this(new BigDecimal(x), new BigDecimal(y), new BigDecimal(r), Weapon.valueOf(weapon));
-    }
-
     @Override
     public String toString() {
         return String.format("%s, %s, %s",x.toPlainString(), y.toPlainString(), r.toPlainString());

@@ -1,5 +1,8 @@
 package ru.ifmo.se.api.pointchecker.dto;
 
+import lombok.Getter;
+
+@Getter
 public class RevolverDetails extends BulletDetails {
     private final BulletDto bullet;
 
@@ -8,7 +11,4 @@ public class RevolverDetails extends BulletDetails {
         this.bullet = bullet;
     }
 
-    public BulletDto getBullet() {
-        return bullet;
-    }
 }

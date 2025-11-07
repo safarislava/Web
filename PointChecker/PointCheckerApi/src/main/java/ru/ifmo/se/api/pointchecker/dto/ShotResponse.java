@@ -1,12 +1,16 @@
 package ru.ifmo.se.api.pointchecker.dto;
 
 import com.google.gson.Gson;
+import lombok.Getter;
+import lombok.Setter;
 import ru.ifmo.se.api.pointchecker.entity.RevolverShot;
 import ru.ifmo.se.api.pointchecker.entity.Shot;
 import ru.ifmo.se.api.pointchecker.entity.ShotgunShot;
 
 import java.util.List;
 
+@Setter
+@Getter
 public class ShotResponse {
     private Long id;
     private String x;
@@ -37,61 +41,5 @@ public class ShotResponse {
             ShotgunDetails details = new ShotgunDetails(bullets);
             this.details = gson.toJson(details);
         }
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getX() {
-        return x;
-    }
-    public void setX(String x) {
-        this.x = x;
-    }
-
-    public String getY() {
-        return y;
-    }
-    public void setY(String y) {
-        this.y = y;
-    }
-
-    public String getR() {
-        return r;
-    }
-    public void setR(String r) {
-        this.r = r;
-    }
-
-    public Integer getAccuracy() {
-        return accuracy;
-    }
-    public void setAccuracy(Integer accuracy) {
-        this.accuracy = accuracy;
-    }
-
-    public Integer getDeltaTime() {
-        return deltaTime;
-    }
-    public void setDeltaTime(int deltaTime) {
-        this.deltaTime = deltaTime;
-    }
-
-    public String getTime() {
-        return time;
-    }
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-    public void setDetails(String details) {
-        this.details = details;
     }
 }

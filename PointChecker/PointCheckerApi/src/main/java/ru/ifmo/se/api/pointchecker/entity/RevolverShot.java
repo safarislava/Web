@@ -1,9 +1,13 @@
 package ru.ifmo.se.api.pointchecker.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 
 import jakarta.persistence.*;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "revolver_shot")
 @PrimaryKeyJoinColumn(name = "id")
@@ -15,14 +19,6 @@ public class RevolverShot extends Shot {
 
     public RevolverShot(User user, Bullet bullet, Integer deltaTime, ShotRequest shotRequest) {
         super(user, bullet.getIsPointInArea() ? 100 : 0, deltaTime, shotRequest);
-        this.bullet = bullet;
-    }
-
-    public Bullet getBullet() {
-        return bullet;
-    }
-
-    public void setBullet(Bullet bullet) {
         this.bullet = bullet;
     }
 }
