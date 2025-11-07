@@ -35,29 +35,20 @@ public class ShotBean {
         return shotResponses;
     }
 
-    public boolean addShots(List<ShotRequest> shotRequests) {
-        ArrayList<Shot> shots = new ArrayList<>();
-        try {
-            for (ShotRequest shotRequest : shotRequests) {
-                validatorBean.validate(shotRequest);
+    public void addShot(ShotRequest shotRequest, String username) {
+        User user = userRepository.getUser(username);
 
-                Shot shot = null;
-                switch (shotRequest.weapon) {
-                    case REVOLVER -> {
-                        shot = processRevolverShot(shotRequest);
-                    }
-                    case SHOTGUN -> {
-                        shot = processShotgunShot(shotRequest);
-                    }
-                }
-                if (shot != null) shots.add(shot);
+        validatorBean.validate(shotRequest);
+        Shot shot = new Shot();
+        switch (shotRequest.weapon) {
+            case REVOLVER -> {
+                shot = processRevolverShot(shotRequest, user);
             }
-            shotRepository.save(shots);
-
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
+            case SHOTGUN -> {
+                shot = processShotgunShot(shotRequest, user);
+            }
         }
+        shotRepository.save(List.of(shot));
     }
 
     private Bullet processShot(ShotRequest shotRequest) {
@@ -70,18 +61,16 @@ public class ShotBean {
         return new Bullet(abstractPoint.x, abstractPoint.y, isPointInArea);
     }
 
-    private RevolverShot processRevolverShot(ShotRequest shotRequest) {
+    private RevolverShot processRevolverShot(ShotRequest shotRequest, User user) {
         long startTime = System.nanoTime();
-        User user = userRepository.getUser(shotRequest.username);
         Bullet bullet = processShot(shotRequest);
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
         return new RevolverShot(user, bullet, deltaTime, shotRequest);
     }
 
-    private ShotgunShot processShotgunShot(ShotRequest shotRequest) {
+    private ShotgunShot processShotgunShot(ShotRequest shotRequest, User user) {
         long startTime = System.nanoTime();
-        User user = userRepository.getUser(shotRequest.username);
         List<Bullet> bullets = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             bullets.add(processShot(shotRequest));

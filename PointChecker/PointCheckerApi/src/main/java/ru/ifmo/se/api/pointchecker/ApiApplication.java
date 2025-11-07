@@ -6,4 +6,5 @@ import jakarta.ws.rs.core.Application;
 @ApplicationPath("/api")
 public class ApiApplication extends Application {
     // TODO Selection of shot with drawing only inherit bullets
+    // TODO Spring, Jackson,
 }

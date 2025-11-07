@@ -5,6 +5,19 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {urlApi} from '../../shared/api-config';
 
+class Bullet {
+  public id!: number;
+  public x!: number;
+  public y!: number;
+  public isPointInArea!: boolean;
+}
+
+class ShotDetails {
+  public type!: string;
+  public bullet?: Bullet;
+  public bullets?: Bullet[];
+}
+
 export class Shot {
   public id!: number;
   public x!: string;
@@ -13,7 +26,7 @@ export class Shot {
   public accuracy!: number;
   public deltaTime!: number;
   public time!: string;
-  public details!: string;
+  public details!: ShotDetails;
 }
 
 @Injectable({

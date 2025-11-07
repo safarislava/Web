@@ -2,6 +2,9 @@ package ru.ifmo.se.api.pointchecker.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.ifmo.se.api.pointchecker.dto.BulletDto;
+import ru.ifmo.se.api.pointchecker.dto.RevolverDetails;
+import ru.ifmo.se.api.pointchecker.dto.ShotDetails;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 
 import jakarta.persistence.*;
@@ -20,5 +23,11 @@ public class RevolverShot extends Shot {
     public RevolverShot(User user, Bullet bullet, Integer deltaTime, ShotRequest shotRequest) {
         super(user, bullet.getIsPointInArea() ? 100 : 0, deltaTime, shotRequest);
         this.bullet = bullet;
+    }
+
+    @Override
+    public ShotDetails getDetails() {
+        BulletDto bullet = new BulletDto(this.bullet);
+        return new RevolverDetails(bullet);
     }
 }

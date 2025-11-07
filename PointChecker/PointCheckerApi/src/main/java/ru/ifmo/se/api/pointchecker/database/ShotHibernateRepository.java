@@ -41,6 +41,7 @@ public class ShotHibernateRepository implements ShotRepository {
     public void clear(User user) {
         List<Shot> shots = findAll(user);
         for (Shot shot : shots) {
+            // TODO
             entityManager.remove(shot);
         }
     }

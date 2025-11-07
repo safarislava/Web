@@ -3,6 +3,7 @@ package ru.ifmo.se.api.pointchecker.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ru.ifmo.se.api.pointchecker.dto.ShotDetails;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 
 import java.math.BigDecimal;
@@ -45,5 +46,9 @@ public class Shot {
         this.accuracy = accuracy;
         this.deltaTime = deltaTime;
         this.time = new Timestamp(System.currentTimeMillis());
+    }
+
+    public ShotDetails getDetails() {
+        return new ShotDetails("");
     }
 }

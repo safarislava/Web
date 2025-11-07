@@ -23,13 +23,11 @@ public class ShotsResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response add(@CookieParam("accessToken") String token, ShotRequest request) {
-        request.username = jwtBean.getUsername(token);
-
-        boolean success = shotBean.addShots(List.of(request));
-        if (success) {
+        try {
+            shotBean.addShot(request, jwtBean.getUsername(token));
             return Response.status(Response.Status.CREATED).build();
         }
-        else  {
+        catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
