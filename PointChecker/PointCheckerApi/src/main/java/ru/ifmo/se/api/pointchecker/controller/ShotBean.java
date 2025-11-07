@@ -1,7 +1,7 @@
 package ru.ifmo.se.api.pointchecker.controller;
 
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.pointchecker.database.ShotRepository;
 import ru.ifmo.se.api.pointchecker.database.UserRepository;
 import ru.ifmo.se.api.pointchecker.dto.*;
@@ -11,44 +11,43 @@ import ru.ifmo.se.api.pointchecker.utils.BigDecimalMath;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
-@Stateless
+@Component
+@RequiredArgsConstructor
 public class ShotBean {
-    @EJB
-    private ShotRepository shotRepository;
-    @EJB
-    private UserRepository userRepository;
-    @EJB
-    private CacheBean cacheBean;
-    @EJB
-    private ValidatorBean validatorBean;
-    @EJB
-    private CalculationBean calculationBean;
+    private final ShotRepository shotRepository;
+    private final UserRepository userRepository;
+    private final CacheBean cacheBean;
+    private final ValidatorBean validatorBean;
+    private final CalculationBean calculationBean;
 
     public List<ShotResponse> getShotResponses(String username) {
-        List<Shot> shots = shotRepository.findAll(userRepository.getUser(username));
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) throw new IllegalArgumentException("User not found");
+
+        List<Shot> shots = shotRepository.findAllByUser(user.get());
         List<ShotResponse> shotResponses = new ArrayList<>();
-        for (Shot shot : shots) {
-            shotResponses.add(new ShotResponse(shot));
-        }
+        shots.forEach(shot -> shotResponses.add(new ShotResponse(shot)));
         return shotResponses;
     }
 
     public void addShot(ShotRequest shotRequest, String username) {
-        User user = userRepository.getUser(username);
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) throw new IllegalArgumentException("User not found");
 
         validatorBean.validate(shotRequest);
         Shot shot = new Shot();
         switch (shotRequest.weapon) {
             case REVOLVER -> {
-                shot = processRevolverShot(shotRequest, user);
+                shot = processRevolverShot(shotRequest, user.get());
             }
             case SHOTGUN -> {
-                shot = processShotgunShot(shotRequest, user);
+                shot = processShotgunShot(shotRequest, user.get());
             }
         }
-        shotRepository.save(List.of(shot));
+        shotRepository.save(shot);
     }
 
     private Bullet processShot(ShotRequest shotRequest) {
@@ -90,13 +89,10 @@ public class ShotBean {
         return new AbstractPoint(pointX, pointY);
     }
 
-    public boolean clearShots(String username) {
-        try {
-            shotRepository.clear(userRepository.getUser(username));
-            return true;
-        }
-        catch (IllegalArgumentException e) {
-            return false;
-        }
+    public void clearShots(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) throw new IllegalArgumentException("User not found");
+
+        shotRepository.deleteAllByUser(user.get());
     }
 }

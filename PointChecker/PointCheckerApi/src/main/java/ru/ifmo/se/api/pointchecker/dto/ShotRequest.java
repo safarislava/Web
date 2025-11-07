@@ -12,9 +12,4 @@ public class ShotRequest {
     public Weapon weapon;
 
     public ShotRequest() {}
-
-    @Override
-    public String toString() {
-        return String.format("%s, %s, %s",x.toPlainString(), y.toPlainString(), r.toPlainString());
-    }
 }

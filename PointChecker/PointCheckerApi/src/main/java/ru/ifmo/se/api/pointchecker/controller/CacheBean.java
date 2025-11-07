@@ -1,10 +1,10 @@
 package ru.ifmo.se.api.pointchecker.controller;
 
-import jakarta.ejb.Stateless;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import ru.ifmo.se.api.pointchecker.entity.AbstractPoint;
 
-@Stateless
+@Component
 public class CacheBean {
     private final Jedis jedis = new Jedis("localhost", 6379);
 

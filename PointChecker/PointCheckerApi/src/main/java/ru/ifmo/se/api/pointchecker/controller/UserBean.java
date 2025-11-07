@@ -1,30 +1,31 @@
 package ru.ifmo.se.api.pointchecker.controller;
 
-import jakarta.ejb.EJB;
-import jakarta.ejb.Stateless;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.pointchecker.database.UserRepository;
 import ru.ifmo.se.api.pointchecker.dto.UserDto;
 import ru.ifmo.se.api.pointchecker.entity.User;
 import ru.ifmo.se.api.pointchecker.utils.SHA256;
 
-@Stateless
+import java.util.Optional;
+
+@Component
+@RequiredArgsConstructor
 public class UserBean {
-    @EJB
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public boolean login(UserDto userDto) {
-        User user = userRepository.getUser(userDto.username);
-        if (user == null) return false;
+        Optional<User> user = userRepository.findByUsername(userDto.username);
+        if (user.isEmpty()) return false;
 
-        String verifyingPassword = SHA256.getHash(userDto.password + user.getSalt());
-        return user.getPassword().equals(verifyingPassword);
+        String verifyingPassword = SHA256.getHash(userDto.password + user.get().getSalt());
+        return user.get().getPassword().equals(verifyingPassword);
     }
 
     public void register(UserDto userDto) throws IllegalArgumentException {
-        User user = userRepository.getUser(userDto.username);
-        if (user != null)
-            throw new IllegalArgumentException("Username already exists");
+        Optional<User> user = userRepository.findByUsername(userDto.username);
+        if (user.isPresent()) throw new IllegalArgumentException("Username already exists");
 
-        userRepository.addUser(userDto.username, userDto.password);
+        userRepository.save(new User(userDto.username, userDto.password));
     }
 }

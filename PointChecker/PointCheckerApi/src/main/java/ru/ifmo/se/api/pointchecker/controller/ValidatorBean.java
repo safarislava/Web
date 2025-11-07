@@ -1,11 +1,11 @@
 package ru.ifmo.se.api.pointchecker.controller;
 
-import jakarta.ejb.Stateless;
+import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 
 import java.math.BigDecimal;
 
-@Stateless
+@Component
 public class ValidatorBean {
     public void validate(ShotRequest shotRequest) throws IllegalArgumentException {
         if (shotRequest.x == null) {

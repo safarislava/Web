@@ -1,6 +1,6 @@
 package ru.ifmo.se.api.pointchecker.controller;
 
-import jakarta.ejb.Stateless;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
 
-@Stateless
+@Component
 public class CalculationBean {
     private final MathContext mathContext = MathContext.DECIMAL128;
     private final BufferedImage image;

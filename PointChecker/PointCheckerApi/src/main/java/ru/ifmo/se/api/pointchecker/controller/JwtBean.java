@@ -5,16 +5,23 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.ejb.Stateless;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.pointchecker.dto.UserDto;
 
 import java.util.Date;
 import java.util.UUID;
 
-@Stateless
+@Component
 public class JwtBean {
-    private final Algorithm algorithm = Algorithm.HMAC256(System.getProperty("JWT_SECRET"));
-    private final JWTVerifier verifier = JWT.require(algorithm).withIssuer("PointCheckerApi").build();
+    private final Algorithm algorithm;
+    private final JWTVerifier verifier;
+
+    public JwtBean(Environment environment) {
+        String secret = environment.getProperty("JWT_SECRET", "VeRy_SeCrEt");
+        this.algorithm = Algorithm.HMAC256(secret);
+        this.verifier = JWT.require(algorithm).withIssuer("PointCheckerApi").build();
+    }
 
     public String generate(UserDto user) {
         return com.auth0.jwt.JWT.create()
@@ -29,7 +36,7 @@ public class JwtBean {
 
     public boolean verify(String token) {
         try {
-            DecodedJWT decodedJWT = verifier.verify(token);
+            verifier.verify(token);
             return true;
         }
         catch (JWTVerificationException e) {

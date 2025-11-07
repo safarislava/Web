@@ -1,22 +1,21 @@
 package ru.ifmo.se.api.pointchecker.filter;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.ejb.Singleton;
-import jakarta.ejb.Startup;
+import lombok.Getter;
+import org.springframework.context.annotation.Configuration;
+
 import java.util.Set;
 
-@Singleton
-@Startup
+@Getter
+@Configuration
 public class CorsConfig {
-    private Set<String> allowedOrigins;
-    private boolean allowCredentials;
-    private Set<String> allowedMethods;
-    private Set<String> allowedHeaders;
-    private Set<String> exposedHeaders;
-    private int maxAge;
+    private final Set<String> allowedOrigins;
+    private final boolean allowCredentials;
+    private final Set<String> allowedMethods;
+    private final Set<String> allowedHeaders;
+    private final Set<String> exposedHeaders;
+    private final int maxAge;
 
-    @PostConstruct
-    public void init() {
+    public CorsConfig() {
         this.allowedOrigins = Set.of(
                 "http://localhost:4200",
                 "http://185.239.141.48:4200",
@@ -29,11 +28,4 @@ public class CorsConfig {
         this.exposedHeaders = Set.of("Set-Cookie");
         this.maxAge = 3600;
     }
-
-    public Set<String> getAllowedOrigins() { return allowedOrigins; }
-    public boolean isAllowCredentials() { return allowCredentials; }
-    public Set<String> getAllowedMethods() { return allowedMethods; }
-    public Set<String> getAllowedHeaders() { return allowedHeaders; }
-    public Set<String> getExposedHeaders() { return exposedHeaders; }
-    public int getMaxAge() { return maxAge; }
 }
