@@ -1,7 +1,7 @@
 package ru.ifmo.se.api.pointchecker.services;
 
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
+import ru.ifmo.se.api.pointchecker.dto.requests.ShotRequest;
 
 import java.math.BigDecimal;
 

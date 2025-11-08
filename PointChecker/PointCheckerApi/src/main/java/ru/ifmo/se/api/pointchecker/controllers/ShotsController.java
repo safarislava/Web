@@ -6,8 +6,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.api.pointchecker.services.JwtService;
 import ru.ifmo.se.api.pointchecker.services.ShotService;
-import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
-import ru.ifmo.se.api.pointchecker.dto.ShotResponse;
+import ru.ifmo.se.api.pointchecker.dto.requests.ShotRequest;
+import ru.ifmo.se.api.pointchecker.dto.responses.ShotResponse;
 
 import java.util.List;
 

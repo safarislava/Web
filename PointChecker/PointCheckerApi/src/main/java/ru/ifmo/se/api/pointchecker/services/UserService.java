@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.pointchecker.repositories.UserRepository;
-import ru.ifmo.se.api.pointchecker.dto.UserDto;
+import ru.ifmo.se.api.pointchecker.dto.requests.UserDto;
 import ru.ifmo.se.api.pointchecker.entities.User;
 
 import java.util.Optional;

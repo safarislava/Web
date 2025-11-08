@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.se.api.pointchecker.services.JwtService;
 import ru.ifmo.se.api.pointchecker.services.UserService;
-import ru.ifmo.se.api.pointchecker.dto.UserDto;
+import ru.ifmo.se.api.pointchecker.dto.requests.UserDto;
 
 import java.time.Duration;
 

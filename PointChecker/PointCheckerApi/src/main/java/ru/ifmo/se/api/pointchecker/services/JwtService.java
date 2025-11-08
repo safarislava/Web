@@ -7,7 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.api.pointchecker.dto.UserDto;
+import ru.ifmo.se.api.pointchecker.dto.requests.UserDto;
 
 import java.util.Date;
 import java.util.UUID;

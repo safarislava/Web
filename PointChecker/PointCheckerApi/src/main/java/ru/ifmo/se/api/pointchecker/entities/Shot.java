@@ -3,8 +3,8 @@ package ru.ifmo.se.api.pointchecker.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.pointchecker.dto.ShotDetails;
-import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
+import ru.ifmo.se.api.pointchecker.dto.responses.ShotDetails;
+import ru.ifmo.se.api.pointchecker.dto.requests.ShotRequest;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

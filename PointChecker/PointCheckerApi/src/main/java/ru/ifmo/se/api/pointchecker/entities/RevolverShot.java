@@ -2,10 +2,10 @@ package ru.ifmo.se.api.pointchecker.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.pointchecker.dto.BulletDto;
-import ru.ifmo.se.api.pointchecker.dto.RevolverDetails;
-import ru.ifmo.se.api.pointchecker.dto.ShotDetails;
-import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
+import ru.ifmo.se.api.pointchecker.dto.responses.BulletDto;
+import ru.ifmo.se.api.pointchecker.dto.responses.RevolverDetails;
+import ru.ifmo.se.api.pointchecker.dto.responses.ShotDetails;
+import ru.ifmo.se.api.pointchecker.dto.requests.ShotRequest;
 
 import jakarta.persistence.*;
 
