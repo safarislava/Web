@@ -1,7 +1,6 @@
 package ru.ifmo.se.api.pointchecker.dto.requests;
 
 import lombok.AllArgsConstructor;
-import ru.ifmo.se.api.pointchecker.entities.Weapon;
 
 import java.math.BigDecimal;
 

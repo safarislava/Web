@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.pointchecker.entities;
+package ru.ifmo.se.api.pointchecker.dto.requests;
 
 import lombok.Getter;
 import ru.ifmo.se.api.pointchecker.components.RequestProcessor;
