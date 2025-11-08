@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/shots")
 @RequiredArgsConstructor
-public class ShotsContoller {
+public class ShotsController {
     private final ShotService shotService;
     private final JwtService jwtService;
 
