@@ -1,6 +1,6 @@
 package ru.ifmo.se.api.pointchecker.utils;
 
-import ru.ifmo.se.api.pointchecker.entity.Shot;
+import ru.ifmo.se.api.pointchecker.entities.Shot;
 
 import java.util.Comparator;
 

@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.pointchecker.entity;
+package ru.ifmo.se.api.pointchecker.entities;
 
 import lombok.Getter;
 import lombok.Setter;

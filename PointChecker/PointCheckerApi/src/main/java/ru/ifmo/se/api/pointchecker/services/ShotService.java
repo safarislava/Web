@@ -1,11 +1,11 @@
-package ru.ifmo.se.api.pointchecker.controller;
+package ru.ifmo.se.api.pointchecker.services;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import ru.ifmo.se.api.pointchecker.database.ShotRepository;
-import ru.ifmo.se.api.pointchecker.database.UserRepository;
+import org.springframework.stereotype.Service;
+import ru.ifmo.se.api.pointchecker.repositories.ShotRepository;
+import ru.ifmo.se.api.pointchecker.repositories.UserRepository;
 import ru.ifmo.se.api.pointchecker.dto.*;
-import ru.ifmo.se.api.pointchecker.entity.*;
+import ru.ifmo.se.api.pointchecker.entities.*;
 import ru.ifmo.se.api.pointchecker.utils.BigDecimalMath;
 
 import java.math.BigDecimal;
@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-@Component
+@Service
 @RequiredArgsConstructor
-public class ShotBean {
+public class ShotService {
     private final ShotRepository shotRepository;
     private final UserRepository userRepository;
-    private final CacheBean cacheBean;
-    private final ValidatorBean validatorBean;
-    private final CalculationBean calculationBean;
+    private final CacheService cacheService;
+    private final ValidatorService validatorService;
+    private final CalculationService calculationService;
 
     public List<ShotResponse> getShotResponses(String username) {
         Optional<User> user = userRepository.findByUsername(username);
@@ -37,7 +37,7 @@ public class ShotBean {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isEmpty()) throw new IllegalArgumentException("User not found");
 
-        validatorBean.validate(shotRequest);
+        validatorService.validate(shotRequest);
         Shot shot = new Shot();
         switch (shotRequest.weapon) {
             case REVOLVER -> {
@@ -52,10 +52,10 @@ public class ShotBean {
 
     private Bullet processShot(ShotRequest shotRequest) {
         AbstractPoint abstractPoint = addSpread(shotRequest.x, shotRequest.y, shotRequest.r);
-        Boolean isPointInArea = cacheBean.getCache(abstractPoint);
+        Boolean isPointInArea = cacheService.getCache(abstractPoint);
         if (isPointInArea == null) {
-            isPointInArea = calculationBean.checkPointInArea(abstractPoint.x, abstractPoint.y);
-            cacheBean.setCache(abstractPoint, isPointInArea);
+            isPointInArea = calculationService.checkPointInArea(abstractPoint.x, abstractPoint.y);
+            cacheService.setCache(abstractPoint, isPointInArea);
         }
         return new Bullet(abstractPoint.x, abstractPoint.y, isPointInArea);
     }

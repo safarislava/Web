@@ -1,11 +1,10 @@
-package ru.ifmo.se.api.pointchecker;
+package ru.ifmo.se.api.pointchecker.controllers;
 
 import lombok.RequiredArgsConstructor;
-import jakarta.servlet.http.Cookie;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import ru.ifmo.se.api.pointchecker.controller.JwtBean;
-import ru.ifmo.se.api.pointchecker.controller.UserBean;
+import ru.ifmo.se.api.pointchecker.services.JwtService;
+import ru.ifmo.se.api.pointchecker.services.UserService;
 import ru.ifmo.se.api.pointchecker.dto.UserDto;
 
 import java.time.Duration;
@@ -13,17 +12,17 @@ import java.time.Duration;
 @RestController
 @RequestMapping("/api/auth-sessions")
 @RequiredArgsConstructor
-public class AuthSessionResource {
-    private final UserBean userBean;
-    private final JwtBean jwtBean;
+public class AuthSessionController {
+    private final UserService userService;
+    private final JwtService jwtService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Void> login(@RequestBody UserDto userDto) {
-        boolean correct = userBean.login(userDto);
+        boolean correct = userService.login(userDto);
         if (!correct) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        String token = jwtBean.generate(userDto);
+        String token = jwtService.generate(userDto);
         ResponseCookie cookie = ResponseCookie.from("accessToken", token)
                 .httpOnly(true)
                 .secure(false)

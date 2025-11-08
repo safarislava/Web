@@ -1,6 +1,6 @@
-package ru.ifmo.se.api.pointchecker.controller;
+package ru.ifmo.se.api.pointchecker.services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,13 +10,13 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Objects;
 
-@Component
-public class CalculationBean {
+@Service
+public class CalculationService {
     private final MathContext mathContext = MathContext.DECIMAL128;
     private final BufferedImage image;
     private final BigDecimal scale = BigDecimal.valueOf(50);
 
-    public CalculationBean() throws IOException {
+    public CalculationService() throws IOException {
         image = ImageIO.read(Objects.requireNonNull(getClass().getResource("target.png")));
     }
 

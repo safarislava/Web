@@ -1,12 +1,12 @@
-package ru.ifmo.se.api.pointchecker.controller;
+package ru.ifmo.se.api.pointchecker.services;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.pointchecker.dto.ShotRequest;
 
 import java.math.BigDecimal;
 
-@Component
-public class ValidatorBean {
+@Service
+public class ValidatorService {
     public void validate(ShotRequest shotRequest) throws IllegalArgumentException {
         if (shotRequest.x == null) {
             throw new IllegalArgumentException("X не указан");

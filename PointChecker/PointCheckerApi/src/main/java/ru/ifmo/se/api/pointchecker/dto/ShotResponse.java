@@ -2,7 +2,7 @@ package ru.ifmo.se.api.pointchecker.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.pointchecker.entity.Shot;
+import ru.ifmo.se.api.pointchecker.entities.Shot;
 
 @Setter
 @Getter

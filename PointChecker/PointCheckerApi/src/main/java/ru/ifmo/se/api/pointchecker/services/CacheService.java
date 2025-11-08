@@ -1,11 +1,12 @@
-package ru.ifmo.se.api.pointchecker.controller;
+package ru.ifmo.se.api.pointchecker.services;
 
-import org.springframework.stereotype.Component;
+
+import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
-import ru.ifmo.se.api.pointchecker.entity.AbstractPoint;
+import ru.ifmo.se.api.pointchecker.entities.AbstractPoint;
 
-@Component
-public class CacheBean {
+@Service
+public class CacheService {
     private final Jedis jedis = new Jedis("localhost", 6379);
 
     private final String TRUE_VALUE = "TRUE";
