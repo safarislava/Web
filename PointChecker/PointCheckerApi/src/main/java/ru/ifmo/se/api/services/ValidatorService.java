@@ -2,6 +2,7 @@ package ru.ifmo.se.api.services;
 
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.dto.requests.ShotRequest;
+import ru.ifmo.se.api.exceptions.BadRequestException;
 
 import java.math.BigDecimal;
 
@@ -9,16 +10,16 @@ import java.math.BigDecimal;
 public class ValidatorService {
     public void validate(ShotRequest shotRequest) throws IllegalArgumentException {
         if (shotRequest.x == null) {
-            throw new IllegalArgumentException("X не указан");
+            throw new BadRequestException("X is null");
         }
         if (shotRequest.y == null) {
-            throw new IllegalArgumentException("Y не указан");
+            throw new BadRequestException("Y is null");
         }
         if (shotRequest.r == null) {
-            throw new IllegalArgumentException("R не указан");
+            throw new BadRequestException("R is null");
         }
         if (shotRequest.r.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("R неположительный");
+            throw new BadRequestException("R is below 0");
         }
     }
 }

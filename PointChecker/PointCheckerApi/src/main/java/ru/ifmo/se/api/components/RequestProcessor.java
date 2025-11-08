@@ -12,6 +12,7 @@ import ru.ifmo.se.api.services.CalculationService;
 import ru.ifmo.se.api.utils.BigDecimalMath;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.Random;
 
 @Component
@@ -26,12 +27,12 @@ public class RequestProcessor {
 
     protected Bullet processShot(ShotRequest shotRequest) {
         AbstractPoint abstractPoint = addSpread(shotRequest.x, shotRequest.y, shotRequest.r);
-        Boolean isPointInArea = cacheService.getCache(abstractPoint);
-        if (isPointInArea == null) {
-            isPointInArea = calculationService.checkPointInArea(abstractPoint.x, abstractPoint.y);
-            cacheService.setCache(abstractPoint, isPointInArea);
+        Optional<Boolean> hit = cacheService.getCache(abstractPoint);
+        if (hit.isEmpty()) {
+            hit = Optional.of(calculationService.checkPointInArea(abstractPoint.x, abstractPoint.y));
+            cacheService.setCache(abstractPoint, hit.get());
         }
-        return new Bullet(abstractPoint.x, abstractPoint.y, isPointInArea);
+        return new Bullet(abstractPoint.x, abstractPoint.y, hit.get());
     }
 
     private AbstractPoint addSpread(BigDecimal x, BigDecimal y, BigDecimal r) {

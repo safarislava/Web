@@ -12,6 +12,4 @@ public class ShotgunDetails extends ShotDetails {
         super("Shotgun");
         this.bullets = bullets;
     }
-
-
 }

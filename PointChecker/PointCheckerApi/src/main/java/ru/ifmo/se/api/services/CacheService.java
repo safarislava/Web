@@ -1,9 +1,10 @@
 package ru.ifmo.se.api.services;
 
-
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import ru.ifmo.se.api.entities.AbstractPoint;
+
+import java.util.Optional;
 
 @Service
 public class CacheService {
@@ -12,33 +13,32 @@ public class CacheService {
     private final String TRUE_VALUE = "TRUE";
     private final String FALSE_VALUE = "FALSE";
 
-    public Boolean getCache(AbstractPoint abstractPoint) {
-        String value;
+    public Optional<Boolean> getCache(AbstractPoint abstractPoint) {
         try {
             jedis.connect();
-            value = jedis.get(abstractPoint.toString());
+            String value = jedis.get(abstractPoint.toString());
             jedis.close();
+
+            return switch (value) {
+                case TRUE_VALUE -> Optional.of(Boolean.TRUE);
+                case FALSE_VALUE -> Optional.of(Boolean.FALSE);
+                default -> Optional.empty();
+            };
         }
         catch (Exception e) {
-            return null;
+            return Optional.empty();
         }
-
-        if (value == null) return null;
-        return switch (value) {
-            case TRUE_VALUE -> true;
-            case FALSE_VALUE -> false;
-            default -> null;
-        };
     }
 
-    public void setCache(AbstractPoint abstractPoint, Boolean isPointInArea) {
+    public void setCache(AbstractPoint abstractPoint, Boolean hit) {
         String key = abstractPoint.toString();
-        String value = isPointInArea ? TRUE_VALUE : FALSE_VALUE;
+        String value = hit ? TRUE_VALUE : FALSE_VALUE;
 
         try {
             jedis.connect();
             jedis.set(key, value);
             jedis.close();
-        } catch (Exception ignored) {}
+        }
+        catch (Exception ignored) {}
     }
 }

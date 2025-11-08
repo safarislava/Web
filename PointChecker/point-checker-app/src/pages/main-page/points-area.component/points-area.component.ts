@@ -105,11 +105,11 @@ export class PointsAreaComponent implements AfterViewInit {
     for (let shot of this.shotsService.currentShots) {
       switch (shot.details.type){
         case "Revolver":
-          this.drawBullet(shot.details.bullet!.x, shot.details.bullet!.y, shot.details.bullet!.isPointInArea);
+          this.drawBullet(shot.details.bullet!.x, shot.details.bullet!.y, shot.details.bullet!.hit);
           break;
         case "Shotgun":
           for (let bullet of shot.details.bullets!) {
-            this.drawBullet(bullet.x, bullet.y, bullet.isPointInArea);
+            this.drawBullet(bullet.x, bullet.y, bullet.hit);
           }
           break;
       }

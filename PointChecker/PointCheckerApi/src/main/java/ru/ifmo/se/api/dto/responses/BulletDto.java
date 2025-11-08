@@ -10,7 +10,7 @@ public class BulletDto {
     private Long id;
     private String x;
     private String y;
-    private Boolean isPointInArea;
+    private Boolean hit;
 
     public BulletDto() {}
 
@@ -18,6 +18,6 @@ public class BulletDto {
         this.id = bullet.getId();
         this.x = bullet.getX().stripTrailingZeros().toPlainString();
         this.y = bullet.getY().stripTrailingZeros().toPlainString();
-        this.isPointInArea = bullet.getIsPointInArea();
+        this.hit = bullet.getHit();
     }
 }

@@ -20,13 +20,13 @@ public class Bullet {
     private BigDecimal x;
     @Column(precision = 25, scale = 20)
     private BigDecimal y;
-    private Boolean isPointInArea;
+    private Boolean hit;
 
     public Bullet() {}
 
-    public Bullet(BigDecimal x, BigDecimal y, Boolean isPointInArea) {
+    public Bullet(BigDecimal x, BigDecimal y, Boolean hit) {
         this.x = x;
         this.y = y;
-        this.isPointInArea = isPointInArea;
+        this.hit = hit;
     }
 }

@@ -9,7 +9,7 @@ class Bullet {
   public id!: number;
   public x!: number;
   public y!: number;
-  public isPointInArea!: boolean;
+  public hit!: boolean;
 }
 
 class ShotDetails {
@@ -69,7 +69,7 @@ export class ShotsService {
           this.updateShots(response);
         }),
         catchError(error => {
-          if (error.status === 401) {
+          if (error.status === 401 || error.status === 403) {
             this.router.navigate(['/']);
           }
           return of([]);
@@ -95,7 +95,7 @@ export class ShotsService {
           this.loadShots().subscribe();
         },
         error: (error) => {
-          if (error.status === 401) {
+          if (error.status === 401 || error.status === 403) {
             this.router.navigate(['/']);
           }
         }
@@ -111,7 +111,7 @@ export class ShotsService {
           this.loadShots().subscribe();
         },
         error: (error) => {
-          if (error.status === 401) {
+          if (error.status === 401 || error.status === 403) {
             this.router.navigate(['/']);
           }
         }

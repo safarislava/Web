@@ -3,6 +3,7 @@ package ru.ifmo.se.api.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.api.services.JwtService;
 import ru.ifmo.se.api.services.ShotService;
@@ -31,6 +32,7 @@ public class ShotsController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
+    @Transactional
     public void clear(@CookieValue("accessToken") String token) {
         shotService.clearShots(jwtService.getUsername(token));
     }

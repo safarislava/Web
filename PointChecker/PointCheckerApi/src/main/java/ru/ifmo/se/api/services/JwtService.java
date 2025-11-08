@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.dto.requests.UserDto;
+import ru.ifmo.se.api.exceptions.BadRequestException;
 
 import java.util.Date;
 import java.util.UUID;
@@ -45,7 +46,11 @@ public class JwtService {
     }
 
     public String getUsername(String token) {
-        DecodedJWT decodedJWT = verifier.verify(token);
-        return decodedJWT.getClaim("username").asString();
+        try {
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return decodedJWT.getClaim("username").asString();
+        } catch (JWTVerificationException e) {
+            throw new BadRequestException("Token is invalid");
+        }
     }
 }
