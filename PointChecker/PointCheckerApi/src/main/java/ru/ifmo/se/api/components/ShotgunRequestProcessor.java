@@ -6,7 +6,7 @@ import ru.ifmo.se.api.entities.Bullet;
 import ru.ifmo.se.api.entities.Shot;
 import ru.ifmo.se.api.entities.ShotgunShot;
 import ru.ifmo.se.api.entities.User;
-import ru.ifmo.se.api.pointchecker.entities.*;
+import ru.ifmo.se.api.entities.*;
 import ru.ifmo.se.api.services.CacheService;
 import ru.ifmo.se.api.services.CalculationService;
 
