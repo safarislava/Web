@@ -1,11 +1,11 @@
 package ru.ifmo.se.api.pointchecker.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.pointchecker.repositories.UserRepository;
 import ru.ifmo.se.api.pointchecker.dto.UserDto;
 import ru.ifmo.se.api.pointchecker.entities.User;
-import ru.ifmo.se.api.pointchecker.utils.SHA256;
 
 import java.util.Optional;
 
@@ -13,19 +13,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public boolean login(UserDto userDto) {
-        Optional<User> user = userRepository.findByUsername(userDto.username);
-        if (user.isEmpty()) return false;
-
-        String verifyingPassword = SHA256.getHash(userDto.password + user.get().getSalt());
-        return user.get().getPassword().equals(verifyingPassword);
+        Optional<User> userOptional = userRepository.findByUsername(userDto.username);
+        return userOptional.map(user -> passwordEncoder.matches(userDto.password, user.getPassword())).orElse(false);
     }
 
     public void register(UserDto userDto) throws IllegalArgumentException {
         Optional<User> user = userRepository.findByUsername(userDto.username);
         if (user.isPresent()) throw new IllegalArgumentException("Username already exists");
 
-        userRepository.save(new User(userDto.username, userDto.password));
+        String hashedPassword = passwordEncoder.encode(userDto.password);
+        userRepository.save(new User(userDto.username, hashedPassword));
     }
 }
