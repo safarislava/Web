@@ -6,8 +6,6 @@ import ru.ifmo.se.api.entities.Bullet;
 import ru.ifmo.se.api.entities.Shot;
 import ru.ifmo.se.api.entities.ShotgunShot;
 import ru.ifmo.se.api.entities.User;
-import ru.ifmo.se.api.entities.*;
-import ru.ifmo.se.api.services.CacheService;
 import ru.ifmo.se.api.services.CalculationService;
 
 import java.util.ArrayList;
@@ -15,8 +13,8 @@ import java.util.List;
 
 @Component
 public class ShotgunRequestProcessor extends RequestProcessor {
-    public ShotgunRequestProcessor(CacheService cacheService, CalculationService calculationService) {
-        super(cacheService, calculationService);
+    public ShotgunRequestProcessor(CalculationService calculationService) {
+        super(calculationService);
     }
 
     @Override

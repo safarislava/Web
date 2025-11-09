@@ -5,7 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.dto.requests.UserDto;
 import ru.ifmo.se.api.exceptions.BadRequestException;
@@ -18,8 +18,7 @@ public class JwtService {
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
 
-    public JwtService(Environment environment) {
-        String secret = environment.getProperty("JWT_SECRET", "VeRy_SeCrEt");
+    public JwtService(@Value("${JWT_SECRET}") String secret) {
         this.algorithm = Algorithm.HMAC256(secret);
         this.verifier = JWT.require(algorithm).withIssuer("PointCheckerApi").build();
     }

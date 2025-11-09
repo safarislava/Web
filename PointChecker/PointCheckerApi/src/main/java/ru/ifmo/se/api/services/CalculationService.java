@@ -1,5 +1,6 @@
 package ru.ifmo.se.api.services;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -20,7 +21,10 @@ public class CalculationService {
         image = ImageIO.read(Objects.requireNonNull(getClass().getResource("target.png")));
     }
 
-    public boolean checkPointInArea(BigDecimal x, BigDecimal y) {
+    @Cacheable(value = "hit",
+            key = "{#x.toString(), #y.toString()}",
+            unless = "#result == false")
+    public boolean checkHit(BigDecimal x, BigDecimal y) {
         BigDecimal width = new BigDecimal(image.getWidth());
         BigDecimal height = new BigDecimal(image.getHeight());
 

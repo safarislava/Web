@@ -6,13 +6,12 @@ import ru.ifmo.se.api.entities.Bullet;
 import ru.ifmo.se.api.entities.RevolverShot;
 import ru.ifmo.se.api.entities.Shot;
 import ru.ifmo.se.api.entities.User;
-import ru.ifmo.se.api.services.CacheService;
 import ru.ifmo.se.api.services.CalculationService;
 
 @Component
 public class RevolverRequestProcessor extends RequestProcessor {
-    public RevolverRequestProcessor(CacheService cacheService, CalculationService calculationService) {
-        super(cacheService, calculationService);
+    public RevolverRequestProcessor(CalculationService calculationService) {
+        super(calculationService);
     }
 
     @Override
