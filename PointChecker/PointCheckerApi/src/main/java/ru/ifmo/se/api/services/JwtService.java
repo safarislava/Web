@@ -7,9 +7,9 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.api.dto.requests.UserDto;
 import ru.ifmo.se.api.exceptions.BadRequestException;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.UUID;
 
@@ -23,13 +23,13 @@ public class JwtService {
         this.verifier = JWT.require(algorithm).withIssuer("PointCheckerApi").build();
     }
 
-    public String generate(UserDto user) {
+    public String generate(String username, Duration expires) {
         return com.auth0.jwt.JWT.create()
                 .withIssuer("PointCheckerApi")
                 .withSubject("Client")
-                .withClaim("username", user.getUsername())
+                .withClaim("username", username)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000L))
+                .withExpiresAt(new Date(System.currentTimeMillis() + expires.toMillis()))
                 .withJWTId(UUID.randomUUID().toString())
                 .sign(algorithm);
     }

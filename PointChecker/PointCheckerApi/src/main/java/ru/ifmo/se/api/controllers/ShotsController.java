@@ -26,6 +26,7 @@ public class ShotsController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public List<ShotResponse> getPoints(@CookieValue("accessToken") String token) {
         return shotService.getShotResponses(jwtService.getUsername(token));
     }

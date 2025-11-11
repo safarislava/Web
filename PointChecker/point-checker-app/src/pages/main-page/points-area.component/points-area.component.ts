@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, HostListener, inject, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
-import {ShotsService} from '../ShotsService';
+import {ShotsService} from '../shots-service';
 
 @Component({
   selector: 'app-points-area',

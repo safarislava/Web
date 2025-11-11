@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.ifmo.se.api.services.JwtService;
 import ru.ifmo.se.api.services.UserService;
 import ru.ifmo.se.api.dto.requests.UserDto;
+import ru.ifmo.se.api.utils.CookieGenerator;
 
 import java.time.Duration;
 
@@ -23,18 +24,16 @@ public class UserController {
     private final JwtService jwtService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> register(@RequestBody UserDto userDto) {
-        userService.register(userDto);
+    public ResponseEntity<Void> register(@RequestBody UserDto user) {
+        userService.register(user);
 
-        String token = jwtService.generate(userDto);
-        ResponseCookie cookie = ResponseCookie.from("accessToken", token)
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(Duration.ofHours(1))
-                .sameSite("Strict")
-                .build();
+        String username = user.getUsername();
+        ResponseCookie accessCookie = CookieGenerator.build("accessToken",
+                jwtService.generate(username, Duration.ofMinutes(15)), Duration.ofMinutes(15));
+        ResponseCookie refreshCookie = CookieGenerator.build("refreshToken",
+                jwtService.generate(username, Duration.ofDays(2)),  Duration.ofDays(2));
 
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString()).build();
     }
 }

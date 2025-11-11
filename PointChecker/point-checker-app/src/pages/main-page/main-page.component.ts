@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, inject, OnInit, PLATFORM_ID, ViewC
 import {PointsAreaComponent} from './points-area.component/points-area.component';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AsyncPipe, isPlatformBrowser, NgOptimizedImage} from '@angular/common';
-import {ShotsService} from './ShotsService';
+import {ShotsService} from './shots-service';
 import VanillaTilt from 'vanilla-tilt';
 import {positiveNumberValidator} from '../../shared/positive-validator';
 
