@@ -1,11 +1,9 @@
 package ru.ifmo.se.api.dto.requests;
 
-import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@AllArgsConstructor
+@Data
 public class UserDto {
-    public String username;
-    public String password;
-
-    public UserDto() {}
+    private String username;
+    private String password;
 }

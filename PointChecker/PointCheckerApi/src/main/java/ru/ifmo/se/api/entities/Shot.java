@@ -35,9 +35,9 @@ public class Shot {
     public Shot() {}
 
     public Shot(ShotRequest shotRequest){
-        x = shotRequest.x;
-        y = shotRequest.y;
-        r = shotRequest.r;
+        x = shotRequest.getX();
+        y = shotRequest.getY();
+        r = shotRequest.getR();
     }
 
     public Shot(User user, Integer accuracy, Integer deltaTime, ShotRequest shotRequest) {

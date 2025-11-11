@@ -27,7 +27,7 @@ public class JwtService {
         return com.auth0.jwt.JWT.create()
                 .withIssuer("PointCheckerApi")
                 .withSubject("Client")
-                .withClaim("username", user.username)
+                .withClaim("username", user.getUsername())
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 15 * 60 * 1000L))
                 .withJWTId(UUID.randomUUID().toString())

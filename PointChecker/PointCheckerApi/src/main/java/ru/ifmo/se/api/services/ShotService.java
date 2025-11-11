@@ -3,6 +3,7 @@ package ru.ifmo.se.api.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import ru.ifmo.se.api.components.RequestProcessor;
 import ru.ifmo.se.api.dto.requests.ShotRequest;
 import ru.ifmo.se.api.dto.responses.ShotResponse;
@@ -23,7 +24,6 @@ public class ShotService {
     private final ApplicationContext applicationContext;
     private final ShotRepository shotRepository;
     private final UserRepository userRepository;
-    private final ValidatorService validatorService;
 
     private User getUser(String username) {
         Optional<User> user = userRepository.findByUsername(username);
@@ -39,9 +39,8 @@ public class ShotService {
         return shotResponses;
     }
 
-    public void addShot(ShotRequest request, String username) {
+    public void addShot(@Validated ShotRequest request, String username) {
         User user = getUser(username);
-        validatorService.validate(request);
         RequestProcessor processor = getRequestProcessor(request);
         Shot shot = processor.process(request, user);
         shotRepository.save(shot);
@@ -53,7 +52,7 @@ public class ShotService {
     }
 
     private RequestProcessor getRequestProcessor(ShotRequest request) {
-        Class<? extends RequestProcessor> processorClass = request.weapon.getProcessorClass();
+        Class<? extends RequestProcessor> processorClass = request.getWeapon().getProcessorClass();
         return applicationContext.getBean(processorClass);
     }
 }

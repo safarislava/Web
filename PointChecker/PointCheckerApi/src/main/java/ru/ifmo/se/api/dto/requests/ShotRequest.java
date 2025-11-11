@@ -1,15 +1,20 @@
 package ru.ifmo.se.api.dto.requests;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
-@AllArgsConstructor
+@Data
 public class ShotRequest {
-    public BigDecimal x;
-    public BigDecimal y;
-    public BigDecimal r;
-    public Weapon weapon;
-
-    public ShotRequest() {}
+    @NotNull
+    private BigDecimal x;
+    @NotNull
+    private BigDecimal y;
+    @NotNull
+    @Positive
+    private BigDecimal r;
+    @NotNull
+    private Weapon weapon;
 }
