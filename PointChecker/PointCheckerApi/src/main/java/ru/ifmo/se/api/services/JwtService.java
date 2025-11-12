@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.exceptions.BadRequestException;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class JwtService {
         return com.auth0.jwt.JWT.create()
                 .withIssuer("PointCheckerApi")
                 .withSubject("Client")
+                .withClaim("id", UUID.randomUUID().toString())
                 .withClaim("username", username)
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expires.toMillis()))
@@ -48,6 +50,15 @@ public class JwtService {
         try {
             DecodedJWT decodedJWT = verifier.verify(token);
             return decodedJWT.getClaim("username").asString();
+        } catch (JWTVerificationException e) {
+            throw new BadRequestException("Token is invalid");
+        }
+    }
+
+    public Instant getIssuedTime(String token) {
+        try {
+            DecodedJWT decodedJWT = verifier.verify(token);
+            return decodedJWT.getIssuedAt().toInstant();
         } catch (JWTVerificationException e) {
             throw new BadRequestException("Token is invalid");
         }

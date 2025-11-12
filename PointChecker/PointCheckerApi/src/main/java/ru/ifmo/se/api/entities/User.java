@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @Entity
@@ -17,6 +19,7 @@ public class User {
     @Column(unique = true)
     private String username;
     private String password;
+    private Instant lastUpdate;
 
     public User() {}
 

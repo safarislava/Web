@@ -34,7 +34,7 @@ export const authInterceptor: HttpInterceptorFn = (
     catchError((error) => {
       if (error instanceof HttpErrorResponse && error.status === 401) {
         if (isPlatformBrowser(platformId)) {
-          if (req.url.includes('/api/auth-sessions')) {
+          if (req.url.includes('/api/users/login')) {
             return throwError(() => error);
           }
           return handle401Error(req, next, authService, router);
@@ -67,7 +67,6 @@ const handle401Error = (
       }),
       catchError((err) => {
         isRefreshing = false;
-        authService.logout().subscribe();
         router.navigate(['/']);
         return throwError(() => err);
       })

@@ -56,7 +56,7 @@ export class FormComponent {
     };
 
     if (this.isEnterOrRegister) {
-      this.http.post(urlApi + "/auth-sessions", payload, {
+      this.http.post(urlApi + "/users/login", payload, {
         withCredentials: true,
       })
         .subscribe({
@@ -71,7 +71,7 @@ export class FormComponent {
         });
     }
     else {
-      this.http.post(urlApi + "/users", payload, {
+      this.http.post(urlApi + "/users/register", payload, {
         withCredentials: true,
       })
         .subscribe({

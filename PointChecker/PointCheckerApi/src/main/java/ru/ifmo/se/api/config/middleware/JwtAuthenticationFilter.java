@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.ifmo.se.api.services.JwtService;
+import ru.ifmo.se.api.services.UserService;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -22,25 +23,18 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
     private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         Optional<String> authToken = getAuthTokenFromCookie(request);
-        if (authToken.isEmpty()) {
+        if (authToken.isEmpty() || !jwtService.verify(authToken.get())) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        if (!jwtService.verify(authToken.get())) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-
         String username = jwtService.getUsername(authToken.get());
-
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     username, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
             SecurityContextHolder.getContext().setAuthentication(authentication);
