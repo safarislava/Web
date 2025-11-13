@@ -63,7 +63,7 @@ public class UserController {
 
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(Duration.ofMinutes(5).getSeconds())
                 .sameSite("Strict")
@@ -71,7 +71,7 @@ public class UserController {
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/api/users")
                 .maxAge(Duration.ofDays(2).getSeconds())
                 .sameSite("Strict")
@@ -85,7 +85,7 @@ public class UserController {
         ResponseCookie accessCookie = ResponseCookie.from(
                 "accessToken", jwtService.generate(username, Duration.ofMinutes(5)))
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/")
                 .maxAge(Duration.ofMinutes(5).getSeconds())
                 .sameSite("Strict")
@@ -94,7 +94,7 @@ public class UserController {
         ResponseCookie refreshCookie = ResponseCookie.from(
                 "refreshToken", jwtService.generate(username, Duration.ofDays(2)))
                 .httpOnly(true)
-                .secure(true)
+                .secure(false)
                 .path("/api/users")
                 .maxAge(Duration.ofDays(2).getSeconds())
                 .sameSite("Strict")

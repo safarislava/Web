@@ -1,7 +1,8 @@
 import {
   HttpErrorResponse,
   HttpEvent,
-  HttpHandlerFn, HttpInterceptorFn,
+  HttpHandlerFn,
+  HttpInterceptorFn,
   HttpRequest,
 } from '@angular/common/http';
 import { inject, PLATFORM_ID } from '@angular/core';
@@ -30,20 +31,22 @@ export const authInterceptor: HttpInterceptorFn = (
   const router = inject(Router);
   const platformId = inject(PLATFORM_ID);
 
+  if (!isPlatformBrowser(platformId) && req.url.includes('/api/')) {
+    return EMPTY;
+  }
+
   return next(req).pipe(
-    catchError((error) => {
-      if (error instanceof HttpErrorResponse && error.status === 401) {
-        if (isPlatformBrowser(platformId)) {
-          if (req.url.includes('/api/users/login')) {
-            return throwError(() => error);
-          }
-          return handle401Error(req, next, authService, router);
-        }
-        else {
-          return EMPTY;
-        }
+    catchError((error: HttpErrorResponse) => {
+      if (!isPlatformBrowser(platformId)) {
+        return throwError(() => error);
       }
 
+      if (error.status === 401) {
+        if (req.url.includes('/users/login') || req.url.includes('/users/register')) {
+          return throwError(() => error);
+        }
+        return handle401Error(req, next, authService, router);
+      }
       return throwError(() => error);
     })
   );
@@ -60,22 +63,28 @@ const handle401Error = (
     refreshTokenSubject.next(null);
 
     return authService.refreshToken().pipe(
-      switchMap(() => {
+      switchMap((token: any) => {
         isRefreshing = false;
-        refreshTokenSubject.next(true);
+        refreshTokenSubject.next(token);
         return next(request);
       }),
-      catchError((err) => {
+      catchError((error) => {
         isRefreshing = false;
+        refreshTokenSubject.next(null);
+
         router.navigate(['/']);
-        return throwError(() => err);
+        return throwError(() => error);
       })
     );
   }
 
   return refreshTokenSubject.pipe(
-    filter((result) => result !== null),
+    filter((token) => token !== null),
     take(1),
-    switchMap(() => next(request))
+    switchMap(() => next(request)),
+    catchError((error) => {
+      router.navigate(['/']);
+      return throwError(() => error);
+    })
   );
 };

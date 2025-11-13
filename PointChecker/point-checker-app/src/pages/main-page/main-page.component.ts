@@ -34,7 +34,7 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   public shootAction(): void {
     if (!isPlatformBrowser(this.platformId)) return;
     if (this.X?.invalid || this.Y?.invalid || this.R?.invalid || this.Weapon == null) return;
-    this.shotsService.addShot(this.X?.value, this.Y?.value, this.R?.value, this.Weapon);
+    this.shotsService.addShot(this.X?.value, this.Y?.value, this.R?.value, this.Weapon).subscribe();
   }
 
   public clearShots(): void {

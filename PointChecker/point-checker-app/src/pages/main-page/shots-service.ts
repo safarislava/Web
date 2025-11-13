@@ -65,6 +65,7 @@ export class ShotsService {
 
   public addShot(x: string, y: string, r: string, weapon: string): Observable<any> {
     const payload = { x, y, r, weapon };
+    console.log(payload);
 
     return this.http.post(`${urlApi}/shots`, payload, {
       withCredentials: true,
