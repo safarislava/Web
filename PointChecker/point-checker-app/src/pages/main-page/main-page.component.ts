@@ -38,7 +38,7 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   }
 
   public clearShots(): void {
-    this.shotsService.clearShots();
+    this.shotsService.clearShots().subscribe();
   }
 
   ngOnInit(): void {

@@ -3,8 +3,10 @@ package ru.ifmo.se.api.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.dto.responses.ShotDetails;
+import ru.ifmo.se.api.dto.responses.ShotDetailsDto;
 import ru.ifmo.se.api.dto.requests.ShotRequest;
+import ru.ifmo.se.api.models.RevolverShot;
+import ru.ifmo.se.api.models.Shot;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -14,14 +16,14 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "shot")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Shot {
+public class ShotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Version
     private Long version;
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private UserEntity user;
     @Column(precision = 25, scale = 20)
     private BigDecimal x;
     @Column(precision = 25, scale = 20)
@@ -32,23 +34,21 @@ public class Shot {
     private Integer deltaTime;
     private Timestamp time;
 
-    public Shot() {}
+    public ShotEntity() {}
 
-    public Shot(ShotRequest shotRequest){
-        x = shotRequest.getX();
-        y = shotRequest.getY();
-        r = shotRequest.getR();
+    public ShotEntity(Shot shot) {
+        id = shot.getId();
+        version = shot.getVersion();
+        x = shot.getX();
+        y = shot.getY();
+        r = shot.getR();
+        user = new UserEntity(shot.getUser());
+        accuracy = shot.getAccuracy();
+        deltaTime = shot.getDeltaTime();
+        time = shot.getTime();
     }
 
-    public Shot(User user, Integer accuracy, Integer deltaTime, ShotRequest shotRequest) {
-        this(shotRequest);
-        this.user = user;
-        this.accuracy = accuracy;
-        this.deltaTime = deltaTime;
-        this.time = new Timestamp(System.currentTimeMillis());
-    }
-
-    public ShotDetails getDetails() {
-        return new ShotDetails("");
+    public Shot toModel() {
+        return new Shot(this);
     }
 }

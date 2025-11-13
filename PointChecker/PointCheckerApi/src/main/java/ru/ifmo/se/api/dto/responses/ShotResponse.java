@@ -2,7 +2,7 @@ package ru.ifmo.se.api.dto.responses;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.entities.Shot;
+import ru.ifmo.se.api.models.Shot;
 
 @Setter
 @Getter
@@ -14,7 +14,7 @@ public class ShotResponse {
     private Integer accuracy;
     private Integer deltaTime;
     private String time;
-    private ShotDetails details;
+    private ShotDetailsDto details;
 
     public ShotResponse(Shot shot) {
         this.id = shot.getId();
@@ -24,6 +24,6 @@ public class ShotResponse {
         this.accuracy = shot.getAccuracy();
         this.deltaTime = shot.getDeltaTime();
         this.time = shot.getTime().toString();
-        this.details = shot.getDetails();
+        this.details = shot.getDetailsDto();
     }
 }

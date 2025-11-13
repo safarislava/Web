@@ -14,7 +14,6 @@ import java.util.Objects;
 
 @Service
 public class CalculationService {
-    private final MathContext cacheMathContext = new MathContext(1, RoundingMode.HALF_EVEN);
     private final MathContext mathContext = MathContext.DECIMAL128;
     private final BufferedImage image;
     private final BigDecimal scale = BigDecimal.valueOf(50);

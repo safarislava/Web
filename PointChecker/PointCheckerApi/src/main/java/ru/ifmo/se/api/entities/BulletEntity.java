@@ -3,6 +3,7 @@ package ru.ifmo.se.api.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ru.ifmo.se.api.models.Bullet;
 
 import java.math.BigDecimal;
 
@@ -10,7 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "bullet")
-public class Bullet {
+public class BulletEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,11 +23,12 @@ public class Bullet {
     private BigDecimal y;
     private Boolean hit;
 
-    public Bullet() {}
+    public BulletEntity() {}
 
-    public Bullet(BigDecimal x, BigDecimal y, Boolean hit) {
-        this.x = x;
-        this.y = y;
-        this.hit = hit;
+    public BulletEntity(Bullet bullet) {
+        id = bullet.getId();
+        x = bullet.getX();
+        y = bullet.getY();
+        hit = bullet.getHit();
     }
 }

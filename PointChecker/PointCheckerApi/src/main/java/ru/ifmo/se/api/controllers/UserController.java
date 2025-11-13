@@ -20,8 +20,8 @@ public class UserController {
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody UserDto userDto) {
-        userService.register(userDto);
-        userService.setLastUpdate(userDto.getUsername()); // IDK
+        userService.register(userDto.getUsername(), userDto.getPassword());
+        userService.setLastUpdate(userDto.getUsername());
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
         return setCookies(response, userDto.getUsername()).build();
     }
@@ -29,9 +29,9 @@ public class UserController {
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Void> login(@RequestBody UserDto userDto) {
-        if (!userService.login(userDto)) throw new BadRequestException("Wrong username or password");
+        if (!userService.login(userDto.getUsername(), userDto.getPassword())) throw new BadRequestException("Wrong username or password");
 
-        userService.setLastUpdate(userDto.getUsername()); // IDK
+        userService.setLastUpdate(userDto.getUsername());
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
         return setCookies(response, userDto.getUsername()).build();
     }

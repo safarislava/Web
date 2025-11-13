@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.api.services.JwtService;
 import ru.ifmo.se.api.services.ShotService;
@@ -21,14 +22,14 @@ public class ShotsController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void add(@CookieValue("accessToken") String token, @RequestBody ShotRequest request) {
+    public void add(@CookieValue("accessToken") String token, @RequestBody @Validated ShotRequest request) {
         shotService.addShot(request, jwtService.getUsername(token));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<ShotResponse> getPoints(@CookieValue("accessToken") String token) {
-        return shotService.getShotResponses(jwtService.getUsername(token));
+        return shotService.getShots(jwtService.getUsername(token)).stream().map(ShotResponse::new).toList();
     }
 
     @DeleteMapping

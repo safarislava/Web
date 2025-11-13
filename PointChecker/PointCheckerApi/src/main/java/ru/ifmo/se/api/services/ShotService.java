@@ -3,18 +3,16 @@ package ru.ifmo.se.api.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 import ru.ifmo.se.api.components.RequestProcessor;
 import ru.ifmo.se.api.dto.requests.ShotRequest;
-import ru.ifmo.se.api.dto.responses.ShotResponse;
-import ru.ifmo.se.api.entities.Shot;
-import ru.ifmo.se.api.entities.User;
+import ru.ifmo.se.api.entities.ShotEntity;
+import ru.ifmo.se.api.entities.UserEntity;
 import ru.ifmo.se.api.exceptions.BadRequestException;
+import ru.ifmo.se.api.models.Shot;
+import ru.ifmo.se.api.models.User;
 import ru.ifmo.se.api.repositories.ShotRepository;
 import ru.ifmo.se.api.repositories.UserRepository;
-import ru.ifmo.se.api.entities.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,29 +24,26 @@ public class ShotService {
     private final UserRepository userRepository;
 
     private User getUser(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
+        Optional<UserEntity> user = userRepository.findByUsername(username);
         if (user.isEmpty()) throw new BadRequestException("User not found");
-        return user.get();
+        return new User(user.get());
     }
 
-    public List<ShotResponse> getShotResponses(String username) {
+    public List<Shot> getShots(String username) {
         User user = getUser(username);
-        List<Shot> shots = shotRepository.findAllByUser(user);
-        List<ShotResponse> shotResponses = new ArrayList<>();
-        shots.forEach(shot -> shotResponses.add(new ShotResponse(shot)));
-        return shotResponses;
+        return shotRepository.findAllByUser(new UserEntity(user)).stream().map(ShotEntity::toModel).toList();
     }
 
-    public void addShot(@Validated ShotRequest request, String username) {
+    public void addShot(ShotRequest request, String username) {
         User user = getUser(username);
         RequestProcessor processor = getRequestProcessor(request);
         Shot shot = processor.process(request, user);
-        shotRepository.save(shot);
+        shotRepository.save(shot.toEntity());
     }
 
     public void clearShots(String username) {
         User user = getUser(username);
-        shotRepository.deleteAllByUser(user);
+        shotRepository.deleteAllByUser(new UserEntity(user));
     }
 
     private RequestProcessor getRequestProcessor(ShotRequest request) {

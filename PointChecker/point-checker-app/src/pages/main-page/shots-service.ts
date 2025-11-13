@@ -80,7 +80,9 @@ export class ShotsService {
   }
 
   public clearShots(): Observable<any> {
-    return this.http.delete(`${urlApi}/shots`).pipe(
+    return this.http.delete(`${urlApi}/shots`, {
+      withCredentials: true
+    }).pipe(
       tap(() => {
         this.loadShots().subscribe();
       })

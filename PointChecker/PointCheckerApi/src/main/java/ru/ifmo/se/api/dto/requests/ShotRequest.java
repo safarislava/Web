@@ -16,5 +16,5 @@ public class ShotRequest {
     @Positive
     private BigDecimal r;
     @NotNull
-    private Weapon weapon;
+    private WeaponDto weapon;
 }

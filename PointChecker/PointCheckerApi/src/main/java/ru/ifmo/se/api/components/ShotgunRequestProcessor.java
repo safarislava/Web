@@ -2,10 +2,10 @@ package ru.ifmo.se.api.components;
 
 import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.dto.requests.ShotRequest;
-import ru.ifmo.se.api.entities.Bullet;
-import ru.ifmo.se.api.entities.Shot;
-import ru.ifmo.se.api.entities.ShotgunShot;
-import ru.ifmo.se.api.entities.User;
+import ru.ifmo.se.api.models.Bullet;
+import ru.ifmo.se.api.models.Shot;
+import ru.ifmo.se.api.models.ShotgunShot;
+import ru.ifmo.se.api.models.User;
 import ru.ifmo.se.api.services.CalculationService;
 
 import java.util.ArrayList;
@@ -26,6 +26,6 @@ public class ShotgunRequestProcessor extends RequestProcessor {
         }
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new ShotgunShot(user, bullets, deltaTime, request);
+        return new ShotgunShot(request.getX(), request.getY(), request.getR(), user, deltaTime, bullets);
     }
 }
