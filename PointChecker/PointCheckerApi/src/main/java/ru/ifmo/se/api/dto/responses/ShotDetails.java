@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ShotDetailsDto {
+public class ShotDetails {
     private String type;
 }

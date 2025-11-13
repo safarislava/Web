@@ -1,11 +1,12 @@
 package ru.ifmo.se.api.dto.responses;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.models.Shot;
 
 @Setter
 @Getter
+@AllArgsConstructor
 public class ShotResponse {
     private Long id;
     private String x;
@@ -14,16 +15,5 @@ public class ShotResponse {
     private Integer accuracy;
     private Integer deltaTime;
     private String time;
-    private ShotDetailsDto details;
-
-    public ShotResponse(Shot shot) {
-        this.id = shot.getId();
-        this.x = shot.getX().stripTrailingZeros().toPlainString();
-        this.y = shot.getY().stripTrailingZeros().toPlainString();
-        this.r = shot.getR().stripTrailingZeros().toPlainString();
-        this.accuracy = shot.getAccuracy();
-        this.deltaTime = shot.getDeltaTime();
-        this.time = shot.getTime().toString();
-        this.details = shot.getDetailsDto();
-    }
+    private ShotDetails details;
 }

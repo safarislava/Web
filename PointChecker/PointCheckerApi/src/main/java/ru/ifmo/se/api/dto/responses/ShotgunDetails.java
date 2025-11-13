@@ -5,10 +5,10 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class ShotgunDetailsDto extends ShotDetailsDto {
+public class ShotgunDetails extends ShotDetails {
     private final List<BulletDto> bullets;
 
-    public ShotgunDetailsDto(List<BulletDto> bullets) {
+    public ShotgunDetails(List<BulletDto> bullets) {
         super("Shotgun");
         this.bullets = bullets;
     }

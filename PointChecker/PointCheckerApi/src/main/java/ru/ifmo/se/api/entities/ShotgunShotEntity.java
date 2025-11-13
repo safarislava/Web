@@ -2,16 +2,14 @@ package ru.ifmo.se.api.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.dto.responses.BulletDto;
-import ru.ifmo.se.api.dto.responses.ShotDetailsDto;
-import ru.ifmo.se.api.dto.requests.ShotRequest;
 
 import jakarta.persistence.*;
-import ru.ifmo.se.api.dto.responses.ShotgunDetailsDto;
-import ru.ifmo.se.api.models.RevolverShot;
+import ru.ifmo.se.api.mappers.BulletMapper;
 import ru.ifmo.se.api.models.Shot;
 import ru.ifmo.se.api.models.ShotgunShot;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 
 @Getter
@@ -25,13 +23,9 @@ public class ShotgunShotEntity extends ShotEntity {
 
     public ShotgunShotEntity() {}
 
-    public ShotgunShotEntity(ShotgunShot shotgunShot) {
-        super(shotgunShot);
-        bullets = shotgunShot.getBullets().stream().map(BulletEntity::new).toList();
-    }
-
-    @Override
-    public Shot toModel() {
-        return new ShotgunShot(this);
+    public ShotgunShotEntity(Long id, Long version, BigDecimal x, BigDecimal y, BigDecimal r, UserEntity user,
+                              Integer accuracy, Integer deltaTime, Timestamp time, List<BulletEntity> bullets) {
+        super(id, version, x, y, r, user, accuracy, deltaTime, time);
+        this.bullets = bullets;
     }
 }

@@ -1,7 +1,9 @@
 package ru.ifmo.se.api.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.ifmo.se.api.models.Bullet;
 
@@ -11,6 +13,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "bullet")
+@AllArgsConstructor
 public class BulletEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +27,4 @@ public class BulletEntity {
     private Boolean hit;
 
     public BulletEntity() {}
-
-    public BulletEntity(Bullet bullet) {
-        id = bullet.getId();
-        x = bullet.getX();
-        y = bullet.getY();
-        hit = bullet.getHit();
-    }
 }

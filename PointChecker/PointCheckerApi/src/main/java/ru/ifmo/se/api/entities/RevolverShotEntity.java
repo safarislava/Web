@@ -1,16 +1,16 @@
 package ru.ifmo.se.api.entities;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import ru.ifmo.se.api.dto.responses.BulletDto;
-import ru.ifmo.se.api.dto.responses.RevolverDetailsDto;
-import ru.ifmo.se.api.dto.responses.ShotDetailsDto;
-import ru.ifmo.se.api.dto.requests.ShotRequest;
 
 import jakarta.persistence.*;
+import ru.ifmo.se.api.mappers.BulletMapper;
 import ru.ifmo.se.api.models.RevolverShot;
 import ru.ifmo.se.api.models.Shot;
-import ru.ifmo.se.api.models.ShotgunShot;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -23,13 +23,9 @@ public class RevolverShotEntity extends ShotEntity {
 
     public RevolverShotEntity() {}
 
-    public RevolverShotEntity(RevolverShot revolverShot) {
-        super(revolverShot);
-        bullet = new BulletEntity(revolverShot.getBullet());
-    }
-
-    @Override
-    public Shot toModel() {
-        return new RevolverShot(this);
+    public RevolverShotEntity(Long id, Long version, BigDecimal x, BigDecimal y, BigDecimal r, UserEntity user,
+                              Integer accuracy, Integer deltaTime, Timestamp time, BulletEntity bullet) {
+        super(id, version, x, y, r, user, accuracy, deltaTime, time);
+        this.bullet = bullet;
     }
 }

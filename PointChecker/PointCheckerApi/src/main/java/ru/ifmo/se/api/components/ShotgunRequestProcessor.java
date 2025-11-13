@@ -5,7 +5,6 @@ import ru.ifmo.se.api.dto.requests.ShotRequest;
 import ru.ifmo.se.api.models.Bullet;
 import ru.ifmo.se.api.models.Shot;
 import ru.ifmo.se.api.models.ShotgunShot;
-import ru.ifmo.se.api.models.User;
 import ru.ifmo.se.api.services.CalculationService;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class ShotgunRequestProcessor extends RequestProcessor {
     }
 
     @Override
-    public Shot process(ShotRequest request, User user) {
+    public Shot process(ShotRequest request) {
         long startTime = System.nanoTime();
         List<Bullet> bullets = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -26,6 +25,6 @@ public class ShotgunRequestProcessor extends RequestProcessor {
         }
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new ShotgunShot(request.getX(), request.getY(), request.getR(), user, deltaTime, bullets);
+        return new ShotgunShot(request.getX(), request.getY(), request.getR(), deltaTime, bullets);
     }
 }

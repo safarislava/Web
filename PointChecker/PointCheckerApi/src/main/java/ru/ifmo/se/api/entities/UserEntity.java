@@ -1,6 +1,7 @@
 package ru.ifmo.se.api.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import ru.ifmo.se.api.models.User;
@@ -11,6 +12,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "app_user")
+@AllArgsConstructor
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +25,6 @@ public class UserEntity {
     private Instant lastUpdate;
 
     public UserEntity() {}
-
-    public UserEntity(User user) {
-        id = user.getId();
-        version = user.getVersion();
-        username = user.getUsername();
-        password = user.getPassword();
-        lastUpdate = user.getLastUpdate();
-    }
 
     public UserEntity(String username, String password) {
         this.username = username;

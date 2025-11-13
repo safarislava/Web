@@ -3,10 +3,10 @@ package ru.ifmo.se.api.dto.responses;
 import lombok.Getter;
 
 @Getter
-public class RevolverDetailsDto extends ShotDetailsDto {
+public class RevolverDetails extends ShotDetails {
     private final BulletDto bullet;
 
-    public RevolverDetailsDto(BulletDto bullet) {
+    public RevolverDetails(BulletDto bullet) {
         super("Revolver");
         this.bullet = bullet;
     }

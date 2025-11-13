@@ -21,7 +21,7 @@ import java.util.Random;
 public abstract class RequestProcessor {
     private final CalculationService calculationService;
 
-    public abstract Shot process(ShotRequest request, User user);
+    public abstract Shot process(ShotRequest request);
 
     protected Bullet processShot(ShotRequest shotRequest) {
         Point point = addSpread(shotRequest.getX(), shotRequest.getY(), shotRequest.getR());
