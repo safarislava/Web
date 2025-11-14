@@ -2,10 +2,6 @@ package ru.ifmo.se.api.models;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.dto.responses.BulletDto;
-import ru.ifmo.se.api.dto.responses.RevolverDetails;
-import ru.ifmo.se.api.dto.responses.ShotDetails;
-import ru.ifmo.se.api.mappers.BulletMapper;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -14,6 +10,8 @@ import java.sql.Timestamp;
 @Setter
 public class RevolverShot extends Shot {
     private Bullet bullet;
+
+    public RevolverShot() {}
 
     public RevolverShot(BigDecimal x, BigDecimal y, BigDecimal r, Integer deltaTime, Bullet bullet) {
         super(x, y, r, bullet.getHit() ? 100 : 0,  deltaTime);
@@ -26,9 +24,7 @@ public class RevolverShot extends Shot {
         this.bullet = bullet;
     }
 
-    @Override
-    public ShotDetails getDetailsDto() {
-        BulletDto bullet = BulletMapper.toDto(this.bullet);
-        return new RevolverDetails(bullet);
+    public <R> R accept(ShotVisitor<R> visitor){
+        return visitor.visit(this);
     }
 }

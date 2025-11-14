@@ -21,7 +21,7 @@ public class UserController {
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody UserDto userDto) {
         userService.register(userDto.getUsername(), userDto.getPassword());
-        userService.setLastUpdate(userDto.getUsername());
+        userService.update(userDto.getUsername());
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
         return setCookies(response, userDto.getUsername()).build();
     }
@@ -31,7 +31,7 @@ public class UserController {
     public ResponseEntity<Void> login(@RequestBody UserDto userDto) {
         if (!userService.login(userDto.getUsername(), userDto.getPassword())) throw new BadRequestException("Wrong username or password");
 
-        userService.setLastUpdate(userDto.getUsername());
+        userService.update(userDto.getUsername());
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
         return setCookies(response, userDto.getUsername()).build();
     }
@@ -42,12 +42,11 @@ public class UserController {
         if (refreshToken == null || refreshToken.isEmpty()) throw new BadRequestException("Refresh token is empty");
         if (!jwtService.verify(refreshToken)) throw new BadRequestException("Invalid refresh token");
 
-        Instant creationTime = jwtService.getIssuedTime(refreshToken);
-        Instant updateTime = userService.getLastUpdate(jwtService.getUsername(refreshToken));
-        if (creationTime.plus(Duration.ofMinutes(1)).isBefore(updateTime)) throw new BadRequestException("Wrong refresh token");
-
         String username = jwtService.getUsername(refreshToken);
-        userService.setLastUpdate(username);
+        Instant creationTime = jwtService.getIssuedTime(refreshToken);
+        if (userService.isUpdatedAfter(creationTime.plus(Duration.ofMinutes(1)), username)) throw new BadRequestException("Wrong refresh token");
+
+        userService.update(username);
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
         return setCookies(response, username).build();
     }
@@ -59,7 +58,7 @@ public class UserController {
         if (!jwtService.verify(accessToken)) throw new BadRequestException("Wrong refresh token");
 
         String username = jwtService.getUsername(accessToken);
-        userService.setLastUpdate(username);
+        userService.update(username);
 
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
                 .httpOnly(true)

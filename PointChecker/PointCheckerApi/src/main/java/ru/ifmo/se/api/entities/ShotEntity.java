@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.models.Shot;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -34,4 +33,8 @@ public class ShotEntity {
     private Timestamp time;
 
     public ShotEntity() {}
+
+    public <R> R accept(ShotEntityVisitor<R> visitor){
+        return visitor.visit(this);
+    }
 }

@@ -21,15 +21,12 @@ public class UserService {
     public User getUser(String username) {
         Optional<UserEntity> user = userRepository.findByUsername(username);
         if (user.isEmpty()) throw new BadRequestException("User not found");
-
         return UserMapper.toModel(user.get());
     }
 
     public boolean login(String  username, String password) {
-        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
-        if (userEntity.isEmpty()) throw new BadRequestException("Username does not exist");
-
-        return userEntity.map(u -> passwordEncoder.matches(password, u.getPassword())).orElse(false);
+        User user = getUser(username);
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
     public void register(String  username, String password) {
@@ -40,18 +37,13 @@ public class UserService {
         userRepository.save(new UserEntity(username, hashedPassword));
     }
 
-    public void setLastUpdate(String username) {
-        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
-        if (userEntity.isEmpty()) throw new BadRequestException("Username does not exist");
-
-        userEntity.get().setLastUpdate(Instant.now());
-        userRepository.save(userEntity.get());
+    public void update(String username) {
+        User user = getUser(username);
+        user.setLastUpdate(Instant.now());
+        userRepository.save(UserMapper.toEntity(user));
     }
 
-    public Instant getLastUpdate(String username) {
-        Optional<UserEntity> userEntity = userRepository.findByUsername(username);
-        if (userEntity.isEmpty()) throw new BadRequestException("Username does not exist");
-
-        return userEntity.get().getLastUpdate();
+    public boolean isUpdatedAfter(Instant time, String username) {
+        return getUser(username).getLastUpdate().isAfter(time);
     }
 }

@@ -28,4 +28,8 @@ public class ShotgunShotEntity extends ShotEntity {
         super(id, version, x, y, r, user, accuracy, deltaTime, time);
         this.bullets = bullets;
     }
+
+    public <R> R accept(ShotEntityVisitor<R> visitor){
+        return visitor.visit(this);
+    }
 }

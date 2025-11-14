@@ -2,10 +2,6 @@ package ru.ifmo.se.api.models;
 
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.dto.responses.BulletDto;
-import ru.ifmo.se.api.dto.responses.ShotDetails;
-import ru.ifmo.se.api.dto.responses.ShotgunDetails;
-import ru.ifmo.se.api.mappers.BulletMapper;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -27,9 +23,7 @@ public class ShotgunShot extends Shot {
         this.bullets = bullets;
     }
 
-    @Override
-    public ShotDetails getDetailsDto() {
-        List<BulletDto> bullets = this.bullets.stream().map(BulletMapper::toDto).toList();
-        return new ShotgunDetails(bullets);
+    public <R> R accept(ShotVisitor<R> visitor){
+        return visitor.visit(this);
     }
 }

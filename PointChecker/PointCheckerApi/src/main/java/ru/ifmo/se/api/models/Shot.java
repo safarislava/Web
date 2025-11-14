@@ -3,7 +3,6 @@ package ru.ifmo.se.api.models;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import ru.ifmo.se.api.dto.responses.ShotDetails;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -22,6 +21,8 @@ public class Shot {
     private Integer deltaTime;
     private Timestamp time;
 
+    public Shot() {}
+
     public Shot(BigDecimal x, BigDecimal y, BigDecimal r, Integer accuracy, Integer deltaTime) {
         this.x = x;
         this.y = y;
@@ -31,7 +32,7 @@ public class Shot {
         this.time = new Timestamp(System.currentTimeMillis());
     }
 
-    public ShotDetails getDetailsDto() {
-        return new ShotDetails("");
+    public <R> R accept(ShotVisitor<R> visitor){
+        return visitor.visit(this);
     }
 }
