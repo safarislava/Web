@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.api.components.RequestProcessor;
 import ru.ifmo.se.api.mappers.ShotMapper;
 import ru.ifmo.se.api.models.Shot;
-import ru.ifmo.se.api.services.JwtService;
+import ru.ifmo.se.api.components.JwtComponent;
 import ru.ifmo.se.api.services.ShotService;
 import ru.ifmo.se.api.dto.requests.ShotRequest;
 import ru.ifmo.se.api.dto.responses.ShotResponse;
@@ -23,27 +23,27 @@ import java.util.List;
 public class ShotsController {
     private final ApplicationContext applicationContext;
     private final ShotService shotService;
-    private final JwtService jwtService;
+    private final JwtComponent jwtComponent;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public void add(@CookieValue("accessToken") String token, @RequestBody @Validated ShotRequest request) {
         RequestProcessor processor = getRequestProcessor(request);
-        Shot shot = processor.process(request);
-        shotService.addShot(shot, jwtService.getUsername(token));
+        Shot shot = processor.process(request.getX(), request.getY(), request.getR());
+        shotService.addShot(shot, jwtComponent.getUsername(token));
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<ShotResponse> getPoints(@CookieValue("accessToken") String token) {
-        return shotService.getShots(jwtService.getUsername(token)).stream().map(ShotMapper::toResponse).toList();
+        return shotService.getShots(jwtComponent.getUsername(token)).stream().map(ShotMapper::toResponse).toList();
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public void clear(@CookieValue("accessToken") String token) {
-        shotService.clearShots(jwtService.getUsername(token));
+        shotService.clearShots(jwtComponent.getUsername(token));
     }
 
     private RequestProcessor getRequestProcessor(ShotRequest request) {

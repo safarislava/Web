@@ -1,24 +1,26 @@
 package ru.ifmo.se.api.components;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.dto.requests.ShotRequest;
 import ru.ifmo.se.api.models.Bullet;
 import ru.ifmo.se.api.models.RevolverShot;
 import ru.ifmo.se.api.models.Shot;
-import ru.ifmo.se.api.services.CalculationService;
+import ru.ifmo.se.api.services.BulletService;
+
+import java.math.BigDecimal;
 
 @Component
-public class RevolverRequestProcessor extends RequestProcessor {
-    public RevolverRequestProcessor(CalculationService calculationService) {
-        super(calculationService);
-    }
+@RequiredArgsConstructor
+public class RevolverRequestProcessor implements RequestProcessor {
+    private final BulletService bulletService;
 
     @Override
-    public Shot process(ShotRequest request) {
+    public Shot process(BigDecimal x, BigDecimal y,  BigDecimal r) {
         long startTime = System.nanoTime();
-        Bullet bullet = processShot(request);
+        Bullet bullet = bulletService.calculateBullet(x, y, r);
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new RevolverShot(request.getX(), request.getY(), request.getR(), deltaTime, bullet);
+        return new RevolverShot(x, y, r, deltaTime, bullet);
     }
 }

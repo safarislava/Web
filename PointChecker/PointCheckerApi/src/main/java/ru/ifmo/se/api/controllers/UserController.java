@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.api.exceptions.BadRequestException;
-import ru.ifmo.se.api.services.JwtService;
+import ru.ifmo.se.api.components.JwtComponent;
 import ru.ifmo.se.api.services.UserService;
 import ru.ifmo.se.api.dto.requests.UserDto;
 
@@ -16,7 +16,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final JwtService jwtService;
+    private final JwtComponent jwtComponent;
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody UserDto userDto) {
@@ -40,10 +40,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> refresh(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
         if (refreshToken == null || refreshToken.isEmpty()) throw new BadRequestException("Refresh token is empty");
-        if (!jwtService.verify(refreshToken)) throw new BadRequestException("Invalid refresh token");
+        if (!jwtComponent.verify(refreshToken)) throw new BadRequestException("Invalid refresh token");
 
-        String username = jwtService.getUsername(refreshToken);
-        Instant creationTime = jwtService.getIssuedTime(refreshToken);
+        String username = jwtComponent.getUsername(refreshToken);
+        Instant creationTime = jwtComponent.getIssuedTime(refreshToken);
         if (userService.isUpdatedAfter(creationTime.plus(Duration.ofMinutes(1)), username)) throw new BadRequestException("Wrong refresh token");
 
         userService.update(username);
@@ -55,9 +55,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> logout(@CookieValue(value = "accessToken") String accessToken) {
         if (accessToken == null || accessToken.isEmpty()) throw new BadRequestException("Access token is empty");
-        if (!jwtService.verify(accessToken)) throw new BadRequestException("Wrong refresh token");
+        if (!jwtComponent.verify(accessToken)) throw new BadRequestException("Wrong refresh token");
 
-        String username = jwtService.getUsername(accessToken);
+        String username = jwtComponent.getUsername(accessToken);
         userService.update(username);
 
         ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
@@ -82,7 +82,7 @@ public class UserController {
 
     private ResponseEntity.HeadersBuilder<?> setCookies(ResponseEntity.HeadersBuilder<?> response, String username) {
         ResponseCookie accessCookie = ResponseCookie.from(
-                "accessToken", jwtService.generate(username, Duration.ofMinutes(5)))
+                "accessToken", jwtComponent.generate(username, Duration.ofMinutes(5)))
                 .httpOnly(true)
                 .secure(false)
                 .path("/")
@@ -91,7 +91,7 @@ public class UserController {
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from(
-                "refreshToken", jwtService.generate(username, Duration.ofDays(2)))
+                "refreshToken", jwtComponent.generate(username, Duration.ofDays(2)))
                 .httpOnly(true)
                 .secure(false)
                 .path("/api/users")

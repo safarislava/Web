@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.services;
+package ru.ifmo.se.api.components;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.exceptions.BadRequestException;
 
 import java.time.Duration;
@@ -14,12 +14,12 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
-@Service
-public class JwtService {
+@Component
+public class JwtComponent {
     private final Algorithm algorithm;
     private final JWTVerifier verifier;
 
-    public JwtService(@Value("${JWT_SECRET}") String secret) {
+    public JwtComponent(@Value("${JWT_SECRET}") String secret) {
         this.algorithm = Algorithm.HMAC256(secret);
         this.verifier = JWT.require(algorithm).withIssuer("PointCheckerApi").build();
     }
