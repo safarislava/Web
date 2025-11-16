@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.coremodule.config.RabbitMQConfig;
 import ru.ifmo.se.api.coremodule.dto.shotsmodule.Message;
@@ -23,12 +24,16 @@ public class ShotMessageService {
     public void sendAddShotRequest(ShotRequest request, Long userId) {
         Message messageRequest = new Message(MessageType.ADD_REQUEST, userId, request);
 
-        Object response = template.convertSendAndReceive(
+        Message messageResponse = template.convertSendAndReceiveAsType(
                 RabbitMQConfig.SHOT_REQUEST_EXCHANGE,
                 RabbitMQConfig.SHOT_ADD_ROUTING_KEY,
-                messageRequest
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
         );
-        Message messageResponse = objectMapper.convertValue(response, Message.class);
+
+        if (messageResponse == null) {
+            throw new IllegalArgumentException("Invalid message received");
+        }
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
             throw new BadRequestException(messageResponse.getPayload().toString());
         }
@@ -37,12 +42,16 @@ public class ShotMessageService {
     public List<ShotResponse> sendGetShotsRequest(Long userId) {
         Message messageRequest = new Message(MessageType.GET_REQUEST, userId, null);
 
-        Object response = template.convertSendAndReceive(
+        Message messageResponse = template.convertSendAndReceiveAsType(
                 RabbitMQConfig.SHOT_REQUEST_EXCHANGE,
                 RabbitMQConfig.SHOT_GET_ROUTING_KEY,
-                messageRequest
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
         );
-        Message messageResponse = objectMapper.convertValue(response, Message.class);
+
+        if (messageResponse == null) {
+            throw new IllegalArgumentException("Invalid message received");
+        }
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
             throw new BadRequestException(messageResponse.getPayload().toString());
         }
@@ -52,12 +61,16 @@ public class ShotMessageService {
     public void sendClearShotsRequest(Long userId) {
         Message messageRequest = new Message(MessageType.CLEAR_REQUEST, userId, null);
 
-        Object response = template.convertSendAndReceive(
+        Message messageResponse = template.convertSendAndReceiveAsType(
                 RabbitMQConfig.SHOT_REQUEST_EXCHANGE,
                 RabbitMQConfig.SHOT_CLEAR_ROUTING_KEY,
-                messageRequest
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
         );
-        Message messageResponse = objectMapper.convertValue(response, Message.class);
+
+        if (messageResponse == null) {
+            throw new IllegalArgumentException("Invalid message received");
+        }
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
             throw new BadRequestException(messageResponse.getPayload().toString());
         }

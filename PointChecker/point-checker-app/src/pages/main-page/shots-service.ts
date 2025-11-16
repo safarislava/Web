@@ -1,7 +1,9 @@
-import {BehaviorSubject, map, Observable, tap} from 'rxjs';
-import {inject, Injectable} from '@angular/core';
+import {BehaviorSubject, map, Observable, Subscription, tap} from 'rxjs';
+import {inject, Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {urlApi} from '../../shared/api-config';
+import {urlApi, urlWs} from '../../shared/api-config';
+import {WebSocketSubject} from 'rxjs/internal/observable/dom/WebSocketSubject';
+import {webSocket} from 'rxjs/webSocket';
 
 class Bullet {
   public id!: number;
@@ -30,13 +32,29 @@ export class Shot {
 @Injectable({
   providedIn: 'root'
 })
-export class ShotsService {
+export class ShotsService implements OnDestroy {
   private shotsSubject = new BehaviorSubject<Shot[]>([]);
   public shots$: Observable<Shot[]> = this.shotsSubject.asObservable().pipe(
     map(shots => this.sortShots(shots))
   );
 
   private http = inject(HttpClient);
+  private socket$!: WebSocketSubject<any>;
+  private wsSubscription!: Subscription;
+
+  constructor() {
+    this.loadShots().subscribe();
+    this.connect();
+  }
+
+  ngOnDestroy(): void {
+    if (this.wsSubscription) {
+      this.wsSubscription.unsubscribe();
+    }
+    if (this.socket$) {
+      this.socket$.complete();
+    }
+  }
 
   get currentShots(): Shot[] {
     return this.shotsSubject.value;
@@ -44,10 +62,6 @@ export class ShotsService {
 
   private updateShots(shots: Shot[]): void {
     this.shotsSubject.next(shots);
-  }
-
-  public sortShots(shots: Shot[]): Shot[] {
-    return shots.sort((a, b) => a.id - b.id);
   }
 
   public loadShots(): Observable<Shot[]> {
@@ -72,11 +86,7 @@ export class ShotsService {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).pipe(
-      tap(() => {
-        this.loadShots().subscribe();
-      })
-    );
+    });
   }
 
   public clearShots(): Observable<any> {
@@ -87,5 +97,22 @@ export class ShotsService {
         this.loadShots().subscribe();
       })
     );
+  }
+
+  private connect(): void {
+    this.socket$ = webSocket(urlWs);
+
+    this.wsSubscription = this.socket$.subscribe({
+      next: (shot: Shot) => {
+        const currentShots = this.shotsSubject.value;
+        this.updateShots([...currentShots, shot])
+      },
+      error: (err) => console.error('WebSocket error:', err),
+      complete: () => console.log('WebSocket connection closed')
+    });
+  }
+
+  private sortShots(shots: Shot[]): Shot[] {
+    return [...shots].sort((a, b) => a.id - b.id);
   }
 }

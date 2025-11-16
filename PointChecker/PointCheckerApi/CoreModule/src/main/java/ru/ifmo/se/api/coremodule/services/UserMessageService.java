@@ -2,8 +2,8 @@ package ru.ifmo.se.api.coremodule.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.coremodule.config.RabbitMQConfig;
 import ru.ifmo.se.api.coremodule.dto.usersmodule.Message;
@@ -22,12 +22,16 @@ public class UserMessageService {
     public TokensDto sendRegisterUserRequest(UserDto userDto) {
         Message messageRequest = new Message(MessageType.REGISTER_REQUEST, userDto);
 
-        Object response = template.convertSendAndReceive(
+        Message messageResponse = template.convertSendAndReceiveAsType(
                 RabbitMQConfig.USER_REQUEST_EXCHANGE,
                 RabbitMQConfig.USER_REGISTER_ROUTING_KEY,
-                messageRequest
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
         );
-        Message messageResponse = objectMapper.convertValue(response, Message.class);
+
+        if (messageResponse == null) {
+            throw new IllegalArgumentException("Invalid message received");
+        }
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
             throw new UnAuthenticationException(messageResponse.getPayload().toString());
         }
@@ -37,13 +41,16 @@ public class UserMessageService {
     public TokensDto sendLoginUserRequest(UserDto userDto) {
         Message messageRequest = new Message(MessageType.LOGIN_REQUEST, userDto);
 
-        Object response = template.convertSendAndReceive(
+        Message messageResponse = template.convertSendAndReceiveAsType(
                 RabbitMQConfig.USER_REQUEST_EXCHANGE,
                 RabbitMQConfig.USER_LOGIN_ROUTING_KEY,
-                messageRequest
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
         );
 
-        Message messageResponse = objectMapper.convertValue(response, Message.class);
+        if (messageResponse == null) {
+            throw new IllegalArgumentException("Invalid message received");
+        }
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
             throw new UnAuthenticationException(messageResponse.getPayload().toString());
         }
@@ -53,12 +60,16 @@ public class UserMessageService {
     public TokensDto sendRefreshUserRequest(TokensDto tokensDto) {
         Message messageRequest = new Message(MessageType.REFRESH_REQUEST, tokensDto);
 
-        Object response = template.convertSendAndReceive(
+        Message messageResponse = template.convertSendAndReceiveAsType(
                 RabbitMQConfig.USER_REQUEST_EXCHANGE,
                 RabbitMQConfig.USER_REFRESH_ROUTING_KEY,
-                messageRequest
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
         );
-        Message messageResponse = objectMapper.convertValue(response, Message.class);
+
+        if (messageResponse == null) {
+            throw new IllegalArgumentException("Invalid message received");
+        }
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
             throw new UnAuthorizationException(messageResponse.getPayload().toString());
         }
@@ -68,12 +79,16 @@ public class UserMessageService {
     public void sendLogoutUserRequest(TokensDto tokensDto) {
         Message messageRequest = new Message(MessageType.LOGOUT_REQUEST, tokensDto);
 
-        Object response = template.convertSendAndReceive(
+        Message messageResponse = template.convertSendAndReceiveAsType(
                 RabbitMQConfig.USER_REQUEST_EXCHANGE,
                 RabbitMQConfig.USER_LOGOUT_ROUTING_KEY,
-                messageRequest
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
         );
-        Message messageResponse = objectMapper.convertValue(response, Message.class);
+
+        if (messageResponse == null) {
+            throw new IllegalArgumentException("Invalid message received");
+        }
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
             throw new UnAuthenticationException(messageResponse.getPayload().toString());
         }

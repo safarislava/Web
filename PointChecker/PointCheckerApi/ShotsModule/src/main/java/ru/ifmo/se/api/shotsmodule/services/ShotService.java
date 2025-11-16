@@ -21,10 +21,14 @@ public class ShotService {
         return shotRepository.findAllByUserId(userId).stream().map(ShotMapper::toModel).toList();
     }
 
-    public void addShot(ShotRequest request, Long userId) {
+    public Shot processShot(ShotRequest request, Long userId) {
         RequestProcessor processor = getRequestProcessor(request);
         Shot shot = processor.process(request.getX(), request.getY(), request.getR());
         shot.setUserId(userId);
+        return shot;
+    }
+
+    public void addShot(Shot shot) {
         shotRepository.save(ShotMapper.toEntity(shot));
     }
 
