@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import ru.ifmo.se.api.shotsmodule.config.RabbitMQConfig;
 import ru.ifmo.se.api.shotsmodule.dto.Message;
 import ru.ifmo.se.api.shotsmodule.dto.MessageType;
@@ -26,7 +24,6 @@ public class ShotsController {
 
     @Transactional
     @RabbitListener(queues = RabbitMQConfig.SHOT_ADD_QUEUE)
-    @SendTo
     public Message add(Message message) {
         try {
             ShotRequest shotRequest = objectMapper.convertValue(message.getPayload(), new TypeReference<>() {});
@@ -40,7 +37,6 @@ public class ShotsController {
 
     @Transactional
     @RabbitListener(queues = RabbitMQConfig.SHOT_GET_QUEUE)
-    @SendTo
     public Message get(Message message) {
         try {
             List<ShotResponse> shots = shotService.getShots(message.getUserId()).stream().map(ShotMapper::toResponse).toList();
@@ -53,7 +49,6 @@ public class ShotsController {
 
     @Transactional
     @RabbitListener(queues = RabbitMQConfig.SHOT_CLEAR_QUEUE)
-    @SendTo
     public Message clear(Message message) {
         try {
             shotService.clearShots(message.getUserId());

@@ -3,7 +3,6 @@ package ru.ifmo.se.api.usersmodule.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import ru.ifmo.se.api.usersmodule.components.JwtComponent;
 import ru.ifmo.se.api.usersmodule.config.RabbitMQConfig;
@@ -25,15 +24,14 @@ public class UserController {
     private final ObjectMapper objectMapper;
 
     @RabbitListener(queues = RabbitMQConfig.USER_REGISTER_QUEUE)
-    @SendTo
     public Message register(Message message) {
         try {
             UserDto userDto = objectMapper.convertValue(message.getPayload(), UserDto.class);
             String username = userDto.getUsername();
 
             userService.register(username, userDto.getPassword());
-            userService.update(username);
             User user = userService.getUser(username);
+            userService.update(user.getId());
 
             TokensDto tokensResponse = new TokensDto(
                     jwtComponent.generate(user.getId(), Duration.ofMinutes(5)),
@@ -47,7 +45,6 @@ public class UserController {
     }
 
     @RabbitListener(queues = RabbitMQConfig.USER_LOGIN_QUEUE)
-    @SendTo
     public Message login(Message message) {
         try {
             UserDto userDto = objectMapper.convertValue(message.getPayload(), UserDto.class);
@@ -56,7 +53,7 @@ public class UserController {
             if (!userService.login(userDto.getUsername(), userDto.getPassword())) throw new IllegalArgumentException("Wrong username or password");
 
             User user = userService.getUser(username);
-            userService.update(userDto.getUsername());
+            userService.update(user.getId());
 
             TokensDto tokensResponse = new TokensDto(
                     jwtComponent.generate(user.getId(), Duration.ofMinutes(5)),
@@ -70,7 +67,6 @@ public class UserController {
     }
 
     @RabbitListener(queues = RabbitMQConfig.USER_REFRESH_QUEUE)
-    @SendTo
     public Message refresh(Message message) {
         try {
             TokensDto tokensRequest = objectMapper.convertValue(message.getPayload(), TokensDto.class);
@@ -79,12 +75,12 @@ public class UserController {
             if (refreshToken == null || refreshToken.isEmpty()) throw new IllegalArgumentException("Refresh token is empty");
             if (!jwtComponent.verify(refreshToken)) throw new IllegalArgumentException("Invalid refresh token");
 
-            String username = jwtComponent.getUsername(refreshToken);
+            Long userId = jwtComponent.getUserId(refreshToken);
             Instant creationTime = jwtComponent.getIssuedTime(refreshToken);
-            if (userService.isUpdatedAfter(creationTime.plus(Duration.ofMinutes(1)), username)) throw new IllegalArgumentException("Wrong refresh token");
+            if (userService.isUpdatedAfter(creationTime.plus(Duration.ofMinutes(1)), userId)) throw new IllegalArgumentException("Wrong refresh token");
 
-            User user = userService.getUser(username);
-            userService.update(username);
+            User user = userService.getUser(userId);
+            userService.update(userId);
 
             TokensDto tokensResponse = new TokensDto(
                     jwtComponent.generate(user.getId(), Duration.ofMinutes(5)),
@@ -98,7 +94,6 @@ public class UserController {
     }
 
     @RabbitListener(queues = RabbitMQConfig.USER_LOGOUT_QUEUE)
-    @SendTo
     public Message logout(Message message) {
         try {
             TokensDto tokensRequest = objectMapper.convertValue(message.getPayload(), TokensDto.class);
@@ -107,8 +102,8 @@ public class UserController {
             if (accessToken == null || accessToken.isEmpty()) throw new IllegalArgumentException("Access token is empty");
             if (!jwtComponent.verify(accessToken)) throw new IllegalArgumentException("Wrong refresh token");
 
-            String username = jwtComponent.getUsername(accessToken);
-            userService.update(username);
+            Long userId = jwtComponent.getUserId(accessToken);
+            userService.update(userId);
 
             return new Message(MessageType.SUCCESS_RESPONSE, null);
         }

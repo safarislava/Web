@@ -45,10 +45,10 @@ public class JwtComponent {
         }
     }
 
-    public String getUsername(String token) {
+    public Long getUserId(String token) {
         try {
             DecodedJWT decodedJWT = verifier.verify(token);
-            return decodedJWT.getClaim("userId").asString();
+            return decodedJWT.getClaim("userId").asLong();
         } catch (JWTVerificationException e) {
             throw new IllegalArgumentException("Token is invalid");
         }
