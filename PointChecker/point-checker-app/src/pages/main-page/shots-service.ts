@@ -90,13 +90,10 @@ export class ShotsService implements OnDestroy {
   }
 
   public clearShots(): Observable<any> {
+    this.updateShots([]);
     return this.http.delete(`${urlApi}/shots`, {
       withCredentials: true
-    }).pipe(
-      tap(() => {
-        this.loadShots().subscribe();
-      })
-    );
+    });
   }
 
   private connect(): void {

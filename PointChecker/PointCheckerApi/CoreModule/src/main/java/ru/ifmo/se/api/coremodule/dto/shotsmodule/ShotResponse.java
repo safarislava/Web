@@ -2,11 +2,13 @@ package ru.ifmo.se.api.coremodule.dto.shotsmodule;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class ShotResponse {
     private Long id;
     private String x;

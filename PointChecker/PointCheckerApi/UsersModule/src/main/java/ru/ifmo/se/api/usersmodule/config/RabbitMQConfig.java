@@ -99,7 +99,6 @@ public class RabbitMQConfig {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         rabbitTemplate.setUseTemporaryReplyQueues(true);
-        rabbitTemplate.setReplyTimeout(10000);
         return rabbitTemplate;
     }
 

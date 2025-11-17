@@ -2,10 +2,14 @@ package ru.ifmo.se.api.shotsmodule.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.Data;
+import lombok.*;
+
 import java.math.BigDecimal;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ShotRequest {
     @NotNull
     private BigDecimal x;
