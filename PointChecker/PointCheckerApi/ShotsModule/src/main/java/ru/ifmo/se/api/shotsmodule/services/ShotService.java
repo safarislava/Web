@@ -2,6 +2,8 @@ package ru.ifmo.se.api.shotsmodule.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.shotsmodule.components.RequestProcessor;
 import ru.ifmo.se.api.shotsmodule.dto.ShotRequest;
@@ -17,7 +19,12 @@ public class ShotService {
     private final ApplicationContext applicationContext;
     private final ShotRepository shotRepository;
 
-    public List<Shot> getShots(Long  userId) {
+    public List<Shot> getShots(Long userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return shotRepository.findAllByUserId(userId, pageable).stream().map(ShotMapper::toModel).toList();
+    }
+
+    public List<Shot> getShots(Long userId) {
         return shotRepository.findAllByUserId(userId).stream().map(ShotMapper::toModel).toList();
     }
 
@@ -25,11 +32,7 @@ public class ShotService {
         RequestProcessor processor = getRequestProcessor(request);
         Shot shot = processor.process(request.getX(), request.getY(), request.getR());
         shot.setUserId(userId);
-        return shot;
-    }
-
-    public void addShot(Shot shot) {
-        shotRepository.save(ShotMapper.toEntity(shot));
+        return ShotMapper.toModel(shotRepository.save(ShotMapper.toEntity(shot)));
     }
 
     public void clearShots(Long userId) {

@@ -43,8 +43,8 @@ export class ShotsService implements OnDestroy {
   private wsSubscription!: Subscription;
 
   constructor() {
-    this.loadShots().subscribe();
     this.connect();
+    this.loadShots().subscribe();
   }
 
   ngOnDestroy(): void {
@@ -64,16 +64,15 @@ export class ShotsService implements OnDestroy {
     this.shotsSubject.next(shots);
   }
 
-  public loadShots(): Observable<Shot[]> {
+  public loadShots() {
     return this.http.get<Shot[]>(`${urlApi}/shots`, {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
-      }
-    }).pipe(
-      tap(response => {
-        this.updateShots(response);
-      })
+      }}).pipe(
+        tap(response => {
+          this.updateShots(response);
+        })
     );
   }
 
@@ -90,19 +89,22 @@ export class ShotsService implements OnDestroy {
   }
 
   public clearShots(): Observable<any> {
-    this.updateShots([]);
     return this.http.delete(`${urlApi}/shots`, {
       withCredentials: true
-    });
+    }).pipe(
+      tap(response => {
+        this.loadShots().subscribe();
+      })
+    );
   }
 
   private connect(): void {
     this.socket$ = webSocket(urlWs);
 
     this.wsSubscription = this.socket$.subscribe({
-      next: (shot: Shot) => {
+      next: (shots: Shot[]) => {
         const currentShots = this.shotsSubject.value;
-        this.updateShots([...currentShots, shot])
+        this.updateShots([...currentShots, ...shots])
       },
       error: (err) => console.error('WebSocket error:', err),
       complete: () => console.log('WebSocket connection closed')

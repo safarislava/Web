@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
+import ru.ifmo.se.api.coremodule.components.ShotSocketHandler;
 import ru.ifmo.se.api.coremodule.config.RabbitMQConfig;
 import ru.ifmo.se.api.coremodule.dto.shotsmodule.Message;
 import ru.ifmo.se.api.coremodule.dto.shotsmodule.MessageType;
@@ -20,6 +21,7 @@ import java.util.List;
 public class ShotMessageService {
     private final RabbitTemplate template;
     private final ObjectMapper objectMapper;
+    private final ShotSocketHandler shotSocketHandler;
 
     public void sendAddShotRequest(ShotRequest request, Long userId) {
         Message messageRequest = new Message(MessageType.ADD_REQUEST, userId, request);
@@ -30,13 +32,11 @@ public class ShotMessageService {
                 messageRequest,
                 new ParameterizedTypeReference<>() {}
         );
+        if (messageResponse == null) throw new IllegalArgumentException("Invalid message received");
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) throw new BadRequestException(messageResponse.getPayload().toString());
 
-        if (messageResponse == null) {
-            throw new IllegalArgumentException("Invalid message received");
-        }
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
-            throw new BadRequestException(messageResponse.getPayload().toString());
-        }
+        ShotResponse shot = objectMapper.convertValue(messageResponse.getPayload(), ShotResponse.class);
+        shotSocketHandler.sendShotsToUser(userId, List.of(shot));
     }
 
     public List<ShotResponse> sendGetShotsRequest(Long userId) {
@@ -49,13 +49,9 @@ public class ShotMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) {
-            throw new IllegalArgumentException("Invalid message received");
-        }
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
-            throw new BadRequestException(messageResponse.getPayload().toString());
-        }
-        return objectMapper.convertValue(messageResponse.getPayload(), new TypeReference<List<ShotResponse>>() {});
+        if (messageResponse == null) throw new IllegalArgumentException("Invalid message received");
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) throw new BadRequestException(messageResponse.getPayload().toString());
+        return objectMapper.convertValue(messageResponse.getPayload(), new TypeReference<>() {});
     }
 
     public void sendClearShotsRequest(Long userId) {

@@ -10,7 +10,7 @@ import ru.ifmo.se.api.coremodule.dto.shotsmodule.Message;
 import ru.ifmo.se.api.coremodule.dto.shotsmodule.MessageType;
 import ru.ifmo.se.api.coremodule.dto.shotsmodule.ShotResponse;
 
-import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,10 +20,8 @@ public class ShotEventsListener {
 
     @RabbitListener(queues = RabbitMQConfig.SHOT_EVENTS_QUEUE)
     public void handleShotProcessed(Message message) {
-        try {
-            if (message.getMessageType().equals(MessageType.ERROR_RESPONSE)) throw new IllegalArgumentException("Invalid message type");
-            ShotResponse shot = objectMapper.convertValue(message.getPayload(), new TypeReference<>() {});
-            shotSocketHandler.sendShotToUser(message.getUserId(), shot);
-        } catch (IOException ignored) {}
+        if (message.getMessageType().equals(MessageType.ERROR_RESPONSE)) throw new IllegalArgumentException("Invalid message type");
+        List<ShotResponse> shots = objectMapper.convertValue(message.getPayload(), new TypeReference<>() {});
+        shotSocketHandler.sendShotsToUser(message.getUserId(), shots);
     }
 }

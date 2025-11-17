@@ -25,11 +25,14 @@ public class ShotMapper {
         private static final ToResponseVisitor INSTANCE = new ToResponseVisitor();
 
         private ShotResponse toBaseResponse(Shot shot) {
+            Long id = shot.getId();
             String x = shot.getX().stripTrailingZeros().toPlainString();
             String y = shot.getY().stripTrailingZeros().toPlainString();
             String r = shot.getR().stripTrailingZeros().toPlainString();
+            Integer accuracy = shot.getAccuracy();
+            Integer deltaTime = shot.getDeltaTime();
             String time = shot.getTime().toString();
-            return new ShotResponse(shot.getId(), x, y, r, shot.getAccuracy(), shot.getDeltaTime(), time, null);
+            return new ShotResponse(id, x, y, r, accuracy, deltaTime, time, null);
         }
 
         @Override
@@ -63,23 +66,28 @@ public class ShotMapper {
         public ShotEntity visit(Shot shot) {
             return new ShotEntity(
                     shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(),
-                    shot.getUserId(), shot.getAccuracy(), shot.getDeltaTime(), shot.getTime());
+                    shot.getUserId(), shot.getAccuracy(), shot.getDeltaTime(), shot.getTime()
+            );
         }
 
         @Override
         public ShotEntity visit(RevolverShot shot) {
             BulletEntity bullet = BulletMapper.toEntity(shot.getBullet());
+
             return new RevolverShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(),
-                    shot.getUserId(), shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullet);
+                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(), shot.getUserId(),
+                    shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullet
+            );
         }
 
         @Override
         public ShotEntity visit(ShotgunShot shot) {
             List<BulletEntity> bullets = shot.getBullets().stream().map(BulletMapper::toEntity).toList();
+
             return new ShotgunShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(),
-                    shot.getUserId(), shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullets);
+                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(), shot.getUserId(),
+                    shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullets
+            );
         }
     }
 

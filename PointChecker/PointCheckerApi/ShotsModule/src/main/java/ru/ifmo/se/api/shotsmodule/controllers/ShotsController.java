@@ -16,6 +16,7 @@ import ru.ifmo.se.api.shotsmodule.mappers.ShotMapper;
 import ru.ifmo.se.api.shotsmodule.models.Shot;
 import ru.ifmo.se.api.shotsmodule.services.ShotService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -30,18 +31,8 @@ public class ShotsController {
     public Message add(Message message) {
         try {
             ShotRequest shotRequest = objectMapper.convertValue(message.getPayload(), new TypeReference<>() {});
-
-            // TODO pending/confirmed/error status
             Shot shot = shotService.processShot(shotRequest, message.getUserId());
-            Message messageResponse = new Message(
-                    MessageType.SUCCESS_RESPONSE,
-                    message.getUserId(),
-                    ShotMapper.toResponse(shot)
-            );
-            template.convertAndSend(RabbitMQConfig.SHOT_EVENTS_EXCHANGE, "", messageResponse);
-
-            shotService.addShot(shot);
-            return new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), null);
+            return new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), ShotMapper.toResponse(shot));
         }
         catch (Exception e) {
             return new Message(MessageType.ERROR_RESPONSE, null, e.getMessage());
@@ -52,7 +43,17 @@ public class ShotsController {
     @RabbitListener(queues = RabbitMQConfig.SHOT_GET_QUEUE)
     public Message get(Message message) {
         try {
-            List<ShotResponse> shots = shotService.getShots(message.getUserId()).stream().map(ShotMapper::toResponse).toList();
+            int page = 0;
+            List<ShotResponse> shots = new ArrayList<>();
+            List<ShotResponse> shotsPage;
+            do {
+                shotsPage = shotService.getShots(message.getUserId(), page, 10)
+                        .stream().map(ShotMapper::toResponse).toList();
+                Message response = new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), shotsPage);
+                template.convertAndSend(RabbitMQConfig.SHOT_EVENTS_EXCHANGE, "", response);
+                shots.addAll(shotsPage);
+                page++;
+            } while (shotsPage.size() == 10);
             return new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), shots);
         }
         catch (Exception e) {
