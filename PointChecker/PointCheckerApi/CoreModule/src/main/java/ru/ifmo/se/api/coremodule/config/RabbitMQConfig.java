@@ -10,14 +10,15 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    public static final String SHOT_EVENTS_QUEUE = "shot.events.queue";
+    public static final String SHOT_POLL_RESPONSE_QUEUE = "shot.response.queue";
 
     public static final String SHOT_REQUEST_EXCHANGE = "shot.request.exchange";
-    public static final String SHOT_EVENTS_EXCHANGE = "shot.events.exchange";
+    public static final String SHOT_RESPONSE_EXCHANGE = "shot.response.exchange";
 
     public static final String SHOT_ADD_ROUTING_KEY = "shot.add";
     public static final String SHOT_GET_ROUTING_KEY = "shot.get";
     public static final String SHOT_CLEAR_ROUTING_KEY = "shot.clear";
+    public static final String SHOT_POLL_ROUTING_KEY = "shot.poll";
 
     public static final String USER_REQUEST_EXCHANGE = "user.request.exchange";
 
@@ -28,19 +29,20 @@ public class RabbitMQConfig {
     public static final String USER_LOGOUT_ROUTING_KEY = "user.logout";
 
     @Bean
-    public FanoutExchange shotEventsExchange() {
-        return new FanoutExchange(SHOT_EVENTS_EXCHANGE);
+    public DirectExchange shotResponseExchange() {
+        return new DirectExchange(SHOT_RESPONSE_EXCHANGE);
     }
 
     @Bean
-    public Queue shotEventsQueue() {
-        return new Queue(SHOT_EVENTS_QUEUE, true);
+    public Queue shotPollResponseQueue() {
+        return new Queue(SHOT_POLL_RESPONSE_QUEUE, true);
     }
 
     @Bean
-    public Binding shotEventsBinding() {
-        return BindingBuilder.bind(shotEventsQueue())
-                .to(shotEventsExchange());
+    public Binding shotResponsePollBinding() {
+        return BindingBuilder.bind(shotPollResponseQueue())
+                .to(shotResponseExchange())
+                .with(SHOT_POLL_ROUTING_KEY);
     }
 
     @Bean

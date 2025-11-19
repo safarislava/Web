@@ -1,9 +1,7 @@
-import {BehaviorSubject, map, Observable, Subscription, tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subscription, take, tap} from 'rxjs';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {urlApi, urlWs} from '../../shared/api-config';
-import {WebSocketSubject} from 'rxjs/internal/observable/dom/WebSocketSubject';
-import {webSocket} from 'rxjs/webSocket';
+import {urlApi} from '../../shared/api-config';
 
 class Bullet {
   public id!: number;
@@ -39,20 +37,16 @@ export class ShotsService implements OnDestroy {
   );
 
   private http = inject(HttpClient);
-  private socket$!: WebSocketSubject<any>;
-  private wsSubscription!: Subscription;
+  private pollSubscription!: Subscription;
 
   constructor() {
-    this.connect();
-    this.loadShots().subscribe();
+    this.loadShots();
+    this.startPolling();
   }
 
   ngOnDestroy(): void {
-    if (this.wsSubscription) {
-      this.wsSubscription.unsubscribe();
-    }
-    if (this.socket$) {
-      this.socket$.complete();
+    if (this.pollSubscription) {
+      this.pollSubscription.unsubscribe();
     }
   }
 
@@ -78,37 +72,48 @@ export class ShotsService implements OnDestroy {
 
   public addShot(x: string, y: string, r: string, weapon: string): Observable<any> {
     const payload = { x, y, r, weapon };
-    console.log(payload);
 
-    return this.http.post(`${urlApi}/shots`, payload, {
+    return this.http.post<Shot>(`${urlApi}/shots`, payload, {
       withCredentials: true,
       headers: {
         'Content-Type': 'application/json'
       }
-    });
+    }).pipe(
+      tap(response => {
+        this.updateShots([...this.shotsSubject.value, response]);
+      })
+    );
   }
 
   public clearShots(): Observable<any> {
     return this.http.delete(`${urlApi}/shots`, {
       withCredentials: true
     }).pipe(
-      tap(response => {
+      tap(() => {
         this.loadShots().subscribe();
       })
     );
   }
 
-  private connect(): void {
-    this.socket$ = webSocket(urlWs);
+  private startPolling(): void {
+    if (this.pollSubscription) {
+      this.pollSubscription.unsubscribe();
+    }
 
-    this.wsSubscription = this.socket$.subscribe({
-      next: (shots: Shot[]) => {
-        const currentShots = this.shotsSubject.value;
-        this.updateShots([...currentShots, ...shots])
-      },
-      error: (err) => console.error('WebSocket error:', err),
-      complete: () => console.log('WebSocket connection closed')
-    });
+    this.pollSubscription = this.http.get<Shot[]>(`${urlApi}/shots/poll`, { withCredentials: true })
+      .pipe(take(1))
+      .subscribe({
+        next: (updatedShots) => {
+          if (updatedShots) {
+            this.updateShots(updatedShots);
+          }
+          this.startPolling();
+        },
+        error: (err) => {
+          console.error('Long polling request failed:', err);
+          setTimeout(() => this.startPolling(), 5000);
+        }
+      });
   }
 
   private sortShots(shots: Shot[]): Shot[] {

@@ -13,17 +13,24 @@ public class RabbitMQConfig {
     public static final String SHOT_ADD_QUEUE = "shot.add.queue";
     public static final String SHOT_GET_QUEUE = "shot.get.queue";
     public static final String SHOT_CLEAR_QUEUE = "shot.clear.queue";
+    public static final String SHOT_POLL_QUEUE = "shot.poll.queue";
 
     public static final String SHOT_REQUEST_EXCHANGE = "shot.request.exchange";
-    public static final String SHOT_EVENTS_EXCHANGE = "shot.events.exchange";
+    public static final String SHOT_RESPONSE_EXCHANGE = "shot.response.exchange";
 
     public static final String SHOT_ADD_ROUTING_KEY = "shot.add";
     public static final String SHOT_GET_ROUTING_KEY = "shot.get";
     public static final String SHOT_CLEAR_ROUTING_KEY = "shot.clear";
+    public static final String SHOT_POLL_ROUTING_KEY = "shot.poll";
 
     @Bean
     public DirectExchange shotRequestExchange() {
         return new DirectExchange(SHOT_REQUEST_EXCHANGE);
+    }
+
+    @Bean
+    public DirectExchange shotResponseExchange() {
+        return new DirectExchange(SHOT_RESPONSE_EXCHANGE);
     }
 
     @Bean
@@ -39,6 +46,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue shotClearQueue() {
         return new Queue(SHOT_CLEAR_QUEUE, true);
+    }
+
+    @Bean
+    public Queue shotPollQueue() {
+        return new Queue(SHOT_POLL_QUEUE, true);
     }
 
     @Bean
@@ -60,6 +72,13 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(shotClearQueue())
                 .to(shotRequestExchange())
                 .with(SHOT_CLEAR_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding shotPollBinding() {
+        return BindingBuilder.bind(shotPollQueue())
+                .to(shotRequestExchange())
+                .with(SHOT_POLL_ROUTING_KEY);
     }
 
 
