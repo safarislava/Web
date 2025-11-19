@@ -51,7 +51,7 @@ public class ShotsController {
         if (!jwtComponent.verify(token)) throw new UnAuthenticationException("Invalid token");
         Long userId = jwtComponent.getUserId(token);
 
-        DeferredResult<ResponseEntity<List<ShotResponse>>> pollResult = new DeferredResult<>(5000L);
+        DeferredResult<ResponseEntity<List<ShotResponse>>> pollResult = new DeferredResult<>(10000L);
         pollResult.onTimeout(() -> pollResult.setResult(ResponseEntity.noContent().build()));
         pollResult.onCompletion(() -> pollListener.removeListener(userId, pollResult));
 

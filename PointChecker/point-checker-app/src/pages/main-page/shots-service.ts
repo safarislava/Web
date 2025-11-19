@@ -111,7 +111,7 @@ export class ShotsService implements OnDestroy {
         },
         error: (err) => {
           console.error('Long polling request failed:', err);
-          setTimeout(() => this.startPolling(), 5000);
+          setTimeout(() => this.startPolling(), 15000);
         }
       });
   }
