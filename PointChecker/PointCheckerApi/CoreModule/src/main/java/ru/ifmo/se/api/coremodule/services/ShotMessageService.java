@@ -31,8 +31,10 @@ public class ShotMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) throw new IllegalArgumentException("Invalid message received");
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) throw new BadRequestException(messageResponse.getPayload().toString());
+        if (messageResponse == null)
+            throw new IllegalArgumentException("Invalid message received");
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
+            throw new BadRequestException(messageResponse.getPayload().toString());
         return objectMapper.convertValue(messageResponse.getPayload(), ShotResponse.class);
     }
 
@@ -46,8 +48,10 @@ public class ShotMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) throw new IllegalArgumentException("Invalid message received");
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) throw new BadRequestException(messageResponse.getPayload().toString());
+        if (messageResponse == null)
+            throw new IllegalArgumentException("Invalid message received");
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
+            throw new BadRequestException(messageResponse.getPayload().toString());
         return objectMapper.convertValue(messageResponse.getPayload(), new TypeReference<>() {});
     }
 
@@ -61,7 +65,9 @@ public class ShotMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) throw new IllegalArgumentException("Invalid message received");
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) throw new BadRequestException(messageResponse.getPayload().toString());
+        if (messageResponse == null)
+            throw new IllegalArgumentException("Invalid message received");
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
+            throw new BadRequestException(messageResponse.getPayload().toString());
     }
 }

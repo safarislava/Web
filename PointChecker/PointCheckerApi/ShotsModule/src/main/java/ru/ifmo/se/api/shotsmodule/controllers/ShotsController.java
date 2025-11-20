@@ -32,6 +32,7 @@ public class ShotsController {
     public Message add(Message message) {
         try {
             ShotRequest shotRequest = objectMapper.convertValue(message.getPayload(), new TypeReference<>() {});
+
             Shot shot = shotService.processShot(shotRequest, message.getUserId());
 
             ShotResponse response = ShotMapper.toResponse(shot);
@@ -46,17 +47,6 @@ public class ShotsController {
     @RabbitListener(queues = RabbitMQConfig.SHOT_GET_QUEUE)
     public Message get(Message message) {
         try {
-//            int page = 0;
-//            List<ShotResponse> shots = new ArrayList<>();
-//            List<ShotResponse> shotsPage;
-//            do {
-//                shotsPage = shotService.getShots(message.getUserId(), page, 10)
-//                        .stream().map(ShotMapper::toResponse).toList();
-//                Message response = new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), shotsPage);
-//                template.convertAndSend(RabbitMQConfig.SHOT_EVENTS_EXCHANGE, "", response);
-//                shots.addAll(shotsPage);
-//                page++;
-//            } while (shotsPage.size() == 10);
             List<ShotResponse> shots = shotService.getShots(message.getUserId())
                     .stream().map(ShotMapper::toResponse).toList();
             return new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), shots);

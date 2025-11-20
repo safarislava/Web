@@ -1,5 +1,6 @@
 package ru.ifmo.se.api.coremodule.services;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,6 +13,8 @@ import ru.ifmo.se.api.coremodule.dto.usersmodule.TokensDto;
 import ru.ifmo.se.api.coremodule.dto.usersmodule.UserDto;
 import ru.ifmo.se.api.coremodule.exceptions.UnAuthenticationException;
 import ru.ifmo.se.api.coremodule.exceptions.UnAuthorizationException;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +32,10 @@ public class UserMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) {
+        if (messageResponse == null)
             throw new IllegalArgumentException("Invalid message received");
-        }
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
             throw new UnAuthenticationException(messageResponse.getPayload().toString());
-        }
         return objectMapper.convertValue(messageResponse, TokensDto.class);
     }
 
@@ -48,12 +49,10 @@ public class UserMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) {
+        if (messageResponse == null)
             throw new IllegalArgumentException("Invalid message received");
-        }
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
             throw new UnAuthenticationException(messageResponse.getPayload().toString());
-        }
         return objectMapper.convertValue(messageResponse.getPayload(), TokensDto.class);
     }
 
@@ -67,12 +66,10 @@ public class UserMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) {
+        if (messageResponse == null)
             throw new IllegalArgumentException("Invalid message received");
-        }
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
             throw new UnAuthorizationException(messageResponse.getPayload().toString());
-        }
         return objectMapper.convertValue(messageResponse.getPayload(), TokensDto.class);
     }
 
@@ -86,11 +83,26 @@ public class UserMessageService {
                 new ParameterizedTypeReference<>() {}
         );
 
-        if (messageResponse == null) {
+        if (messageResponse == null)
             throw new IllegalArgumentException("Invalid message received");
-        }
-        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE)) {
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
             throw new UnAuthenticationException(messageResponse.getPayload().toString());
-        }
+    }
+
+    public List<String> sendGetRolesRequest(Long userId) {
+        Message messageRequest = new Message(MessageType.GET_ROLES_REQUEST, userId);
+
+        Message messageResponse = template.convertSendAndReceiveAsType(
+                RabbitMQConfig.USER_REQUEST_EXCHANGE,
+                RabbitMQConfig.USER_GET_ROLES_ROUTING_KEY,
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        if (messageResponse == null)
+            throw new IllegalArgumentException("Invalid message received");
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
+            throw new UnAuthorizationException(messageResponse.getPayload().toString());
+        return objectMapper.convertValue(messageResponse.getPayload(), new TypeReference<>() {});
     }
 }

@@ -16,7 +16,6 @@ services:
       dockerfile: Dockerfile
     environment:
       RABBITMQ_HOST: rabbitmq
-      SECRET: aa946dd9-5240-4103-86ca-2873e751fa9e
     container_name: point-checker-core-module
     restart: unless-stopped
     ports:

@@ -7,12 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-import ru.ifmo.se.api.coremodule.components.JwtComponent;
 import ru.ifmo.se.api.coremodule.components.PollListener;
 import ru.ifmo.se.api.coremodule.dto.shotsmodule.ShotRequest;
 import ru.ifmo.se.api.coremodule.dto.shotsmodule.ShotResponse;
-import ru.ifmo.se.api.coremodule.exceptions.UnAuthenticationException;
+import ru.ifmo.se.api.coremodule.dto.usersmodule.TokenClaimsResponse;
 import ru.ifmo.se.api.coremodule.services.ShotMessageService;
+import ru.ifmo.se.api.coremodule.services.TokenMessageService;
 
 import java.util.List;
 
@@ -20,42 +20,41 @@ import java.util.List;
 @RequestMapping("/api/shots")
 @RequiredArgsConstructor
 public class ShotsController {
-    private final JwtComponent jwtComponent;
+    private final TokenMessageService tokenMessageService;
     private final ShotMessageService shotMessageService;
     private final PollListener pollListener;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ShotResponse add(@CookieValue("accessToken") String token, @RequestBody ShotRequest request) {
-        if (!jwtComponent.verify(token)) throw new UnAuthenticationException("Invalid token");
-        return shotMessageService.sendAddShotRequest(request, jwtComponent.getUserId(token));
+        TokenClaimsResponse claims = tokenMessageService.getTokenClaims(token);
+        return shotMessageService.sendAddShotRequest(request, claims.getUserId());
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<ShotResponse> getPoints(@CookieValue("accessToken") String token) {
-        if (!jwtComponent.verify(token)) throw new UnAuthenticationException("Invalid token");
-        return shotMessageService.sendGetShotsRequest(jwtComponent.getUserId(token));
+        TokenClaimsResponse claims = tokenMessageService.getTokenClaims(token);
+        return shotMessageService.sendGetShotsRequest(claims.getUserId());
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     @Transactional
     public void clear(@CookieValue("accessToken") String token) {
-        if (!jwtComponent.verify(token)) throw new UnAuthenticationException("Invalid token");
-        shotMessageService.sendClearShotsRequest(jwtComponent.getUserId(token));
+        TokenClaimsResponse claims = tokenMessageService.getTokenClaims(token);
+        shotMessageService.sendClearShotsRequest(claims.getUserId());
     }
 
     @GetMapping(value = "/poll", produces = MediaType.APPLICATION_JSON_VALUE)
     public DeferredResult<ResponseEntity<List<ShotResponse>>> poll(@CookieValue("accessToken") String token) {
-        if (!jwtComponent.verify(token)) throw new UnAuthenticationException("Invalid token");
-        Long userId = jwtComponent.getUserId(token);
+        TokenClaimsResponse claims = tokenMessageService.getTokenClaims(token);
 
         DeferredResult<ResponseEntity<List<ShotResponse>>> pollResult = new DeferredResult<>(10000L);
         pollResult.onTimeout(() -> pollResult.setResult(ResponseEntity.noContent().build()));
-        pollResult.onCompletion(() -> pollListener.removeListener(userId, pollResult));
+        pollResult.onCompletion(() -> pollListener.removeListener(claims.getUserId(), pollResult));
 
-        pollListener.addListener(userId, pollResult);
+        pollListener.addListener(claims.getUserId(), pollResult);
         return pollResult;
     }
 }

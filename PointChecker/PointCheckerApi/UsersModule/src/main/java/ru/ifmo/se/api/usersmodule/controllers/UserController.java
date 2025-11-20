@@ -10,16 +10,20 @@ import ru.ifmo.se.api.usersmodule.dto.Message;
 import ru.ifmo.se.api.usersmodule.dto.MessageType;
 import ru.ifmo.se.api.usersmodule.dto.TokensDto;
 import ru.ifmo.se.api.usersmodule.dto.UserDto;
+import ru.ifmo.se.api.usersmodule.models.Role;
 import ru.ifmo.se.api.usersmodule.models.User;
+import ru.ifmo.se.api.usersmodule.services.UserRoleService;
 import ru.ifmo.se.api.usersmodule.services.UserService;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserRoleService userRoleService;
     private final JwtComponent jwtComponent;
     private final ObjectMapper objectMapper;
 
@@ -29,15 +33,10 @@ public class UserController {
             UserDto userDto = objectMapper.convertValue(message.getPayload(), UserDto.class);
             String username = userDto.getUsername();
 
-            userService.register(username, userDto.getPassword());
-            User user = userService.getUser(username);
-            userService.update(user.getId());
+            User user = userService.register(username, userDto.getPassword());
+            userRoleService.addRole(user.getId(), Role.USER);
 
-            TokensDto tokensResponse = new TokensDto(
-                    jwtComponent.generate(user.getId(), Duration.ofMinutes(5)),
-                    jwtComponent.generate(user.getId(), Duration.ofDays(2))
-            );
-            return new Message(MessageType.SUCCESS_RESPONSE, tokensResponse);
+            return getMessage(user);
         }
         catch (Exception e) {
             return new Message(MessageType.ERROR_RESPONSE, e.getMessage());
@@ -52,14 +51,7 @@ public class UserController {
 
             if (!userService.login(userDto.getUsername(), userDto.getPassword())) throw new IllegalArgumentException("Wrong username or password");
 
-            User user = userService.getUser(username);
-            userService.update(user.getId());
-
-            TokensDto tokensResponse = new TokensDto(
-                    jwtComponent.generate(user.getId(), Duration.ofMinutes(5)),
-                    jwtComponent.generate(user.getId(), Duration.ofDays(2))
-            );
-            return new Message(MessageType.SUCCESS_RESPONSE, tokensResponse);
+            return getMessage(userService.getUser(username));
         }
         catch (Exception e) {
             return new Message(MessageType.ERROR_RESPONSE, e.getMessage());
@@ -79,14 +71,7 @@ public class UserController {
             Instant creationTime = jwtComponent.getIssuedTime(refreshToken);
             if (userService.isUpdatedAfter(creationTime.plus(Duration.ofMinutes(1)), userId)) throw new IllegalArgumentException("Wrong refresh token");
 
-            User user = userService.getUser(userId);
-            userService.update(userId);
-
-            TokensDto tokensResponse = new TokensDto(
-                    jwtComponent.generate(user.getId(), Duration.ofMinutes(5)),
-                    jwtComponent.generate(user.getId(), Duration.ofDays(2))
-            );
-            return new Message(MessageType.SUCCESS_RESPONSE, tokensResponse);
+            return getMessage(userService.getUser(userId));
         }
         catch (Exception e) {
             return new Message(MessageType.ERROR_RESPONSE, e.getMessage());
@@ -110,5 +95,28 @@ public class UserController {
         catch (Exception e) {
             return new Message(MessageType.ERROR_RESPONSE, e.getMessage());
         }
+    }
+
+    @RabbitListener(queues = RabbitMQConfig.USER_GET_ROLES_QUEUE)
+    public Message getRoles(Message message) {
+        try {
+            Long userId = objectMapper.convertValue(message.getPayload(), Long.class);
+
+            List<String> roles = userRoleService.getRoles(userId).stream().map(Enum::toString).toList();
+            return new Message(MessageType.SUCCESS_RESPONSE, roles);
+        }
+        catch (Exception e) {
+            return new Message(MessageType.ERROR_RESPONSE, e.getMessage());
+        }
+    }
+
+    private Message getMessage(User  user) {
+        userService.update(user.getId());
+
+        TokensDto tokensResponse = new TokensDto(
+                jwtComponent.generate(user.getId(), Duration.ofMinutes(5)),
+                jwtComponent.generate(user.getId(), Duration.ofDays(2))
+        );
+        return new Message(MessageType.SUCCESS_RESPONSE, tokensResponse);
     }
 }

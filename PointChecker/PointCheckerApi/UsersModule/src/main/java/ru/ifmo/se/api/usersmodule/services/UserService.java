@@ -35,18 +35,18 @@ public class UserService {
         return passwordEncoder.matches(password, user.getPassword());
     }
 
-    public void register(String  username, String password) {
+    public User register(String  username, String password) {
         Optional<UserEntity> userEntity = userRepository.findByUsername(username);
         if (userEntity.isPresent()) throw new BadRequestException("Username already exists");
 
         String hashedPassword = passwordEncoder.encode(password);
-        userRepository.save(new UserEntity(username, hashedPassword));
+        return UserMapper.toModel(userRepository.save(new UserEntity(username, hashedPassword)));
     }
 
     public void update(Long userId) {
         User user = getUser(userId);
         user.setLastUpdate(Instant.now());
-         userRepository.save(UserMapper.toEntity(user));
+        userRepository.save(UserMapper.toEntity(user));
     }
 
     public boolean isUpdatedAfter(Instant time, Long  userId) {
