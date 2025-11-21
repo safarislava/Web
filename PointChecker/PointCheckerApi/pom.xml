@@ -15,7 +15,8 @@
         <module>core-service</module>
         <module>user-service</module>
         <module>shot-service</module>
-        <module>common_module</module>
+        <module>common-module</module>
+        <module>bff-service</module>
     </modules>
 
     <properties>

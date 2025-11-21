@@ -1,7 +1,8 @@
 import {BehaviorSubject, map, Observable, Subscription, take, tap} from 'rxjs';
 import {inject, Injectable, OnDestroy} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {urlApi} from '../../shared/api-config';
+import {urlApi, urlWs} from '../../shared/api-config';
+import {Client, IMessage} from '@stomp/stompjs';
 
 class Bullet {
   public id!: number;
@@ -37,17 +38,15 @@ export class ShotsService implements OnDestroy {
   );
 
   private http = inject(HttpClient);
-  private pollSubscription!: Subscription;
+  private stompClient!: Client;
 
   constructor() {
-    this.loadShots();
-    this.startPolling();
+    this.loadInitialShots();
+    this.connectWebSocket();
   }
 
   ngOnDestroy(): void {
-    if (this.pollSubscription) {
-      this.pollSubscription.unsubscribe();
-    }
+    this.disconnectWebSocket();
   }
 
   get currentShots(): Shot[] {
@@ -58,16 +57,13 @@ export class ShotsService implements OnDestroy {
     this.shotsSubject.next(shots);
   }
 
-  public loadShots() {
-    return this.http.get<Shot[]>(`${urlApi}/shots`, {
+  public loadInitialShots() {
+    this.http.get<Shot[]>(`${urlApi}/shots`, {
       withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json'
-      }}).pipe(
-        tap(response => {
-          this.updateShots(response);
-        })
-    );
+      headers: { 'Content-Type': 'application/json' }
+    }).subscribe(response => {
+      this.updateShots(response);
+    });
   }
 
   public addShot(x: string, y: string, r: string, weapon: string): Observable<any> {
@@ -78,11 +74,7 @@ export class ShotsService implements OnDestroy {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).pipe(
-      tap(response => {
-        this.updateShots([...this.shotsSubject.value, response]);
-      })
-    );
+    });
   }
 
   public clearShots(): Observable<any> {
@@ -90,33 +82,51 @@ export class ShotsService implements OnDestroy {
       withCredentials: true
     }).pipe(
       tap(() => {
-        this.loadShots().subscribe();
+        this.updateShots([]);
       })
     );
   }
 
-  private startPolling(): void {
-    if (this.pollSubscription) {
-      this.pollSubscription.unsubscribe();
-    }
-
-    this.pollSubscription = this.http.get<Shot[]>(`${urlApi}/shots/poll`, { withCredentials: true })
-      .pipe(take(1))
-      .subscribe({
-        next: (updatedShots) => {
-          if (updatedShots) {
-            this.updateShots(updatedShots);
-          }
-          this.startPolling();
-        },
-        error: (err) => {
-          console.error('Long polling request failed:', err);
-          setTimeout(() => this.startPolling(), 15000);
-        }
-      });
-  }
-
   private sortShots(shots: Shot[]): Shot[] {
     return [...shots].sort((a, b) => a.id - b.id);
+  }
+
+  private connectWebSocket(): void {
+    this.stompClient = new Client({
+      brokerURL: urlWs,
+      connectHeaders: {},
+      debug: (str) => {
+        // console.log(new Date(), str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    this.stompClient.onConnect = (frame) => {
+      this.stompClient.subscribe('/user/queue/shots', (message: IMessage) => {
+        const newShots: Shot[] = JSON.parse(message.body);
+        const currentShots = this.currentShots;
+
+        const shotMap = new Map<number, Shot>();
+        currentShots.forEach(shot => shotMap.set(shot.id, shot));
+        newShots.forEach(shot => shotMap.set(shot.id, shot));
+
+        this.updateShots(Array.from(shotMap.values()));
+      });
+    };
+
+    this.stompClient.onStompError = (frame) => {
+      console.error('Broker reported error: ' + frame.headers['message']);
+      console.error('Additional details: ' + frame.body);
+    };
+
+    this.stompClient.activate();
+  }
+
+  private disconnectWebSocket(): void {
+    if (this.stompClient?.active) {
+      this.stompClient.deactivate();
+    }
   }
 }

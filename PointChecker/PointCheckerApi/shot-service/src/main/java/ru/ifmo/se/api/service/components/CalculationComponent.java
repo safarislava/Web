@@ -19,7 +19,7 @@ public class CalculationComponent {
     private final BigDecimal scale = BigDecimal.valueOf(50);
 
     public CalculationComponent(ResourceLoader resourceLoader) throws IOException {
-        Resource resource = resourceLoader.getResource("classpath:ru/ifmo/se/api/shotsmodule/components/target.png");
+        Resource resource = resourceLoader.getResource("classpath:ru/ifmo/se/api/service/components/target.png");
         image = ImageIO.read(resource.getInputStream());
     }
 

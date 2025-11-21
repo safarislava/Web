@@ -53,7 +53,6 @@ export class MainPageComponent implements OnInit, AfterViewInit {
     this.R?.valueChanges.subscribe(r => {
       this.onRChange(r);
     });
-    this.shotsService.loadShots().subscribe();
   }
 
   ngAfterViewInit(): void {

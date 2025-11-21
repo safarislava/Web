@@ -73,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>ru.ifmo.se.api</groupId>
-            <artifactId>common_module</artifactId>
+            <artifactId>common-module</artifactId>
             <version>1.0.0</version>
             <scope>compile</scope>
         </dependency>

@@ -3,12 +3,9 @@ package ru.ifmo.se.api.service.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.async.DeferredResult;
 import ru.ifmo.se.api.common.dto.shot.ShotRequest;
-import ru.ifmo.se.api.service.components.PollListener;
 import ru.ifmo.se.api.common.dto.shot.ShotResponse;
 import ru.ifmo.se.api.common.dto.user.TokenClaimsResponse;
 import ru.ifmo.se.api.service.services.ShotMessageService;
@@ -22,7 +19,6 @@ import java.util.List;
 public class ShotsController {
     private final TokenMessageService tokenMessageService;
     private final ShotMessageService shotMessageService;
-    private final PollListener pollListener;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,17 +40,5 @@ public class ShotsController {
     public void clear(@CookieValue("accessToken") String token) {
         TokenClaimsResponse claims = tokenMessageService.getTokenClaims(token);
         shotMessageService.sendClearShotsRequest(claims.getUserId());
-    }
-
-    @GetMapping(value = "/poll", produces = MediaType.APPLICATION_JSON_VALUE)
-    public DeferredResult<ResponseEntity<List<ShotResponse>>> poll(@CookieValue("accessToken") String token) {
-        TokenClaimsResponse claims = tokenMessageService.getTokenClaims(token);
-
-        DeferredResult<ResponseEntity<List<ShotResponse>>> pollResult = new DeferredResult<>(10000L);
-        pollResult.onTimeout(() -> pollResult.setResult(ResponseEntity.noContent().build()));
-        pollResult.onCompletion(() -> pollListener.removeListener(claims.getUserId(), pollResult));
-
-        pollListener.addListener(claims.getUserId(), pollResult);
-        return pollResult;
     }
 }
