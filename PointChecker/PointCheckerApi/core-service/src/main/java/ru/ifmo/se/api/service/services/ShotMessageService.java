@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.services;
+package ru.ifmo.se.api.service.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,8 +10,8 @@ import ru.ifmo.se.api.common.shotservice.Message;
 import ru.ifmo.se.api.common.shotservice.MessageType;
 import ru.ifmo.se.api.common.shotservice.ShotRequest;
 import ru.ifmo.se.api.common.shotservice.ShotResponse;
-import ru.ifmo.se.api.coreservice.config.RabbitMQConfig;
-import ru.ifmo.se.api.coreservice.exceptions.BadRequestException;
+import ru.ifmo.se.api.service.config.RabbitMQConfig;
+import ru.ifmo.se.api.service.exceptions.BadRequestException;
 
 import java.util.List;
 

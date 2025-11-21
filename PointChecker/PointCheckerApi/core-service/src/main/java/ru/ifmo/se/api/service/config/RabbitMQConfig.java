@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.config;
+package ru.ifmo.se.api.service.config;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

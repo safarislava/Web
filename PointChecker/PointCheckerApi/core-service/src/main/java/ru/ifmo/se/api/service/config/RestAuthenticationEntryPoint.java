@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.config;
+package ru.ifmo.se.api.service.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

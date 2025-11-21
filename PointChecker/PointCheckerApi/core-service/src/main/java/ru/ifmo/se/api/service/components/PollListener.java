@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.components;
+package ru.ifmo.se.api.service.components;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +9,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import ru.ifmo.se.api.common.shotservice.Message;
 import ru.ifmo.se.api.common.shotservice.MessageType;
 import ru.ifmo.se.api.common.shotservice.ShotResponse;
-import ru.ifmo.se.api.coreservice.config.RabbitMQConfig;
+import ru.ifmo.se.api.service.config.RabbitMQConfig;
 
 import java.util.List;
 import java.util.Map;

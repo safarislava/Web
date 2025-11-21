@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice;
+package ru.ifmo.se.api.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

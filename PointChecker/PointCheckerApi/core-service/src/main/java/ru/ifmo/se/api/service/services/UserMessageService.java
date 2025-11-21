@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.services;
+package ru.ifmo.se.api.service.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,9 +10,9 @@ import ru.ifmo.se.api.common.userservice.Message;
 import ru.ifmo.se.api.common.userservice.MessageType;
 import ru.ifmo.se.api.common.userservice.TokensDto;
 import ru.ifmo.se.api.common.userservice.UserDto;
-import ru.ifmo.se.api.coreservice.config.RabbitMQConfig;
-import ru.ifmo.se.api.coreservice.exceptions.UnAuthenticationException;
-import ru.ifmo.se.api.coreservice.exceptions.UnAuthorizationException;
+import ru.ifmo.se.api.service.config.RabbitMQConfig;
+import ru.ifmo.se.api.service.exceptions.UnAuthenticationException;
+import ru.ifmo.se.api.service.exceptions.UnAuthorizationException;
 
 import java.util.List;
 

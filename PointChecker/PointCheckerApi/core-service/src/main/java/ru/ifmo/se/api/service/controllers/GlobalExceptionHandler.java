@@ -1,12 +1,12 @@
-package ru.ifmo.se.api.coreservice.controllers;
+package ru.ifmo.se.api.service.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.ifmo.se.api.coreservice.exceptions.BadRequestException;
-import ru.ifmo.se.api.coreservice.exceptions.UnAuthenticationException;
-import ru.ifmo.se.api.coreservice.exceptions.UnAuthorizationException;
+import ru.ifmo.se.api.service.exceptions.BadRequestException;
+import ru.ifmo.se.api.service.exceptions.UnAuthenticationException;
+import ru.ifmo.se.api.service.exceptions.UnAuthorizationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

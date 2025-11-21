@@ -77,7 +77,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ru.ifmo.se.api.coreservice.CoreServiceApplication</mainClass>
+                    <mainClass>ru.ifmo.se.api.service.CoreServiceApplication</mainClass>
                     <executable>true</executable>
                 </configuration>
                 <executions>

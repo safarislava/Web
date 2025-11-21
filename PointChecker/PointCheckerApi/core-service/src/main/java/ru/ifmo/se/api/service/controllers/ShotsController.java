@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.controllers;
+package ru.ifmo.se.api.service.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import ru.ifmo.se.api.common.shotservice.ShotRequest;
-import ru.ifmo.se.api.coreservice.components.PollListener;
+import ru.ifmo.se.api.service.components.PollListener;
 import ru.ifmo.se.api.common.shotservice.ShotResponse;
 import ru.ifmo.se.api.common.userservice.TokenClaimsResponse;
-import ru.ifmo.se.api.coreservice.services.ShotMessageService;
-import ru.ifmo.se.api.coreservice.services.TokenMessageService;
+import ru.ifmo.se.api.service.services.ShotMessageService;
+import ru.ifmo.se.api.service.services.TokenMessageService;
 
 import java.util.List;
 

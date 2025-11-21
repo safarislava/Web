@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.utils;
+package ru.ifmo.se.api.service.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

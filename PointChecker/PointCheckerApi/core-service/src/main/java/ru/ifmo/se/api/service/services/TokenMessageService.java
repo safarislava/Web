@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.coreservice.services;
+package ru.ifmo.se.api.service.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import ru.ifmo.se.api.common.userservice.Message;
 import ru.ifmo.se.api.common.userservice.MessageType;
 import ru.ifmo.se.api.common.userservice.TokenClaimsResponse;
-import ru.ifmo.se.api.coreservice.config.RabbitMQConfig;
-import ru.ifmo.se.api.coreservice.exceptions.UnAuthenticationException;
+import ru.ifmo.se.api.service.config.RabbitMQConfig;
+import ru.ifmo.se.api.service.exceptions.UnAuthenticationException;
 
 @Service
 @RequiredArgsConstructor
