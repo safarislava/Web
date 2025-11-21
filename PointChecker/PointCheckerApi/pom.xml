@@ -12,9 +12,10 @@
     <name>PointChecker</name>
 
     <modules>
-        <module>CoreModule</module>
-        <module>UsersModule</module>
-        <module>ShotsModule</module>
+        <module>core-service</module>
+        <module>user-service</module>
+        <module>shot-service</module>
+        <module>common_module</module>
     </modules>
 
     <properties>
