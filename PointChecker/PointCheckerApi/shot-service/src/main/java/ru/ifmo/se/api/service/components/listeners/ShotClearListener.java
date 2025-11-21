@@ -4,8 +4,8 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.ifmo.se.api.common.shotservice.Message;
-import ru.ifmo.se.api.common.shotservice.MessageType;
+import ru.ifmo.se.api.common.dto.shot.Message;
+import ru.ifmo.se.api.common.dto.shot.MessageType;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 import ru.ifmo.se.api.service.services.ShotService;
 

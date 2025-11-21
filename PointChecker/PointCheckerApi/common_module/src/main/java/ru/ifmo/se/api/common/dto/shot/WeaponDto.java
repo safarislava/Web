@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.common.shotservice;
+package ru.ifmo.se.api.common.dto.shot;
 
 import lombok.Getter;
 

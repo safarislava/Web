@@ -6,9 +6,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.async.DeferredResult;
-import ru.ifmo.se.api.common.shotservice.Message;
-import ru.ifmo.se.api.common.shotservice.MessageType;
-import ru.ifmo.se.api.common.shotservice.ShotResponse;
+import ru.ifmo.se.api.common.dto.shot.Message;
+import ru.ifmo.se.api.common.dto.shot.MessageType;
+import ru.ifmo.se.api.common.dto.shot.ShotResponse;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 
 import java.util.List;

@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.api.common.shotservice.Message;
-import ru.ifmo.se.api.common.shotservice.MessageType;
-import ru.ifmo.se.api.common.shotservice.ShotRequest;
-import ru.ifmo.se.api.common.shotservice.ShotResponse;
+import ru.ifmo.se.api.common.dto.shot.Message;
+import ru.ifmo.se.api.common.dto.shot.MessageType;
+import ru.ifmo.se.api.common.dto.shot.ShotRequest;
+import ru.ifmo.se.api.common.dto.shot.ShotResponse;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 import ru.ifmo.se.api.service.exceptions.BadRequestException;
 

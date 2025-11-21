@@ -7,10 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-import ru.ifmo.se.api.common.shotservice.ShotRequest;
+import ru.ifmo.se.api.common.dto.shot.ShotRequest;
 import ru.ifmo.se.api.service.components.PollListener;
-import ru.ifmo.se.api.common.shotservice.ShotResponse;
-import ru.ifmo.se.api.common.userservice.TokenClaimsResponse;
+import ru.ifmo.se.api.common.dto.shot.ShotResponse;
+import ru.ifmo.se.api.common.dto.user.TokenClaimsResponse;
 import ru.ifmo.se.api.service.services.ShotMessageService;
 import ru.ifmo.se.api.service.services.TokenMessageService;
 

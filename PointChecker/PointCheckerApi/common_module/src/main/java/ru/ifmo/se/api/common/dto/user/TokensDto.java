@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.common.userservice;
+package ru.ifmo.se.api.common.dto.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
-    private MessageType messageType;
-    private Object payload;
+public class TokensDto {
+    private String accessToken;
+    private String refreshToken;
 }

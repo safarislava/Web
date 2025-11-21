@@ -2,7 +2,7 @@ package ru.ifmo.se.api.service.services;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.api.common.shotservice.ShotRequest;
+import ru.ifmo.se.api.common.dto.shot.ShotRequest;
 import ru.ifmo.se.api.service.components.PollHandler;
 import ru.ifmo.se.api.service.models.Shot;
 

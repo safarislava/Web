@@ -1,6 +1,6 @@
 package ru.ifmo.se.api.service.mappers;
 
-import ru.ifmo.se.api.common.shotservice.WeaponDto;
+import ru.ifmo.se.api.common.dto.shot.WeaponDto;
 import ru.ifmo.se.api.service.models.Weapon;
 
 public class WeaponMapper {

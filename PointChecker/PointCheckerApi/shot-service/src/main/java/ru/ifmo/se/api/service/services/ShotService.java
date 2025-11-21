@@ -1,6 +1,6 @@
 package ru.ifmo.se.api.service.services;
 
-import ru.ifmo.se.api.common.shotservice.ShotRequest;
+import ru.ifmo.se.api.common.dto.shot.ShotRequest;
 import ru.ifmo.se.api.service.models.Shot;
 
 import java.util.List;

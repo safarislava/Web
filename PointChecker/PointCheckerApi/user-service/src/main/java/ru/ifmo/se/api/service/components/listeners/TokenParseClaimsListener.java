@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
-import ru.ifmo.se.api.common.userservice.Message;
-import ru.ifmo.se.api.common.userservice.MessageType;
-import ru.ifmo.se.api.common.userservice.TokenClaimsResponse;
+import ru.ifmo.se.api.common.dto.user.Message;
+import ru.ifmo.se.api.common.dto.user.MessageType;
+import ru.ifmo.se.api.common.dto.user.TokenClaimsResponse;
 import ru.ifmo.se.api.service.components.JwtComponent;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 

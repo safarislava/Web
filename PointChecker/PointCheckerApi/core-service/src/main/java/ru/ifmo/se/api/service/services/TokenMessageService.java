@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.api.common.userservice.Message;
-import ru.ifmo.se.api.common.userservice.MessageType;
-import ru.ifmo.se.api.common.userservice.TokenClaimsResponse;
+import ru.ifmo.se.api.common.dto.user.Message;
+import ru.ifmo.se.api.common.dto.user.MessageType;
+import ru.ifmo.se.api.common.dto.user.TokenClaimsResponse;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 import ru.ifmo.se.api.service.exceptions.UnAuthenticationException;
 

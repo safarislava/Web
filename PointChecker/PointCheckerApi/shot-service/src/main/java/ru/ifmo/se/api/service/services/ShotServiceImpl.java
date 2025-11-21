@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.ifmo.se.api.common.shotservice.ShotRequest;
+import ru.ifmo.se.api.common.dto.shot.ShotRequest;
 import ru.ifmo.se.api.service.components.processors.RequestProcessor;
 import ru.ifmo.se.api.service.mappers.ShotMapper;
 import ru.ifmo.se.api.service.mappers.WeaponMapper;

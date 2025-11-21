@@ -1,4 +1,4 @@
-package ru.ifmo.se.api.common.userservice;
+package ru.ifmo.se.api.common.dto.user;
 
 public enum MessageType {
     REGISTER_REQUEST,

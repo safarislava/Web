@@ -2,9 +2,9 @@ package ru.ifmo.se.api.service.components;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.ifmo.se.api.common.userservice.Message;
-import ru.ifmo.se.api.common.userservice.MessageType;
-import ru.ifmo.se.api.common.userservice.TokensDto;
+import ru.ifmo.se.api.common.dto.user.Message;
+import ru.ifmo.se.api.common.dto.user.MessageType;
+import ru.ifmo.se.api.common.dto.user.TokensDto;
 import ru.ifmo.se.api.service.models.User;
 import ru.ifmo.se.api.service.services.UserService;
 

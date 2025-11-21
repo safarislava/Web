@@ -1,6 +1,6 @@
 package ru.ifmo.se.api.service.mappers;
 
-import ru.ifmo.se.api.common.shotservice.*;
+import ru.ifmo.se.api.common.dto.shot.*;
 import ru.ifmo.se.api.service.entities.*;
 import ru.ifmo.se.api.service.models.*;
 

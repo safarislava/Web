@@ -1,6 +1,6 @@
 package ru.ifmo.se.api.service.mappers;
 
-import ru.ifmo.se.api.common.shotservice.BulletDto;
+import ru.ifmo.se.api.common.dto.shot.BulletDto;
 import ru.ifmo.se.api.service.entities.BulletEntity;
 import ru.ifmo.se.api.service.models.Bullet;
 

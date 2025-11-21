@@ -2,9 +2,9 @@ package ru.ifmo.se.api.service.components;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
-import ru.ifmo.se.api.common.shotservice.Message;
-import ru.ifmo.se.api.common.shotservice.MessageType;
-import ru.ifmo.se.api.common.shotservice.ShotResponse;
+import ru.ifmo.se.api.common.dto.shot.Message;
+import ru.ifmo.se.api.common.dto.shot.MessageType;
+import ru.ifmo.se.api.common.dto.shot.ShotResponse;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 import ru.ifmo.se.api.service.mappers.ShotMapper;
 import ru.ifmo.se.api.service.models.Shot;

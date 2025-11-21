@@ -3,8 +3,8 @@ package ru.ifmo.se.api.service.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import ru.ifmo.se.api.common.userservice.TokensDto;
-import ru.ifmo.se.api.common.userservice.UserDto;
+import ru.ifmo.se.api.common.dto.user.TokensDto;
+import ru.ifmo.se.api.common.dto.user.UserDto;
 import ru.ifmo.se.api.service.services.UserMessageService;
 
 import java.time.Duration;
