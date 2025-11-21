@@ -11,8 +11,7 @@
     </parent>
 
     <artifactId>user-service</artifactId>
-    <name>UsersModule</name>
-    <description>UsersModule</description>
+    <name>UsersService</name>
 
     <dependencies>
         <dependency>

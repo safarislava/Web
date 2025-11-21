@@ -11,8 +11,7 @@
     </parent>
 
     <artifactId>core-service</artifactId>
-    <name>CoreModule</name>
-    <description>CoreModule</description>
+    <name>CoreService</name>
 
     <dependencies>
         <dependency>

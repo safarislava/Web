@@ -11,8 +11,7 @@
     </parent>
 
     <artifactId>shot-service</artifactId>
-    <name>ShotsModule</name>
-    <description>ShotsModule</description>
+    <name>ShotsService</name>
 
     <dependencies>
         <dependency>
