@@ -10,6 +10,7 @@ import ru.ifmo.se.api.common.dto.shot.Message;
 import ru.ifmo.se.api.common.dto.shot.MessageType;
 import ru.ifmo.se.api.common.dto.shot.ShotRequest;
 import ru.ifmo.se.api.common.dto.shot.ShotResponse;
+import ru.ifmo.se.api.service.components.ShotRequestValidator;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 import ru.ifmo.se.api.service.mappers.ShotMapper;
 import ru.ifmo.se.api.service.models.Shot;
@@ -18,10 +19,16 @@ import ru.ifmo.se.api.service.services.ShotService;
 @Component
 public class ShotAddListener {
     private final ShotService shotService;
+    private final ShotRequestValidator shotRequestValidator;
     private final ObjectMapper objectMapper;
 
-    public ShotAddListener(@Qualifier("shotServiceProxy") ShotService shotService, ObjectMapper objectMapper) {
+    public ShotAddListener(
+            @Qualifier("shotServiceProxy") ShotService shotService,
+            ShotRequestValidator validator,
+            ObjectMapper objectMapper
+    ) {
         this.shotService = shotService;
+        this.shotRequestValidator = validator;
         this.objectMapper = objectMapper;
     }
 
@@ -30,6 +37,7 @@ public class ShotAddListener {
     public Message add(Message message) {
         try {
             ShotRequest shotRequest = objectMapper.convertValue(message.getPayload(), new TypeReference<>() {});
+            shotRequestValidator.validate(shotRequest);
 
             Shot shot = shotService.processShot(shotRequest, message.getUserId());
 
