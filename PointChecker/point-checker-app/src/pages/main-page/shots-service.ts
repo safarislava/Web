@@ -1,8 +1,9 @@
-import {BehaviorSubject, map, Observable, Subscription, take, tap} from 'rxjs';
-import {inject, Injectable, OnDestroy} from '@angular/core';
+import {BehaviorSubject, map, Observable, tap} from 'rxjs';
+import {inject, Injectable, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {urlApi, urlWs} from '../../shared/api-config';
 import {Client, IMessage} from '@stomp/stompjs';
+import {isPlatformBrowser} from '@angular/common';
 
 class Bullet {
   public id!: number;
@@ -38,11 +39,13 @@ export class ShotsService implements OnDestroy {
   );
 
   private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID);
   private stompClient!: Client;
 
   constructor() {
-    this.loadInitialShots();
-    this.connectWebSocket();
+    if (isPlatformBrowser(this.platformId)) {
+      this.connectWebSocket();
+    }
   }
 
   ngOnDestroy(): void {

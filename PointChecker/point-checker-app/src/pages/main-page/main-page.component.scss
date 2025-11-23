@@ -51,6 +51,11 @@ header {
   }
 }
 
+.header-items {
+  display: flex;
+  gap: 20px;
+}
+
 .logo {
   font-size: 32px;
 }

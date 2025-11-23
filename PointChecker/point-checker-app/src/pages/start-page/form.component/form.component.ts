@@ -1,16 +1,16 @@
 import {ChangeDetectorRef, Component} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {urlApi} from '../../../shared/api-config';
+import {urlApi, urlGoogleAuth} from '../../../shared/api-config';
 
 @Component({
   selector: 'app-form',
   standalone: true,
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
-  imports: [CommonModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage]
 })
 export class FormComponent {
   public isCompliant = false;
@@ -97,6 +97,10 @@ export class FormComponent {
     this.isEnterOrRegister = true;
     this.errorMessage = false;
     this.onSubmit();
+  }
+
+  public onSyncGoogleClick(): void {
+    window.location.href = urlGoogleAuth;
   }
 
   get username(): AbstractControl | null { return this.loginForm.get('username'); }

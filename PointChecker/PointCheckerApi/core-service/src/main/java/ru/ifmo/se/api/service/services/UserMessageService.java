@@ -56,6 +56,23 @@ public class UserMessageService {
         return objectMapper.convertValue(messageResponse.getPayload(), TokensDto.class);
     }
 
+    public TokensDto sendSyncRequest(String username) {
+        Message messageRequest = new Message(MessageType.SYNC_REQUEST, username);
+
+        Message messageResponse = template.convertSendAndReceiveAsType(
+                RabbitMQConfig.USER_REQUEST_EXCHANGE,
+                RabbitMQConfig.USER_SYNC_ROUTING_KEY,
+                messageRequest,
+                new ParameterizedTypeReference<>() {}
+        );
+
+        if (messageResponse == null)
+            throw new IllegalArgumentException("Invalid message received");
+        if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
+            throw new UnAuthenticationException(messageResponse.getPayload().toString());
+        return objectMapper.convertValue(messageResponse.getPayload(), TokensDto.class);
+    }
+
     public TokensDto sendRefreshUserRequest(TokensDto tokensDto) {
         Message messageRequest = new Message(MessageType.REFRESH_REQUEST, tokensDto);
 

@@ -16,6 +16,7 @@ public class RabbitMQConfig {
     public static final String USER_REGISTER_QUEUE = "user.register.queue";
     public static final String USER_GET_QUEUE = "user.get.queue";
     public static final String USER_LOGIN_QUEUE = "user.login.queue";
+    public static final String USER_SYNC_QUEUE = "user.sync.queue";
     public static final String USER_REFRESH_QUEUE = "user.refresh.queue";
     public static final String USER_LOGOUT_QUEUE = "user.logout.queue";
     public static final String USER_GET_ROLES_QUEUE = "user.get.role.queue";
@@ -27,6 +28,7 @@ public class RabbitMQConfig {
     public static final String USER_REGISTER_ROUTING_KEY = "user.register";
     public static final String USER_GET_ROUTING_KEY = "user.get";
     public static final String USER_LOGIN_ROUTING_KEY = "user.login";
+    public static final String USER_SYNC_ROUTING_KEY = "user.sync";
     public static final String USER_REFRESH_ROUTING_KEY = "user.refresh";
     public static final String USER_LOGOUT_ROUTING_KEY = "user.logout";
     public static final String USER_GET_ROLES_ROUTING_KEY = "user.get.roles";
@@ -55,6 +57,11 @@ public class RabbitMQConfig {
     @Bean
     public Queue userLoginQueue() {
         return new Queue(USER_LOGIN_QUEUE, true);
+    }
+
+    @Bean
+    public Queue userSyncQueue() {
+        return new Queue(USER_SYNC_QUEUE, true);
     }
 
     @Bean
@@ -98,6 +105,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
+    public Binding userSyncBinding() {
+        return BindingBuilder.bind(userSyncQueue())
+                .to(userRequestExchange())
+                .with(USER_SYNC_ROUTING_KEY);
+    }
+
+    @Bean
     public Binding userRefreshBinding() {
         return BindingBuilder.bind(userRefreshQueue())
                 .to(userRequestExchange())
@@ -130,6 +144,7 @@ public class RabbitMQConfig {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         rabbitTemplate.setUseTemporaryReplyQueues(true);
+        rabbitTemplate.setReplyTimeout(10000);
         return rabbitTemplate;
     }
 

@@ -5,6 +5,8 @@ import {AsyncPipe, isPlatformBrowser, NgOptimizedImage} from '@angular/common';
 import {ShotsService} from './shots-service';
 import VanillaTilt from 'vanilla-tilt';
 import {positiveNumberValidator} from '../../shared/positive-validator';
+import {AuthService} from '../../shared/auth.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -25,6 +27,8 @@ export class MainPageComponent implements OnInit, AfterViewInit {
   public pointForm!: FormGroup;
   public shotsService = inject(ShotsService);
 
+  private router = inject(Router);
+  private authService = inject(AuthService);
   private weapon: string = "REVOLVER";
 
   constructor(private formBuilder: FormBuilder, private elementRef: ElementRef) {
@@ -41,7 +45,13 @@ export class MainPageComponent implements OnInit, AfterViewInit {
     this.shotsService.clearShots().subscribe();
   }
 
+  public logout(): void {
+    this.authService.logout().subscribe();
+    this.router.navigate(['/']);
+  }
+
   ngOnInit(): void {
+    this.shotsService.loadInitialShots();
     this.X?.valueChanges.subscribe(x => {
       this.onXChange(x);
     });

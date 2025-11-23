@@ -22,6 +22,7 @@ public class RabbitMQConfig {
     public static final String USER_REGISTER_ROUTING_KEY = "user.register";
     public static final String USER_GET_ROUTING_KEY = "user.get";
     public static final String USER_LOGIN_ROUTING_KEY = "user.login";
+    public static final String USER_SYNC_ROUTING_KEY = "user.sync";
     public static final String USER_REFRESH_ROUTING_KEY = "user.refresh";
     public static final String USER_LOGOUT_ROUTING_KEY = "user.logout";
     public static final String USER_GET_ROLES_ROUTING_KEY = "user.get.roles";

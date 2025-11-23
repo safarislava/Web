@@ -27,11 +27,10 @@ import java.util.stream.Collectors;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenMessageService tokenMessageService;
     private final UserMessageService userMessageService;
-    private final CookieTokenManager cookieTokenManager =  new CookieTokenManager();
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        Optional<String> authToken = cookieTokenManager.getAuthTokenFromCookie(request);
+        Optional<String> authToken = CookieTokenManager.getAuthTokenFromCookie(request);
         if (authToken.isEmpty()) {
             filterChain.doFilter(request, response);
             return;

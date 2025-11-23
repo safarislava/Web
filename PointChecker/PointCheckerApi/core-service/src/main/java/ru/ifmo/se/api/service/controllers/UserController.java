@@ -1,13 +1,14 @@
 package ru.ifmo.se.api.service.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ifmo.se.api.common.dto.user.TokensDto;
 import ru.ifmo.se.api.common.dto.user.UserDto;
 import ru.ifmo.se.api.service.services.UserMessageService;
-
-import java.time.Duration;
+import ru.ifmo.se.api.service.utils.CookieTokenManager;
 
 @RestController
 @RequestMapping("/api/users")
@@ -20,7 +21,7 @@ public class UserController {
         TokensDto tokensDto = messageService.sendRegisterUserRequest(userDto);
 
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
-        return setCookies(response, tokensDto).build();
+        return CookieTokenManager.setCookies(response, tokensDto).build();
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -29,7 +30,7 @@ public class UserController {
         TokensDto tokensDto = messageService.sendLoginUserRequest(userDto);
 
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
-        return setCookies(response, tokensDto).build();
+        return CookieTokenManager.setCookies(response, tokensDto).build();
     }
 
     @GetMapping(path = "/refresh")
@@ -38,7 +39,7 @@ public class UserController {
         TokensDto tokensDto = messageService.sendRefreshUserRequest(new TokensDto(null, refreshToken));
 
         ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
-        return setCookies(response, tokensDto).build();
+        return CookieTokenManager.setCookies(response, tokensDto).build();
     }
 
     @DeleteMapping(path = "/logout")
@@ -46,49 +47,7 @@ public class UserController {
     public ResponseEntity<Void> logout(@CookieValue(value = "accessToken") String accessToken) {
         messageService.sendLogoutUserRequest(new TokensDto(accessToken, null));
 
-        ResponseEntity.HeadersBuilder<?> response = ResponseEntity.noContent();
-        return clearCookies(response).build();
-    }
-
-    private ResponseEntity.HeadersBuilder<?> setCookies(ResponseEntity.HeadersBuilder<?> response, TokensDto tokensDto) {
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", tokensDto.getAccessToken())
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(Duration.ofMinutes(5).getSeconds())
-                .sameSite("Strict")
-                .build();
-
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", tokensDto.getRefreshToken())
-                .httpOnly(true)
-                .secure(false)
-                .path("/api/users")
-                .maxAge(Duration.ofDays(2).getSeconds())
-                .sameSite("Strict")
-                .build();
-
-        return response.header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString());
-    }
-
-    private ResponseEntity.HeadersBuilder<?> clearCookies(ResponseEntity.HeadersBuilder<?> response) {
-        ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
-                .httpOnly(true)
-                .secure(false)
-                .path("/")
-                .maxAge(Duration.ofMinutes(0).getSeconds())
-                .sameSite("Strict")
-                .build();
-
-        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
-                .httpOnly(true)
-                .secure(false)
-                .path("/api/users")
-                .maxAge(Duration.ofDays(0).getSeconds())
-                .sameSite("Strict")
-                .build();
-
-        return response.header(HttpHeaders.SET_COOKIE, accessCookie.toString())
-                .header(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+        ResponseEntity.HeadersBuilder<?> responseBuilder = ResponseEntity.noContent();
+        return CookieTokenManager.clearCookies(responseBuilder).build();
     }
 }

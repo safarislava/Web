@@ -10,6 +10,7 @@ import ru.ifmo.se.api.service.repositories.UserRepository;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +41,10 @@ public class UserService {
 
         String hashedPassword = passwordEncoder.encode(password);
         return UserMapper.toModel(userRepository.save(new UserEntity(username, hashedPassword)));
+    }
+
+    public User register(String  username) {
+        return register(username, UUID.randomUUID().toString());
     }
 
     public void update(Long userId) {

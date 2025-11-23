@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class CoreServiceApplication {
-    // TODO WebSockets(BFF), Oauth2
+    // TODO Liquid Migration
     public static void main(String[] args) {
         SpringApplication.run(CoreServiceApplication.class, args);
     }

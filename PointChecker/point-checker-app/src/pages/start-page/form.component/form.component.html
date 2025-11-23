@@ -37,10 +37,17 @@
         </div>
       }
 
-      <div class="form-actions">
-        <button type="submit" class="cancel-btn" (click)="onRegistrationClick()">REGISTRATION</button>
-        <button type="submit" class="login-btn" (click)="onEnterClick()">ENTER</button>
-        <button type="button" class="cancel-btn" (click)="closeForm()">CANCEL</button>
+      <div class="form-container">
+        <div class="form-actions">
+          <button type="submit" class="login-btn" (click)="onRegistrationClick()">REGISTRATION</button>
+          <button type="submit" class="login-btn" (click)="onEnterClick()">ENTER</button>
+          <button type="submit" class="google-btn" (click)="onSyncGoogleClick()">
+            <img ngSrc="assets/images/google.png" alt="" height="2048" width="2048"/>
+          </button>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="closeForm()">CANCEL</button>
+        </div>
       </div>
     </form>
   </div>
