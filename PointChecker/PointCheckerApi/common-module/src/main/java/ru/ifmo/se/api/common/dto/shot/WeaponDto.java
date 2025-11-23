@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public enum WeaponDto {
     REVOLVER,
-    SHOTGUN;
+    SHOTGUN
 }
