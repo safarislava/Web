@@ -36,7 +36,7 @@ public class UserMessageService {
             throw new IllegalArgumentException("Invalid message received");
         if (messageResponse.getMessageType().equals(MessageType.ERROR_RESPONSE))
             throw new UnAuthenticationException(messageResponse.getPayload().toString());
-        return objectMapper.convertValue(messageResponse, TokensDto.class);
+        return objectMapper.convertValue(messageResponse.getPayload(), TokensDto.class);
     }
 
     public TokensDto sendLoginUserRequest(UserDto userDto) {
