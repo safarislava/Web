@@ -1,5 +1,5 @@
 import {BehaviorSubject, map, Observable, tap} from 'rxjs';
-import {inject, Injectable, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
+import {inject, Injectable, OnDestroy, PLATFORM_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {urlApi, urlWs} from '../../shared/api-config';
 import {Client, IMessage} from '@stomp/stompjs';

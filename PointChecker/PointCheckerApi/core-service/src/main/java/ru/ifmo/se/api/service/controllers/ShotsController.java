@@ -24,7 +24,9 @@ public class ShotsController {
     @ResponseStatus(HttpStatus.CREATED)
     public ShotResponse add(@CookieValue("accessToken") String token, @RequestBody ShotRequest request) {
         TokenClaimsResponse claims = tokenMessageService.getTokenClaims(token);
-        return shotMessageService.sendAddShotRequest(request, claims.getUserId());
+        ShotResponse response = shotMessageService.sendAddShotRequest(request, claims.getUserId());
+        System.out.println(response.getId().toString());
+        return response;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
