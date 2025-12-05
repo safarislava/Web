@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "lmbin" ]
+    branches: [ "lab" ]
   workflow_dispatch:
 
 jobs:
