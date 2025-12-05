@@ -21,7 +21,7 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean install -DskipTests
-        working-directory: ./PointChecker
+        working-directory: ./PointChecker/PointCheckerApi
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -32,28 +32,28 @@ jobs:
       - name: Build and Push BFF
         uses: docker/build-push-action@v5
         with:
-          context: ./PointChecker/bff-service
+          context: ./PointChecker/PointCheckerApi/bff-service
           push: true
           tags: safarislava/pc-api-bff-service:latest
 
       - name: Build and Push Core
         uses: docker/build-push-action@v5
         with:
-          context: ./PointChecker/core-service
+          context: ./PointChecker/PointCheckerApi/core-service
           push: true
           tags: safarislava/pc-api-core-service:latest
 
       - name: Build and Push User
         uses: docker/build-push-action@v5
         with:
-          context: ./PointChecker/user-service
+          context: ./PointChecker/PointCheckerApi/user-service
           push: true
           tags: safarislava/pc-api-user-service:latest
 
       - name: Build and Push Shot
         uses: docker/build-push-action@v5
         with:
-          context: ./PointChecker/shot-service
+          context: ./PointChecker/PointCheckerApi/shot-service
           push: true
           tags: safarislava/pc-api-shot-service:latest
 
@@ -73,7 +73,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          envsubst < ./PointChecker/k82-full.yaml | kubectl apply -f -
+          envsubst < ./PointChecker/PointCheckerApi/k82-full.yaml | kubectl apply -f -
 
       - name: Restart Deployments
         run: |
