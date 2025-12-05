@@ -73,7 +73,6 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          
           envsubst < ./PointChecker/k82-full.yaml | kubectl apply -f -
 
       - name: Restart Deployments
