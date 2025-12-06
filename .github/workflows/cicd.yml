@@ -73,7 +73,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          envsubst < ./PointChecker/PointCheckerApi/k82-full.yaml | kubectl apply -f -
+          envsubst '${RABBITMQ_PASS} ${GOOGLE_CLIENT_ID} ${GOOGLE_CLIENT_SECRET} ${DB_URL} ${DB_USER} ${DB_PASSWORD} ${JWT_SECRET}' < ./PointChecker/PointCheckerApi/k82-full.yaml | kubectl apply -f -
 
       - name: Restart Deployments
         run: |
