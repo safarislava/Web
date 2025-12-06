@@ -69,11 +69,11 @@ jobs:
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           DB_URL: ${{ secrets.DB_URL }}
-          DB_USER: ${{ secrets.DB_USER }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          envsubst '${RABBITMQ_PASS} ${GOOGLE_CLIENT_ID} ${GOOGLE_CLIENT_SECRET} ${DB_URL} ${DB_USER} ${DB_PASSWORD} ${JWT_SECRET}' < ./PointChecker/PointCheckerApi/k82-full.yaml | kubectl apply -f -
+          envsubst '${RABBITMQ_PASS} ${GOOGLE_CLIENT_ID} ${GOOGLE_CLIENT_SECRET} ${DB_URL} ${DB_USERNAME} ${DB_PASSWORD} ${JWT_SECRET}' < ./PointChecker/PointCheckerApi/k82-full.yaml | kubectl apply -f -
 
       - name: Restart Deployments
         run: |
