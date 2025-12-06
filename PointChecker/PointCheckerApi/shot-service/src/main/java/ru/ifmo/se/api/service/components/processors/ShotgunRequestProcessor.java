@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.service.models.Bullet;
 import ru.ifmo.se.api.service.models.Shot;
 import ru.ifmo.se.api.service.models.ShotgunShot;
+import ru.ifmo.se.api.service.models.Weapon;
 import ru.ifmo.se.api.service.services.BulletService;
 
 import java.math.BigDecimal;
@@ -26,5 +27,10 @@ public class ShotgunRequestProcessor implements RequestProcessor {
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
         return new ShotgunShot(x, y, r, deltaTime, bullets);
+    }
+
+    @Override
+    public Weapon getWeaponType() {
+        return Weapon.SHOTGUN;
     }
 }
