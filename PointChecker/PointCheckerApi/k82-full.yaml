@@ -119,7 +119,7 @@ spec:
             - name: DB_URL
               value: "${DB_URL}"
             - name: DB_USERNAME
-              value: "${DB_USER}"
+              value: "${DB_USERNAME}"
             - name: DB_PASSWORD
               value: "${DB_PASSWORD}"
             - name: SECRET
@@ -164,7 +164,7 @@ spec:
             - name: DB_URL
               value: "${DB_URL}"
             - name: DB_USERNAME
-              value: "${DB_USER}"
+              value: "${DB_USERNAME}"
             - name: DB_PASSWORD
               value: "${DB_PASSWORD}"
             - name: SECRET
