@@ -2,6 +2,7 @@ package ru.ifmo.se.api.service.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "bullet")
 @AllArgsConstructor

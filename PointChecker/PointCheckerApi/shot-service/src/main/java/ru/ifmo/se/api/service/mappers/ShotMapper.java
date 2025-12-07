@@ -4,8 +4,6 @@ import ru.ifmo.se.api.common.dto.shot.*;
 import ru.ifmo.se.api.service.entities.*;
 import ru.ifmo.se.api.service.models.*;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class ShotMapper {
@@ -24,118 +22,109 @@ public class ShotMapper {
     private static class ToResponseVisitor implements ShotVisitor<ShotResponse> {
         private static final ToResponseVisitor INSTANCE = new ToResponseVisitor();
 
-        private ShotResponse toBaseResponse(Shot shot) {
-            Long id = shot.getId();
-            String x = shot.getX().stripTrailingZeros().toPlainString();
-            String y = shot.getY().stripTrailingZeros().toPlainString();
-            String r = shot.getR().stripTrailingZeros().toPlainString();
-            Integer accuracy = shot.getAccuracy();
-            Integer deltaTime = shot.getDeltaTime();
-            String time = shot.getTime().toString();
-            return new ShotResponse(id, x, y, r, accuracy, deltaTime, time, null);
+        private ShotResponse.ShotResponseBuilder getCommonBuilder(Shot shot) {
+            return ShotResponse.builder()
+                    .id(shot.getId())
+                    .x(shot.getX().stripTrailingZeros().toPlainString())
+                    .y(shot.getY().stripTrailingZeros().toPlainString())
+                    .r(shot.getR().stripTrailingZeros().toPlainString())
+                    .accuracy(shot.getAccuracy())
+                    .deltaTime(shot.getDeltaTime())
+                    .time(shot.getTime().toString());
         }
 
         @Override
         public ShotResponse visit(Shot shot) {
-            ShotResponse response = toBaseResponse(shot);
-            response.setDetails(new ShotDetails(""));
-            return response;
+            return getCommonBuilder(shot).details(new ShotDetails("")).build();
         }
 
         @Override
         public ShotResponse visit(RevolverShot shot) {
-            ShotResponse response = toBaseResponse(shot);
             BulletDto bullet = BulletMapper.toDto(shot.getBullet());
-            response.setDetails(new RevolverDetails(bullet));
-            return response;
+            return getCommonBuilder(shot).details(new RevolverDetails(bullet)).build();
         }
 
         @Override
         public ShotResponse visit(ShotgunShot shot) {
-            ShotResponse response = toBaseResponse(shot);
             List<BulletDto> bullets = shot.getBullets().stream().map(BulletMapper::toDto).toList();
-            response.setDetails(new ShotgunDetails(bullets));
-            return response;
+            return getCommonBuilder(shot).details(new ShotgunDetails(bullets)).build();
         }
     }
 
     private static class ToEntityVisitor implements ShotVisitor<ShotEntity> {
         private static final ToEntityVisitor INSTANCE = new ToEntityVisitor();
 
+        private void fillCommonFields(Shot shot, ShotEntity.ShotEntityBuilder<?, ?> builder) {
+            builder.id(shot.getId())
+                    .version(shot.getVersion())
+                    .x(shot.getX())
+                    .y(shot.getY())
+                    .r(shot.getR())
+                    .userId(shot.getUserId())
+                    .accuracy(shot.getAccuracy())
+                    .deltaTime(shot.getDeltaTime())
+                    .time(shot.getTime());
+        }
+
         @Override
         public ShotEntity visit(Shot shot) {
-            return new ShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(),
-                    shot.getUserId(), shot.getAccuracy(), shot.getDeltaTime(), shot.getTime()
-            );
+            var builder = ShotEntity.builder();
+            fillCommonFields(shot, builder);
+            return builder.build();
         }
 
         @Override
         public ShotEntity visit(RevolverShot shot) {
+            var builder = RevolverShotEntity.builder();
+            fillCommonFields(shot, builder);
             BulletEntity bullet = BulletMapper.toEntity(shot.getBullet());
-
-            return new RevolverShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(), shot.getUserId(),
-                    shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullet
-            );
+            return builder.bullet(bullet).build();
         }
 
         @Override
         public ShotEntity visit(ShotgunShot shot) {
+            var builder = ShotgunShotEntity.builder();
+            fillCommonFields(shot, builder);
             List<BulletEntity> bullets = shot.getBullets().stream().map(BulletMapper::toEntity).toList();
-
-            return new ShotgunShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(), shot.getUserId(),
-                    shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullets
-            );
+            return builder.bullets(bullets).build();
         }
     }
 
     private static class ToModelVisitor implements ShotEntityVisitor<Shot> {
         private static final ToModelVisitor INSTANCE = new ToModelVisitor();
 
+        private void fillCommonFields(ShotEntity entity, Shot.ShotBuilder<?, ?> builder) {
+            builder.id(entity.getId())
+                    .version(entity.getVersion())
+                    .x(entity.getX())
+                    .y(entity.getY())
+                    .r(entity.getR())
+                    .userId(entity.getUserId())
+                    .accuracy(entity.getAccuracy())
+                    .deltaTime(entity.getDeltaTime())
+                    .time(entity.getTime());
+        }
+
         @Override
         public Shot visit(ShotEntity shotEntity) {
-            Long id = shotEntity.getId();
-            Long version = shotEntity.getVersion();
-            BigDecimal x = shotEntity.getX();
-            BigDecimal y = shotEntity.getY();
-            BigDecimal r = shotEntity.getR();
-            Long userId = shotEntity.getUserId();
-            Integer accuracy = shotEntity.getAccuracy();
-            Integer deltaTime = shotEntity.getDeltaTime();
-            Timestamp time = shotEntity.getTime();
-            return new Shot(id, version, x, y, r, userId, accuracy, deltaTime, time);
+            var builder = Shot.builder();
+            fillCommonFields(shotEntity, builder);
+            return builder.build();
         }
 
         @Override
         public Shot visit(RevolverShotEntity shotEntity) {
-            Long id = shotEntity.getId();
-            Long version = shotEntity.getVersion();
-            BigDecimal x = shotEntity.getX();
-            BigDecimal y = shotEntity.getY();
-            BigDecimal r = shotEntity.getR();
-            Long userId = shotEntity.getUserId();
-            Integer accuracy = shotEntity.getAccuracy();
-            Integer deltaTime = shotEntity.getDeltaTime();
-            Timestamp time = shotEntity.getTime();
-            Bullet bullet = BulletMapper.toModel(shotEntity.getBullet());
-            return new RevolverShot(id, version, x, y, r, userId, accuracy, deltaTime, time, bullet);
+            var builder = RevolverShot.builder();
+            fillCommonFields(shotEntity, builder);
+            return builder.bullet(BulletMapper.toModel(shotEntity.getBullet())).build();
         }
 
         @Override
         public Shot visit(ShotgunShotEntity shotEntity) {
-            Long id = shotEntity.getId();
-            Long version = shotEntity.getVersion();
-            BigDecimal x = shotEntity.getX();
-            BigDecimal y = shotEntity.getY();
-            BigDecimal r = shotEntity.getR();
-            Long userId = shotEntity.getUserId();
-            Integer accuracy = shotEntity.getAccuracy();
-            Integer deltaTime = shotEntity.getDeltaTime();
-            Timestamp time = shotEntity.getTime();
+            var builder = ShotgunShot.builder();
+            fillCommonFields(shotEntity, builder);
             List<Bullet> bullets = shotEntity.getBullets().stream().map(BulletMapper::toModel).toList();
-            return new ShotgunShot(id, version, x, y, r, userId, accuracy, deltaTime, time, bullets);
+            return builder.bullets(bullets).build();
         }
     }
 }

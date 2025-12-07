@@ -27,7 +27,6 @@ public class RabbitMQConfig {
     public static final String USER_GET_ROLES_ROUTING_KEY = "user.get.roles";
     public static final String TOKEN_PARSE_CLAIMS_ROUTING_KEY = "token.parse.claims";
 
-
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);

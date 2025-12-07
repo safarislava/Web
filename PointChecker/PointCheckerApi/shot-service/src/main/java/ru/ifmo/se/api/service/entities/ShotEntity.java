@@ -1,9 +1,9 @@
 package ru.ifmo.se.api.service.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
@@ -11,11 +11,11 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
+@SuperBuilder
 @Entity
 @Table(name = "shot")
 @BatchSize(size = 20)
 @Inheritance(strategy = InheritanceType.JOINED)
-@AllArgsConstructor
 public class ShotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
