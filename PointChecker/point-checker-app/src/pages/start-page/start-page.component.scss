@@ -1,0 +1,138 @@
+* {
+  font-family: 'Chinese Rocks Rg', sans-serif;
+  color: white;
+}
+
+.main-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: black;
+  z-index: -1;
+}
+
+.crop-video {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  video {
+    position: fixed;
+    width: 100%;
+    height: auto;
+  }
+
+  img {
+    position: fixed;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
+
+.top-nav {
+  width: 100%;
+  height: 40%;
+  background: black;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 90%;
+  height: 90%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: contain;
+}
+
+.logo > img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.window {
+  width: 100%;
+  height: 40%;
+}
+
+.bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 20%;
+  background: black;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 30px;
+  height: 1em;
+  gap: 15px;
+}
+
+.button-image {
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-image img {
+  height: 100%;
+  width: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.progress-rect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  z-index: 0;
+
+  rect {
+    fill: none;
+    stroke: #ff0000;
+    stroke-width: 7px;
+    stroke-linecap: round;
+    stroke-dasharray: 160;
+    transform-origin: 50% 50%;
+  }
+}
+
+

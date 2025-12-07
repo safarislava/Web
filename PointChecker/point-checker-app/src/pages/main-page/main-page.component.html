@@ -1,0 +1,113 @@
+<div class="main-container">
+  <div class="background"></div>
+  <header class="glass">
+    <div class="header-container">
+      <p class="header-item logo">LAB 4</p>
+      <p class="header-item mobile-hidden">safarislava</p>
+      <div class="header-items">
+        <button (click)="clearShots()">Clear shots</button>
+        <button (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="graph-section">
+      <div class="graph-container glass">
+        <app-points-area/>
+      </div>
+      <form [formGroup]="pointForm" class="input-container" (ngSubmit)="shootAction()">
+        <div class="input-form glass">
+          <h2 class="form-title">SHOT PARAMETERS</h2>
+          <div class="input-group">
+            <label class="input-group-label" for="x-data">Coordinate X</label>
+            <input type="text" id="x-data" formControlName="x" placeholder="Enter X" required>
+            @if (X?.invalid && X?.touched) {
+              <div class="error-message">
+                @if (X?.errors?.['required']) {
+                  <p>X is required</p>
+                }
+                @else if (X?.errors?.['pattern']) {
+                  <p>Invalid format</p>
+                }
+              </div>
+            }
+          </div>
+          <div class="input-group">
+            <label class="input-group-label" for="y-data">Coordinate Y</label>
+            <input type="text" id="y-data" formControlName="y" placeholder="Enter Y" required>
+            @if (Y?.invalid && Y?.touched) {
+              <div class="error-message">
+                @if (Y?.errors?.['required']) {
+                  <p>Y is required</p>
+                }
+                @else if (Y?.errors?.['pattern']) {
+                  <p>Invalid format</p>
+                }
+              </div>
+            }
+          </div>
+          <div class="input-group">
+            <label class="input-group-label" for="r-data">Coordinate R</label>
+            <input type="text" id="r-data" formControlName="r" placeholder="Enter R" required>
+            @if (R?.invalid && R?.touched) {
+              <div class="error-message">
+                @if (R?.errors?.['required']) {
+                  <p>R is required</p>
+                }
+                @else if (R?.errors?.['pattern']) {
+                  <p>Invalid format</p>
+                }
+                @else if (R?.errors?.['positive']) {
+                  <p>R must be positive</p>
+                }
+              </div>
+            }
+          </div>
+          <div class="input-group">
+            <div class="input-image-container">
+              <img ngSrc="/assets/images/Revolver.png" alt="" width="1198" height="628"
+                   (click)="setRevolver()" [class.selected]="Weapon=='REVOLVER'"/>
+              <img ngSrc="assets/images/Shotgun.png" alt="" width="982" height="306"
+                   (click)="setShotgun()" [class.selected]="Weapon=='SHOTGUN'"/>
+            </div>
+          </div>
+          <div class="send-form">
+            <button type="submit">SHOOT</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+  <footer>
+    <div class="table-container">
+      <table class="glass">
+        <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">X</th>
+          <th scope="col">Y</th>
+          <th scope="col">R</th>
+          <th scope="col">ACCURACY</th>
+          <th scope="col">CALCULATION TIME</th>
+          <th scope="col">WHEN</th>
+        </tr>
+        </thead>
+        <tbody id="results-tbody">
+          @if (shotsService.shots$ | async; as shotsData) {
+            @for (shot of shotsData; track shot.id) {
+              <tr>
+                <td>{{ shot.id }}</td>
+                <td>{{ shot.x }}</td>
+                <td>{{ shot.y }}</td>
+                <td>{{ shot.r }}</td>
+                <td>{{ shot.accuracy }}</td>
+                <td>{{ shot.deltaTime }}</td>
+                <td>{{ shot.time }}</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </footer>
+</div>

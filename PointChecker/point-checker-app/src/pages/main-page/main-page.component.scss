@@ -1,0 +1,262 @@
+$accent-color: #e60003;
+
+* {
+  font-family: 'Chinese Rocks Rg', sans-serif;
+  color: white;
+}
+
+.main-container {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-image: url(/assets/images/background.webp);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+header {
+  margin-bottom: 50px;
+  padding: 20px;
+}
+
+.header-container {
+  max-width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 20px;
+  gap: 20px;
+}
+
+.header-item {
+  color: white;
+  font-size: 26px;
+  transition: all 0.1s ease;
+
+  &:hover {
+    color: $accent-color;
+  }
+}
+
+.header-items {
+  display: flex;
+  gap: 20px;
+}
+
+.logo {
+  font-size: 32px;
+}
+
+.graph-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10%;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 0 50px 0 50px;
+}
+
+.graph-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  max-width: 100%;
+  margin-bottom: 30px;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+
+  padding: 40px;
+  border-radius: 10px;
+  gap: 20px;
+}
+
+.input-group-label {
+  color: white;
+  text-align: center;
+  font-weight: bold;
+}
+
+.form-title {
+  text-align: center;
+  color: white;
+  margin-bottom: 10px;
+  font-size: 32px;
+
+  &::after {
+    content: "";
+    display: block;
+    width: 75%;
+    height: 3px;
+    background-color: white;
+    margin: 10px auto 0;
+  }
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    color: white;
+    font-size: 20px;
+  }
+
+  input {
+    padding: 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    color: #444;
+  }
+
+  .error-message {
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .input-image-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 10px;
+
+    background: white;
+    border-radius: 15px;
+
+    padding: 10px;
+
+    img {
+      max-width: max(10vw, 80px);
+
+      height: auto;
+      opacity: 0.6;
+
+      &.selected {
+        opacity: 1;
+      }
+
+      &:hover {
+        filter: drop-shadow(0 0 5px $accent-color);
+      }
+    }
+  }
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 5px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: $accent-color;
+  }
+}
+
+#problem-label {
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.send-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  background: $accent-color;
+  color: white;
+  border: none;
+  padding: 14px 25px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 17px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+  &:hover {
+    transform: translateY(2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  }
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0 0 0;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  color: white;
+
+  th, td {
+    padding: 15px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  thead {
+    tr {
+      background: rgba(25, 25, 25, 0.2);
+    }
+    th {
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+    }
+  }
+
+  tr {
+    &:nth-child(even) {
+      background: rgba(25, 25, 25, 0.2);
+    }
+
+    &:hover {
+      background: $accent-color;
+    }
+  }
+}

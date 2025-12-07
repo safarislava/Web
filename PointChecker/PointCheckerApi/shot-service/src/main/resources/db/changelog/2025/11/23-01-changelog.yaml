@@ -1,0 +1,185 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1763908131165-1
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_bullet
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: version
+                  type: BIGINT
+              - column:
+                  name: x
+                  type: DECIMAL(25, 20)
+              - column:
+                  name: y
+                  type: DECIMAL(25, 20)
+              - column:
+                  name: hit
+                  type: BOOLEAN
+            tableName: bullet
+  - changeSet:
+      id: 1763908131165-2
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_revolver_shot
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: bullet_id
+                  type: BIGINT
+            tableName: revolver_shot
+  - changeSet:
+      id: 1763908131165-3
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_shot
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: version
+                  type: BIGINT
+              - column:
+                  name: x
+                  type: DECIMAL(25, 20)
+              - column:
+                  name: y
+                  type: DECIMAL(25, 20)
+              - column:
+                  name: r
+                  type: DECIMAL(25, 20)
+              - column:
+                  name: user_id
+                  type: BIGINT
+              - column:
+                  name: accuracy
+                  type: INT
+              - column:
+                  name: delta_time
+                  type: INT
+              - column:
+                  name: time
+                  type: DATETIME
+            tableName: shot
+  - changeSet:
+      id: 1763908131165-4
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_shotgun_shot
+                  name: id
+                  type: BIGINT
+            tableName: shotgun_shot
+  - changeSet:
+      id: 1763908131165-5
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: shotgun_shot_entity_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: bullets_id
+                  type: BIGINT
+            tableName: shotgun_shot_bullets
+  - changeSet:
+      id: 1763908131165-6
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: bullets_id
+            constraintName: uc_shotgun_shot_bullets_bullets
+            tableName: shotgun_shot_bullets
+  - changeSet:
+      id: 1763908131165-7
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: bullet_id
+            baseTableName: revolver_shot
+            constraintName: FK_REVOLVER_SHOT_ON_BULLET
+            referencedColumnNames: id
+            referencedTableName: bullet
+  - changeSet:
+      id: 1763908131165-8
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: revolver_shot
+            constraintName: FK_REVOLVER_SHOT_ON_ID
+            referencedColumnNames: id
+            referencedTableName: shot
+  - changeSet:
+      id: 1763908131165-9
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: id
+            baseTableName: shotgun_shot
+            constraintName: FK_SHOTGUN_SHOT_ON_ID
+            referencedColumnNames: id
+            referencedTableName: shot
+  - changeSet:
+      id: 1763908131165-10
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: bullets_id
+            baseTableName: shotgun_shot_bullets
+            constraintName: fk_shoshobul_on_bullet_entity
+            referencedColumnNames: id
+            referencedTableName: bullet
+  - changeSet:
+      id: 1763908131165-11
+      author: safarislava
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: shotgun_shot_entity_id
+            baseTableName: shotgun_shot_bullets
+            constraintName: fk_shoshobul_on_shotgun_shot_entity
+            referencedColumnNames: id
+            referencedTableName: shotgun_shot
+
