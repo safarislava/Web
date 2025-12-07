@@ -26,7 +26,7 @@ public class ShotgunRequestProcessor implements RequestProcessor {
         }
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new ShotgunShot(x, y, r, deltaTime, bullets);
+        return ShotgunShot.builder().x(x).y(y).r(r).deltaTime(deltaTime).bullets(bullets).build();
     }
 
     @Override

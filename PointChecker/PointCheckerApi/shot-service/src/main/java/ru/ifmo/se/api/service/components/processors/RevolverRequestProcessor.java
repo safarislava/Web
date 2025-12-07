@@ -21,7 +21,7 @@ public class RevolverRequestProcessor implements RequestProcessor {
         Bullet bullet = bulletService.calculateBullet(x, y, r);
         long endTime = System.nanoTime();
         int deltaTime = (int) (endTime - startTime);
-        return new RevolverShot(x, y, r, deltaTime, bullet);
+        return RevolverShot.builder().x(x).y(y).r(r).deltaTime(deltaTime).bullet(bullet).build();
     }
 
     @Override
