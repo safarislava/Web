@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ShotServiceImpl implements ShotService {
+public class DataShotService implements ShotService {
     private final ShotRepository shotRepository;
     private Map<Weapon, RequestProcessor> processorMap;
 
