@@ -1,0 +1,25 @@
+spring:
+  rabbitmq:
+    password: ${RABBITMQ_PASSWORD:guest}
+    port: '5672'
+    host: ${RABBITMQ_HOST:localhost}
+    username: ${RABBITMQ_USERNAME:guest}
+  application:
+    name: ShotsModule
+  liquibase:
+    default-schema: shot_service
+  datasource:
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    username: ${DB_USERNAME}
+    url: ${DB_URL}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: 'false'
+    properties:
+      hibernate:
+        default_schema: shot_service
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+server:
+  port: '8003'
