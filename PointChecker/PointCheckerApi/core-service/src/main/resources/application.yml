@@ -1,0 +1,19 @@
+spring:
+  rabbitmq:
+    password: ${RABBITMQ_PASSWORD:guest}
+    port: '5672'
+    host: ${RABBITMQ_HOST:localhost}
+    username: ${RABBITMQ_USERNAME:guest}
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-secret: ${CLIENT_SECRET}
+            redirect-uri: '{baseUrl}/login/oauth2/code/{registrationId}'
+            client-id: ${CLIENT_ID}
+            scope: openid,email,profile
+  application:
+    name: CoreModule
+server:
+  port: '8001'

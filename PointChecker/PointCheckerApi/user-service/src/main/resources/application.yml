@@ -1,0 +1,26 @@
+server:
+  port: '8002'
+spring:
+  application:
+    name: UsersModule
+  rabbitmq:
+    username: ${RABBITMQ_USERNAME:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+    host: ${RABBITMQ_HOST:localhost}
+    port: '5672'
+  jpa:
+    properties:
+      hibernate:
+        default_schema: user_service
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: 'true'
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  liquibase:
+    default-schema: user_service
+JWT_SECRET: ${SECRET}

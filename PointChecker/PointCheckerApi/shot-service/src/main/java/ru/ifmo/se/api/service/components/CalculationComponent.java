@@ -23,7 +23,6 @@ public class CalculationComponent {
         image = ImageIO.read(resource.getInputStream());
     }
 
-    // @Cacheable(value = "hit", keyGenerator = "bigDecimalKeyGenerator", unless = "#result == false")
     public boolean checkHit(Point point) {
         BigDecimal width = new BigDecimal(image.getWidth());
         BigDecimal height = new BigDecimal(image.getHeight());

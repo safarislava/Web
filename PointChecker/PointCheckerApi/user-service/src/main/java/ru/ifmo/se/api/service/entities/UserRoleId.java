@@ -2,17 +2,15 @@ package ru.ifmo.se.api.service.entities;
 
 
 import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+import java.io.Serializable;
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class UserRoleId {
+public class UserRoleId implements Serializable {
     private Long userId;
     private String role;
 }

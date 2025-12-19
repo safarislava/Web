@@ -1,9 +1,10 @@
 package ru.ifmo.se.api.service.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.BatchSize;
 
 import java.math.BigDecimal;
@@ -11,11 +12,12 @@ import java.sql.Timestamp;
 
 @Getter
 @Setter
+@SuperBuilder
 @Entity
 @Table(name = "shot")
 @BatchSize(size = 20)
 @Inheritance(strategy = InheritanceType.JOINED)
-@AllArgsConstructor
+@NoArgsConstructor
 public class ShotEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,10 +34,4 @@ public class ShotEntity {
     private Integer accuracy;
     private Integer deltaTime;
     private Timestamp time;
-
-    public ShotEntity() {}
-
-    public <R> R accept(ShotEntityVisitor<R> visitor){
-        return visitor.visit(this);
-    }
 }

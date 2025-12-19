@@ -14,6 +14,10 @@ import java.util.List;
 public class ShotgunDetails extends ShotDetails {
     private List<BulletDto> bullets;
 
+    {
+        setType("Shotgun");
+    }
+
     @JsonCreator
     public ShotgunDetails(@JsonProperty("bullets") List<BulletDto> bullets) {
         super("Shotgun");

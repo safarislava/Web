@@ -1,34 +1,26 @@
 package ru.ifmo.se.api.service.mappers;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.ifmo.se.api.common.dto.shot.BulletDto;
 import ru.ifmo.se.api.service.entities.BulletEntity;
 import ru.ifmo.se.api.service.models.Bullet;
 
 import java.math.BigDecimal;
 
-public class BulletMapper {
-    public static Bullet toModel(BulletEntity bulletEntity) {
-        Long id = bulletEntity.getId();
-        Long version = bulletEntity.getVersion();
-        BigDecimal x = bulletEntity.getX();
-        BigDecimal y = bulletEntity.getY();
-        Boolean hit = bulletEntity.getHit();
-        return new Bullet(id, version, x, y, hit);
-    }
+@Mapper(componentModel = "spring")
+public interface BulletMapper {
+    Bullet toModel(BulletEntity bulletEntity);
+    BulletEntity toEntity(Bullet bullet);
 
-    public static BulletDto toDto(Bullet bullet) {
-        String x = bullet.getX().stripTrailingZeros().toPlainString();
-        String y = bullet.getY().stripTrailingZeros().toPlainString();
-        Boolean hit = bullet.getHit();
-        return new BulletDto(x, y, hit);
-    }
+    @Mapping(target = "x", source = "x", qualifiedByName = "formatToPlainString")
+    @Mapping(target = "y", source = "y", qualifiedByName = "formatToPlainString")
+    BulletDto toDto(Bullet bullet);
 
-    public static BulletEntity toEntity(Bullet bullet) {
-        Long id = bullet.getId();
-        Long version = bullet.getVersion();
-        BigDecimal x = bullet.getX();
-        BigDecimal y = bullet.getY();
-        Boolean hit = bullet.getHit();
-        return new BulletEntity(id, version, x, y, hit);
+    @Named("formatToPlainString")
+    default String formatToPlainString(BigDecimal value) {
+        if (value == null) return null;
+        return value.stripTrailingZeros().toPlainString();
     }
 }

@@ -1,141 +1,50 @@
 package ru.ifmo.se.api.service.mappers;
 
-import ru.ifmo.se.api.common.dto.shot.*;
-import ru.ifmo.se.api.service.entities.*;
-import ru.ifmo.se.api.service.models.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.SubclassMapping;
+import ru.ifmo.se.api.common.dto.shot.RevolverDetails;
+import ru.ifmo.se.api.common.dto.shot.ShotDetails;
+import ru.ifmo.se.api.common.dto.shot.ShotResponse;
+import ru.ifmo.se.api.common.dto.shot.ShotgunDetails;
+import ru.ifmo.se.api.service.entities.RevolverShotEntity;
+import ru.ifmo.se.api.service.entities.ShotEntity;
+import ru.ifmo.se.api.service.entities.ShotgunShotEntity;
+import ru.ifmo.se.api.service.models.RevolverShot;
+import ru.ifmo.se.api.service.models.Shot;
+import ru.ifmo.se.api.service.models.ShotgunShot;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.List;
+@Mapper(
+        componentModel = "spring",
+        uses = {BulletMapper.class}
+)
+public interface ShotMapper {
+    @Mapping(target = "x", source = "x", qualifiedByName = "formatToPlainString")
+    @Mapping(target = "y", source = "y", qualifiedByName = "formatToPlainString")
+    @Mapping(target = "r", source = "r", qualifiedByName = "formatToPlainString")
+    @Mapping(target = "details", source = "shot")
+    ShotResponse toResponse(Shot shot);
 
-public class ShotMapper {
-    public static ShotResponse toResponse(Shot shot) {
-        return shot.accept(ToResponseVisitor.INSTANCE);
+    default ShotDetails mapDetails(Shot shot) {
+        if (shot instanceof RevolverShot s) return toRevolverDetails(s);
+        if (shot instanceof ShotgunShot s) return toShotgunDetails(s);
+        return new ShotDetails("");
     }
 
-    public static ShotEntity toEntity(Shot shot) {
-        return shot.accept(ToEntityVisitor.INSTANCE);
-    }
+    RevolverDetails toRevolverDetails(RevolverShot shot);
+    ShotgunDetails toShotgunDetails(ShotgunShot shot);
 
-    public static Shot toModel(ShotEntity shotEntity) {
-        return shotEntity.accept(ToModelVisitor.INSTANCE);
-    }
+    @SubclassMapping(source = RevolverShot.class, target = RevolverShotEntity.class)
+    @SubclassMapping(source = ShotgunShot.class, target = ShotgunShotEntity.class)
+    ShotEntity toEntity(Shot shot);
 
-    private static class ToResponseVisitor implements ShotVisitor<ShotResponse> {
-        private static final ToResponseVisitor INSTANCE = new ToResponseVisitor();
+    RevolverShotEntity mapToRevolverEntity(RevolverShot shot);
+    ShotgunShotEntity mapToShotgunEntity(ShotgunShot shot);
 
-        private ShotResponse toBaseResponse(Shot shot) {
-            Long id = shot.getId();
-            String x = shot.getX().stripTrailingZeros().toPlainString();
-            String y = shot.getY().stripTrailingZeros().toPlainString();
-            String r = shot.getR().stripTrailingZeros().toPlainString();
-            Integer accuracy = shot.getAccuracy();
-            Integer deltaTime = shot.getDeltaTime();
-            String time = shot.getTime().toString();
-            return new ShotResponse(id, x, y, r, accuracy, deltaTime, time, null);
-        }
+    @SubclassMapping(source = RevolverShotEntity.class, target = RevolverShot.class)
+    @SubclassMapping(source = ShotgunShotEntity.class, target = ShotgunShot.class)
+    Shot toModel(ShotEntity shotEntity);
 
-        @Override
-        public ShotResponse visit(Shot shot) {
-            ShotResponse response = toBaseResponse(shot);
-            response.setDetails(new ShotDetails(""));
-            return response;
-        }
-
-        @Override
-        public ShotResponse visit(RevolverShot shot) {
-            ShotResponse response = toBaseResponse(shot);
-            BulletDto bullet = BulletMapper.toDto(shot.getBullet());
-            response.setDetails(new RevolverDetails(bullet));
-            return response;
-        }
-
-        @Override
-        public ShotResponse visit(ShotgunShot shot) {
-            ShotResponse response = toBaseResponse(shot);
-            List<BulletDto> bullets = shot.getBullets().stream().map(BulletMapper::toDto).toList();
-            response.setDetails(new ShotgunDetails(bullets));
-            return response;
-        }
-    }
-
-    private static class ToEntityVisitor implements ShotVisitor<ShotEntity> {
-        private static final ToEntityVisitor INSTANCE = new ToEntityVisitor();
-
-        @Override
-        public ShotEntity visit(Shot shot) {
-            return new ShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(),
-                    shot.getUserId(), shot.getAccuracy(), shot.getDeltaTime(), shot.getTime()
-            );
-        }
-
-        @Override
-        public ShotEntity visit(RevolverShot shot) {
-            BulletEntity bullet = BulletMapper.toEntity(shot.getBullet());
-
-            return new RevolverShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(), shot.getUserId(),
-                    shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullet
-            );
-        }
-
-        @Override
-        public ShotEntity visit(ShotgunShot shot) {
-            List<BulletEntity> bullets = shot.getBullets().stream().map(BulletMapper::toEntity).toList();
-
-            return new ShotgunShotEntity(
-                    shot.getId(), shot.getVersion(), shot.getX(), shot.getY(), shot.getR(), shot.getUserId(),
-                    shot.getAccuracy(), shot.getDeltaTime(), shot.getTime(), bullets
-            );
-        }
-    }
-
-    private static class ToModelVisitor implements ShotEntityVisitor<Shot> {
-        private static final ToModelVisitor INSTANCE = new ToModelVisitor();
-
-        @Override
-        public Shot visit(ShotEntity shotEntity) {
-            Long id = shotEntity.getId();
-            Long version = shotEntity.getVersion();
-            BigDecimal x = shotEntity.getX();
-            BigDecimal y = shotEntity.getY();
-            BigDecimal r = shotEntity.getR();
-            Long userId = shotEntity.getUserId();
-            Integer accuracy = shotEntity.getAccuracy();
-            Integer deltaTime = shotEntity.getDeltaTime();
-            Timestamp time = shotEntity.getTime();
-            return new Shot(id, version, x, y, r, userId, accuracy, deltaTime, time);
-        }
-
-        @Override
-        public Shot visit(RevolverShotEntity shotEntity) {
-            Long id = shotEntity.getId();
-            Long version = shotEntity.getVersion();
-            BigDecimal x = shotEntity.getX();
-            BigDecimal y = shotEntity.getY();
-            BigDecimal r = shotEntity.getR();
-            Long userId = shotEntity.getUserId();
-            Integer accuracy = shotEntity.getAccuracy();
-            Integer deltaTime = shotEntity.getDeltaTime();
-            Timestamp time = shotEntity.getTime();
-            Bullet bullet = BulletMapper.toModel(shotEntity.getBullet());
-            return new RevolverShot(id, version, x, y, r, userId, accuracy, deltaTime, time, bullet);
-        }
-
-        @Override
-        public Shot visit(ShotgunShotEntity shotEntity) {
-            Long id = shotEntity.getId();
-            Long version = shotEntity.getVersion();
-            BigDecimal x = shotEntity.getX();
-            BigDecimal y = shotEntity.getY();
-            BigDecimal r = shotEntity.getR();
-            Long userId = shotEntity.getUserId();
-            Integer accuracy = shotEntity.getAccuracy();
-            Integer deltaTime = shotEntity.getDeltaTime();
-            Timestamp time = shotEntity.getTime();
-            List<Bullet> bullets = shotEntity.getBullets().stream().map(BulletMapper::toModel).toList();
-            return new ShotgunShot(id, version, x, y, r, userId, accuracy, deltaTime, time, bullets);
-        }
-    }
+    RevolverShot mapToRevolverModel(RevolverShotEntity entity);
+    ShotgunShot mapToShotgunModel(ShotgunShotEntity entity);
 }

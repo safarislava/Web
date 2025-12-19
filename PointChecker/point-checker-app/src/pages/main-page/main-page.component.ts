@@ -11,7 +11,6 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
-  standalone: true,
   imports: [
     PointsAreaComponent,
     ReactiveFormsModule,

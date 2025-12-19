@@ -7,7 +7,6 @@ import {urlApi, urlGoogleAuth} from '../../../shared/api-config';
 
 @Component({
   selector: 'app-form',
-  standalone: true,
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
   imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage]
@@ -18,7 +17,8 @@ export class FormComponent {
   public errorMessage: boolean = false;
   private isEnterOrRegister: boolean = true;
 
-  constructor(private router: Router, private http: HttpClient, private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
+  constructor(private router: Router, private http: HttpClient,
+              private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
     this.loginForm = this.createForm();
   }
 
