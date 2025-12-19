@@ -11,8 +11,4 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 public class RevolverShot extends Shot {
     private Bullet bullet;
-
-    public <R> R accept(ShotVisitor<R> visitor){
-        return visitor.visit(this);
-    }
 }

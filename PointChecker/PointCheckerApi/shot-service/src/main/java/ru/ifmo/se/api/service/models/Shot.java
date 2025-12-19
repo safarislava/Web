@@ -22,8 +22,4 @@ public class Shot {
     private Integer accuracy;
     private Integer deltaTime;
     private Timestamp time;
-
-    public <R> R accept(ShotVisitor<R> visitor){
-        return visitor.visit(this);
-    }
 }

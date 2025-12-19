@@ -6,8 +6,7 @@ import {ShotsService} from '../shots-service';
   selector: 'app-points-area',
   imports: [],
   templateUrl: './points-area.component.html',
-  styleUrl: './points-area.component.scss',
-  standalone: true
+  styleUrl: './points-area.component.scss'
 })
 export class PointsAreaComponent implements AfterViewInit {
   private canvas!: HTMLCanvasElement;

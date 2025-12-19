@@ -21,6 +21,7 @@ import ru.ifmo.se.api.service.services.ShotService;
 public class ShotAddListener {
     private final ShotService shotService;
     private final ShotRequestValidator shotRequestValidator;
+    private final ShotMapper shotMapper;
     private final ObjectMapper objectMapper;
 
     @Transactional
@@ -32,7 +33,7 @@ public class ShotAddListener {
 
             Shot shot = shotService.processShot(shotRequest, message.getUserId());
 
-            ShotResponse response = ShotMapper.toResponse(shot);
+            ShotResponse response = shotMapper.toResponse(shot);
             return new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), response);
         }
         catch (Exception e) {

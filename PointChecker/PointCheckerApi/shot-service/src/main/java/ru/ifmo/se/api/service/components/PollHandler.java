@@ -1,5 +1,6 @@
 package ru.ifmo.se.api.service.components;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 import ru.ifmo.se.api.common.dto.shot.Message;
@@ -12,15 +13,13 @@ import ru.ifmo.se.api.service.models.Shot;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class PollHandler {
     private final RabbitTemplate template;
-
-    public PollHandler(RabbitTemplate template) {
-        this.template = template;
-    }
+    private final ShotMapper shotMapper;
 
     public void notifyUpdate(Long userId, List<Shot> shots) {
-        List<ShotResponse> shotResponses = shots.stream().map(ShotMapper::toResponse).toList();
+        List<ShotResponse> shotResponses = shots.stream().map(shotMapper::toResponse).toList();
         Message message = new Message(MessageType.SUCCESS_RESPONSE, userId, shotResponses);
 
         template.convertAndSend(

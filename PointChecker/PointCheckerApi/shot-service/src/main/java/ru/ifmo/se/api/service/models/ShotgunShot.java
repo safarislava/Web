@@ -13,8 +13,4 @@ import java.util.List;
 @NoArgsConstructor
 public class ShotgunShot extends Shot {
     private List<Bullet> bullets;
-
-    public <R> R accept(ShotVisitor<R> visitor){
-        return visitor.visit(this);
-    }
 }

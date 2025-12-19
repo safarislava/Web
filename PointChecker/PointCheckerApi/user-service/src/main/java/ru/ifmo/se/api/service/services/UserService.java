@@ -17,17 +17,18 @@ import java.util.UUID;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     public User getUser(Long userId) {
         Optional<UserEntity> user = userRepository.findById(userId);
         if (user.isEmpty()) throw new IllegalArgumentException("User not found");
-        return UserMapper.toModel(user.get());
+        return userMapper.toModel(user.get());
     }
 
     public User getUser(String username) {
         Optional<UserEntity> user = userRepository.findByUsername(username);
         if (user.isEmpty()) throw new IllegalArgumentException("User not found");
-        return UserMapper.toModel(user.get());
+        return userMapper.toModel(user.get());
     }
 
     public boolean login(String  username, String password) {
@@ -40,7 +41,7 @@ public class UserService {
         if (userEntity.isPresent()) throw new IllegalArgumentException("Username already exists");
 
         String hashedPassword = passwordEncoder.encode(password);
-        return UserMapper.toModel(userRepository.save(new UserEntity(username, hashedPassword)));
+        return userMapper.toModel(userRepository.save(new UserEntity(username, hashedPassword)));
     }
 
     public User register(String  username) {
@@ -50,7 +51,7 @@ public class UserService {
     public void update(Long userId) {
         User user = getUser(userId);
         user.setLastUpdate(Instant.now());
-        userRepository.save(UserMapper.toEntity(user));
+        userRepository.save(userMapper.toEntity(user));
     }
 
     public boolean isUpdatedAfter(Instant time, Long  userId) {

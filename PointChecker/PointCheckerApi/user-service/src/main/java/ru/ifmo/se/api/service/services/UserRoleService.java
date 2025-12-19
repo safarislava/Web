@@ -14,15 +14,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRoleService {
     private final UserRoleRepository userRoleRepository;
+    private final UserRoleMapper userRoleMapper;
 
     public List<Role> getRoles(Long userId) {
         List<UserRoleEntity> userRolesEntity = userRoleRepository.findAllByUserId(userId);
         return userRolesEntity.stream()
-                .map(UserRoleMapper::toModel)
+                .map(userRoleMapper::toModel)
                 .map(UserRole::getRole).toList();
     }
 
     public void addRole(Long userId, Role role) {
-        userRoleRepository.save(UserRoleMapper.toEntity(new UserRole(userId, role)));
+        userRoleRepository.save(userRoleMapper.toEntity(new UserRole(userId, role)));
     }
 }

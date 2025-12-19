@@ -81,7 +81,6 @@ public class RabbitMQConfig {
                 .with(SHOT_POLL_ROUTING_KEY);
     }
 
-
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);

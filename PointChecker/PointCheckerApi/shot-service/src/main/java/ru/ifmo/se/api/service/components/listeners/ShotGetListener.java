@@ -9,6 +9,7 @@ import ru.ifmo.se.api.common.dto.shot.MessageType;
 import ru.ifmo.se.api.common.dto.shot.ShotResponse;
 import ru.ifmo.se.api.service.config.RabbitMQConfig;
 import ru.ifmo.se.api.service.mappers.ShotMapper;
+import ru.ifmo.se.api.service.models.Shot;
 import ru.ifmo.se.api.service.services.ShotService;
 
 import java.util.List;
@@ -17,13 +18,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ShotGetListener {
     private final ShotService shotService;
+    private final ShotMapper shotMapper;
 
     @Transactional
     @RabbitListener(queues = RabbitMQConfig.SHOT_GET_QUEUE)
     public Message get(Message message) {
         try {
-            List<ShotResponse> shots = shotService.getShots(message.getUserId())
-                    .stream().map(ShotMapper::toResponse).toList();
+            List<Shot> shotM = shotService.getShots(message.getUserId());
+            List<ShotResponse> shots = shotM.stream().map(shotMapper::toResponse).toList();
             return new Message(MessageType.SUCCESS_RESPONSE, message.getUserId(), shots);
         }
         catch (Exception e) {

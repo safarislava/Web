@@ -14,7 +14,6 @@ import {timeout} from 'rxjs';
 
 @Component({
   selector: 'app-start-page',
-  standalone: true,
   templateUrl: './start-page.component.html',
   styleUrl: './start-page.component.scss',
   imports: [CommonModule, FormComponent, NgOptimizedImage]
